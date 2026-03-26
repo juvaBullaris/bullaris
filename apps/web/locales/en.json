@@ -1,0 +1,277 @@
+{
+  "nav": {
+    "dashboard": "Overview",
+    "payslip": "Payslip",
+    "taxPlanner": "Tax Planner",
+    "goals": "Goals",
+    "chat": "AI Assistant",
+    "learning": "Learn",
+    "portal": "Overview",
+    "employees": "Employees",
+    "analytics": "Analytics",
+    "signOut": "Sign out",
+    "signIn": "Sign in"
+  },
+  "dashboard": {
+    "title": "Good day",
+    "subtitle": "Here is an overview of your financial situation.",
+    "netPayThisMonth": "Net pay this month",
+    "activeGoals": "Active goals",
+    "netWorth": "Net worth",
+    "quickActions": "Quick actions",
+    "recentActivity": "Recent activity",
+    "noActivity": "No activity yet."
+  },
+  "payslip": {
+    "title": "Payslip Explainer",
+    "subtitle": "Enter your gross salary and see exactly what you take home — step by step.",
+    "grossInput": "Gross salary (DKK/month)",
+    "grossPlaceholder": "E.g. 45000",
+    "calculating": "Calculating...",
+    "breakdown": {
+      "title": "Your payslip broken down",
+      "gross": "Gross salary",
+      "amBidrag": "AM contribution (8%)",
+      "amGrundlag": "AM basis",
+      "aSkat": "Income tax (A-skat)",
+      "atp": "ATP contribution",
+      "net": "Net pay",
+      "notes": "Calculation notes"
+    }
+  },
+  "taxPlanner": {
+    "title": "Tax Planner",
+    "subtitle": "Calculate your deductions and find out what you can deduct.",
+    "kmDaily": "Daily commute distance (km one way)",
+    "workingDays": "Working days per year",
+    "unionContrib": "Union membership fee (DKK/year)",
+    "deductions": {
+      "title": "Your deductions",
+      "commuting": "Commuting deduction",
+      "union": "Union membership",
+      "akasse": "Unemployment insurance (A-kasse)",
+      "craftsman": "Home improvement deduction",
+      "total": "Total deductions"
+    }
+  },
+  "goals": {
+    "title": "Financial Goals",
+    "subtitle": "Set and track your goals.",
+    "newGoal": "+ New goal",
+    "createGoal": "Create new goal",
+    "goalType": "Goal type",
+    "targetAmount": "Target amount (DKK)",
+    "targetPlaceholder": "E.g. 50000",
+    "deadline": "Deadline",
+    "save": "Save goal",
+    "cancel": "Cancel",
+    "saved": "kr. saved",
+    "target": "Target:",
+    "noGoals": "You have no active goals yet.",
+    "createFirst": "Create your first goal",
+    "types": {
+      "emergency_fund": "Emergency fund",
+      "house_deposit": "House deposit",
+      "pension_boost": "Pension savings",
+      "debt_payoff": "Debt payoff",
+      "vacation": "Holiday fund",
+      "other": "Other"
+    }
+  },
+  "chat": {
+    "title": "AI Finance Assistant",
+    "subtitle": "Ask questions about your salary, taxes, and finances. Max 20 messages per day.",
+    "placeholder": "Type your question...",
+    "send": "Send",
+    "disclaimer": "The AI assistant provides financial knowledge — not investment advice. Consult an advisor for important decisions.",
+    "welcome": "Hi! I'm your financial assistant. Ask me about your payslip, deductions, pension, or anything about your finances.",
+    "suggestions": {
+      "amBidrag": "What is AM contribution?",
+      "aSkat": "How is my income tax calculated?",
+      "personfradrag": "What is the personal allowance?"
+    },
+    "errors": {
+      "dailyLimit": "Daily message limit reached. Visit the Learning Library for more resources.",
+      "network": "Network error. Check your connection and try again.",
+      "generic": "An error occurred. Please try again."
+    }
+  },
+  "learning": {
+    "title": "Learning Library",
+    "subtitle": "Learn about Danish tax, pension, and personal finance at your own pace.",
+    "loading": "Loading content...",
+    "markComplete": "Mark as complete",
+    "completed": "Completed",
+    "viewContent": "View content",
+    "modules": {
+      "tax_basics": "Tax basics",
+      "pension": "Pension",
+      "budgeting": "Budgeting",
+      "investing": "Savings",
+      "payslip": "Payslip"
+    }
+  },
+  "portal": {
+    "title": "HR Portal",
+    "subtitle": "All figures are anonymised aggregates. Minimum 5 employees per group.",
+    "privacyNotice": "You only see anonymised aggregates. Individual employee data is never visible here.",
+    "privacyGuarantee": "Bullaris never shows individual employee data in the HR portal. All aggregates require a minimum of 5 employees.",
+    "insufficientData": "Insufficient data",
+    "stats": {
+      "activeEmployees": "Active employees",
+      "onboardingRate": "Onboarding rate",
+      "totalGoals": "Goals created (total)"
+    }
+  },
+  "employees": {
+    "title": "Employees",
+    "subtitle": "Invite employees and view onboarding status. No financial data is shown here.",
+    "invite": {
+      "title": "Invite employee",
+      "description": "Employees receive a magic link and set up their own profile.",
+      "placeholder": "employee@company.com",
+      "button": "Send invitation",
+      "sending": "Sending...",
+      "success": "Invitation sent."
+    },
+    "list": {
+      "title": "Employee list",
+      "noEmployees": "No employees yet.",
+      "unnamed": "Unnamed",
+      "status": {
+        "onboarded": "Onboarded",
+        "pending": "Pending"
+      }
+    }
+  },
+  "analytics": {
+    "title": "Analytics",
+    "subtitle": "Anonymised aggregates for your organisation.",
+    "privacyThresholdNotice": "Data is only shown when the group has at least 5 employees.",
+    "loading": "Loading analytics...",
+    "stats": {
+      "activeUsersLast30Days": "Active users (30 days)",
+      "avgOnboardingRate": "Average onboarding rate",
+      "totalGoalsCreated": "Goals created in total",
+      "learningCompletions": "Learning modules completed"
+    },
+    "goalDistribution": "Goal type distribution",
+    "moduleAdoption": "Module adoption"
+  },
+  "consent": {
+    "accept": "I accept",
+    "decline": "No thanks",
+    "dataCollected": "What data is collected?",
+    "purpose": "Purpose",
+    "retention": "Retention period",
+    "visibility": "Who can see your data?",
+    "versionNotice": "You can withdraw your consent at any time under Settings.",
+    "modules": {
+      "payslip_module": "Payslip Explainer",
+      "tax_planner": "Tax Planner",
+      "ai_chat": "AI Finance Assistant",
+      "spending_tracker": "Spending Overview",
+      "profile": "Profile"
+    }
+  },
+  "errors": {
+    "unauthorized": "You do not have access to this page.",
+    "notFound": "The page was not found.",
+    "generic": "An unexpected error occurred. Please try again.",
+    "consentRequired": "Consent is required to use this module."
+  },
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "currency": "DKK",
+    "month": "monthly",
+    "annual": "annually"
+  },
+  "marketing": {
+    "meta": {
+      "title": "Bullaris — Employee Financial Wellness for Danish Workplaces",
+      "description": "Help your employees feel confident about their finances. Bullaris gives HR teams a GDPR-compliant financial wellness platform built for Danish SMEs."
+    },
+    "nav": {
+      "howItWorks": "How it works",
+      "pricing": "Pricing",
+      "bookDemo": "Book a conversation"
+    },
+    "hero": {
+      "badge": "Employee Financial Wellbeing",
+      "subheadline": "Financial stress is the #1 hidden drag on engagement and retention. Bullaris gives HR teams the tools to actually do something about it — without adding complexity to your benefits stack.",
+      "cta": "Take the free Financial Stress Audit →",
+      "secondaryCta": "Book a conversation",
+      "cardTitle": "Emergency fund: funded",
+      "cardSubtitle": "Anna just reached her goal 🎉",
+      "card2Title": "Salary decoded",
+      "card2Subtitle": "Thomas finally understood his payslip"
+    },
+    "trust": {
+      "dpa": "Data processing agreement included",
+      "servers": "EU servers (Frankfurt)",
+      "noHr": "No individual HR access"
+    },
+    "stats": {
+      "source": "Sources: Finansforbundet 2023, PwC Global Workforce Survey 2024, Velliv Association 2023",
+      "c1value": "68%",
+      "c1label": "of employees report financial stress affects their work",
+      "c1source": "(Finansforbundet, 2023)",
+      "c2value": "3.2×",
+      "c2label": "higher retention in companies with financial wellness programs",
+      "c2source": "(PwC, 2024)",
+      "c3value": "23%",
+      "c3label": "of sick days in Denmark linked to financial stress",
+      "c3source": "(Velliv Association, 2023)",
+      "c4value": "100%",
+      "c4label": "GDPR compliant — EU data, always",
+      "c4source": ""
+    },
+    "peopleStrip": "Built for Danish workplaces. Designed with HR teams across retail, tech, construction, and healthcare.",
+    "howItWorks": {
+      "h2": "How Bullaris works for HR teams",
+      "headline": "Simple for HR. Meaningful for employees.",
+      "subheadline": "No complex integrations. No extra admin. Up and running in one afternoon.",
+      "step1title": "You set it up in an afternoon",
+      "step1desc": "Connect your payroll data or enter headcount manually. No IT department required. GDPR-compliant from day one.",
+      "step2title": "Employees access their financial picture",
+      "step2desc": "Each employee gets a private dashboard: net salary decoder, emergency fund tracker, and total compensation view. Completely confidential — you never see individual data.",
+      "step3title": "You see the organisational impact",
+      "step3desc": "Anonymised, aggregated insights for your HR dashboard. Track financial wellbeing as an engagement metric alongside eNPS and absenteeism."
+    },
+    "pricing": {
+      "h2": "Transparent pricing for Danish SMEs",
+      "headline": "Transparent pricing. No surprises.",
+      "label": "Per employee, per month",
+      "price": "From 49 DKK",
+      "subtext": "Billed annually · Minimum 10 seats · Includes all features + dedicated onboarding",
+      "f1": "Net salary decoder",
+      "f2": "Emergency fund tracker",
+      "f3": "Total compensation view",
+      "f4": "HR aggregated dashboard",
+      "cta": "Get a custom quote →",
+      "below": "All plans include a free 30-day pilot. No credit card required."
+    },
+    "finalCta": {
+      "headline": "Start with a 5-minute audit.",
+      "subheadline": "Find out exactly where your employees stand — and what it's costing your organisation.",
+      "primary": "Take the Financial Stress Audit →",
+      "secondary": "Book a conversation",
+      "reassurance": "Free. Anonymous for employees. No commitment required."
+    },
+    "footer": {
+      "tagline": "Employee financial wellness for Danish workplaces",
+      "l1": "How it works",
+      "l2": "Pricing",
+      "l3": "Privacy policy",
+      "l4": "Data processing agreement",
+      "madeIn": "Made in Denmark 🇩🇰",
+      "email": "hello@bullaris.dk",
+      "bottom": "Bullaris ApS · CVR: XXXXXXXX · EU servers · GDPR compliant"
+    }
+  }
+}

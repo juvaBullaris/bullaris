@@ -1,0 +1,17 @@
+{
+  "name": "@bullaris/nudge-engine",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./index.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "@bullaris/db": "*",
+    "resend": "^3.4.0",
+    "date-fns": "^3.6.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

@@ -1,0 +1,307 @@
+// Bullaris Prisma Schema
+// Database: Supabase (Postgres) — Frankfurt EU region
+// All financial data is employee-owned. Employer can never query financial tables directly.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CORE TABLES
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Employer {
+  id               String     @id @default(uuid())
+  name             String
+  slug             String     @unique
+  stripeCustomerId String?    @map("stripe_customer_id")
+  seatsPurchased   Int        @default(5) @map("seats_purchased")
+  createdAt        DateTime   @default(now()) @map("created_at")
+
+  employees        Employee[]
+
+  @@map("employers")
+}
+
+model Employee {
+  id             String    @id @default(uuid())
+  employerId     String    @map("employer_id")
+  supabaseUserId String    @unique @map("supabase_user_id")
+  role           String    @default("employee") // employee | hr_admin | operator
+  invitedAt      DateTime  @default(now()) @map("invited_at")
+  onboardedAt    DateTime? @map("onboarded_at")
+
+  employer           Employer            @relation(fields: [employerId], references: [id], onDelete: Cascade)
+  profile            Profile?
+  consentEvents      ConsentEvent[]
+  netWorthEntries    NetWorthEntry[]
+  goals              Goal[]
+  debts              Debt[]
+  budgetCategories   BudgetCategory[]
+  payslipInputs      PayslipInput[]
+  learningProgress   LearningProgress[]
+  nudgeEvents          NudgeEvent[]
+  aiChatSessions       AiChatSession[]
+  courseEnrollments    CourseEnrollment[]
+  webinarRegistrations WebinarRegistration[]
+
+  @@map("employees")
+}
+
+// Profile — basic info, not deeply sensitive.
+// display_name and age stored here. gross_dkk stored for context injection into AI.
+model Profile {
+  id             String   @id // = employee.id
+  displayName    String?  @map("display_name")
+  age            Int?
+  municipality   String?
+  employmentType String?  @map("employment_type") // full_time | part_time
+  gross_dkk      Decimal? @db.Decimal(12, 2)
+  tax_card_type  String?  @map("tax_card_type")   // A | B | frikort
+  frikort_limit_dkk Decimal? @map("frikort_limit_dkk") @db.Decimal(12, 2)
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  employee Employee @relation(fields: [id], references: [id], onDelete: Cascade)
+
+  @@map("profiles")
+}
+
+// Consent events — 5-year retention, legal requirement.
+// Never bundle consents — one row per module per action.
+model ConsentEvent {
+  id         String   @id @default(uuid())
+  employeeId String   @map("employee_id")
+  source     String   // payslip_module | tax_planner | ai_chat | spending_tracker | profile
+  version    String   // consent text version e.g. "1.0"
+  action     String   // grant | revoke
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@map("consent_events")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FINANCIAL DATA TABLES — employee-owned, RLS-protected
+// All accessible only via server-side tRPC — never direct client queries
+// ─────────────────────────────────────────────────────────────────────────────
+
+model NetWorthEntry {
+  id              String   @id @default(uuid())
+  employeeId      String   @map("employee_id")
+  assets_dkk      Decimal  @db.Decimal(14, 2)
+  liabilities_dkk Decimal  @db.Decimal(14, 2)
+  // Note: store totals only — never account numbers or institution names
+  recordedAt      DateTime @default(now()) @map("recorded_at")
+
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@map("net_worth_entries")
+}
+
+model Goal {
+  id           String    @id @default(uuid())
+  employeeId   String    @map("employee_id")
+  type         String    // emergency_fund | house_deposit | pension_boost | debt_payoff | vacation | other
+  target_dkk   Decimal   @db.Decimal(12, 2)
+  deadline     DateTime?
+  progress_dkk Decimal   @default(0) @db.Decimal(12, 2)
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@map("goals")
+}
+
+model Debt {
+  id           String  @id @default(uuid())
+  employeeId   String  @map("employee_id")
+  label        String  // e.g. "Boliglån", "SU-lån" — never bank names
+  balance_dkk  Decimal @db.Decimal(12, 2)
+  interestRate Decimal @db.Decimal(5, 4) @map("interest_rate")
+  strategy     String? // avalanche | snowball
+
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@map("debts")
+}
+
+model BudgetCategory {
+  id         String  @id @default(uuid())
+  employeeId String  @map("employee_id")
+  label      String
+  limit_dkk  Decimal @db.Decimal(10, 2)
+  period     String  // monthly | annual
+
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@map("budget_categories")
+}
+
+// Payslip inputs — store ONLY gross_dkk + tax_card_type + period.
+// Net is always recalculated server-side from danish-tax package.
+// 13-month rolling retention.
+model PayslipInput {
+  id          String   @id @default(uuid())
+  employeeId  String   @map("employee_id")
+  gross_dkk   Decimal  @db.Decimal(12, 2)
+  period      String   // YYYY-MM
+  taxCardType String   @map("tax_card_type") // A | B | frikort
+  recordedAt  DateTime @default(now()) @map("recorded_at")
+
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@unique([employeeId, period])
+  @@map("payslip_inputs")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// LEARNING TABLES
+// ─────────────────────────────────────────────────────────────────────────────
+
+model LearningContent {
+  id          String   @id @default(uuid())
+  sanityId    String   @map("sanity_id")
+  type        String   // article | video
+  module      String   // tax_basics | pension | budgeting | investing | payslip
+  title       String
+  description String?
+  publishedAt DateTime @map("published_at")
+
+  progress LearningProgress[]
+
+  @@map("learning_content")
+}
+
+model LearningProgress {
+  id          String   @id @default(uuid())
+  employeeId  String   @map("employee_id")
+  contentId   String   @map("content_id")
+  completedAt DateTime @map("completed_at")
+
+  employee Employee        @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  content  LearningContent @relation(fields: [contentId], references: [id], onDelete: Cascade)
+
+  @@unique([employeeId, contentId])
+  @@map("learning_progress")
+}
+
+// Courses — ordered collections of LearningContent items
+model Course {
+  id              String   @id @default(uuid())
+  sanityId        String   @unique @map("sanity_id")
+  title           String
+  description     String?
+  module          String   // tax_basics | pension | budgeting | investing | payslip
+  estimatedMinutes Int     @default(0) @map("estimated_minutes")
+  publishedAt     DateTime @map("published_at")
+
+  enrollments CourseEnrollment[]
+
+  @@map("courses")
+}
+
+model CourseEnrollment {
+  id          String    @id @default(uuid())
+  employeeId  String    @map("employee_id")
+  courseId    String    @map("course_id")
+  enrolledAt  DateTime  @default(now()) @map("enrolled_at")
+  completedAt DateTime? @map("completed_at")
+
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  course   Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([employeeId, courseId])
+  @@map("course_enrollments")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// WEBINAR TABLES
+// ─────────────────────────────────────────────────────────────────────────────
+
+model WebinarRegistration {
+  id            String    @id @default(uuid())
+  employeeId    String    @map("employee_id")
+  webinarSanityId String  @map("webinar_sanity_id")
+  registeredAt  DateTime  @default(now()) @map("registered_at")
+  attended      Boolean   @default(false)
+
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@unique([employeeId, webinarSanityId])
+  @@map("webinar_registrations")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// NUDGE ENGINE TABLES
+// ─────────────────────────────────────────────────────────────────────────────
+
+model NudgeRule {
+  id                String @id @default(uuid())
+  code              String @unique
+  triggerCondition  String @map("trigger_condition") // JSON expression
+  templateId        String @map("template_id")       // maps to Resend template
+  cooldownDays      Int    @map("cooldown_days")
+
+  events NudgeEvent[]
+
+  @@map("nudge_rules")
+}
+
+model NudgeEvent {
+  id         String   @id @default(uuid())
+  employeeId String   @map("employee_id")
+  ruleId     String   @map("rule_id")
+  sentAt     DateTime @default(now()) @map("sent_at")
+  channel    String   @default("email")
+
+  employee Employee  @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  rule     NudgeRule @relation(fields: [ruleId], references: [id])
+
+  @@map("nudge_events")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// AUDIT COMPLETIONS — unauthenticated HR audit sessions
+// No PII in this table (email captured separately via Resend).
+// ─────────────────────────────────────────────────────────────────────────────
+
+model AuditCompletion {
+  id              String   @id @default(uuid())
+  sessionId       String   @unique @map("session_id")
+  size            String?
+  sector          String?
+  benefits        String?
+  stressFrequency Int?     @map("stress_frequency")
+  priority        String?
+  riskTier        String?  @map("risk_tier")
+  riskScore       Float?   @map("risk_score")
+  emailCaptured   Boolean  @default(false) @map("email_captured")
+  pathChosen      String?  @map("path_chosen") // "share" | "book"
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@map("audit_completions")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// AI CHAT SESSIONS
+// Store ONLY session_id and token count — NEVER message content.
+// 30-day rolling retention.
+// ─────────────────────────────────────────────────────────────────────────────
+
+model AiChatSession {
+  id           String   @id @default(uuid())
+  employeeId   String   @map("employee_id")
+  inputTokens  Int      @default(0) @map("input_tokens")
+  outputTokens Int      @default(0) @map("output_tokens")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@map("ai_chat_sessions")
+}

@@ -1,0 +1,277 @@
+{
+  "nav": {
+    "dashboard": "Oversigt",
+    "payslip": "Lønseddel",
+    "taxPlanner": "Skatteplan",
+    "goals": "Mål",
+    "chat": "AI-assistent",
+    "learning": "Lær mere",
+    "portal": "Overblik",
+    "employees": "Medarbejdere",
+    "analytics": "Analyser",
+    "signOut": "Log ud",
+    "signIn": "Log ind"
+  },
+  "dashboard": {
+    "title": "God dag",
+    "subtitle": "Her er et overblik over din finansielle situation.",
+    "netPayThisMonth": "Nettoløn denne måned",
+    "activeGoals": "Aktive mål",
+    "netWorth": "Formue (netto)",
+    "quickActions": "Hurtige handlinger",
+    "recentActivity": "Seneste aktivitet",
+    "noActivity": "Ingen aktivitet endnu."
+  },
+  "payslip": {
+    "title": "Lønseddel-forklarer",
+    "subtitle": "Indtast din bruttoløn og se præcis hvad du får udbetalt — trin for trin.",
+    "grossInput": "Bruttoløn (DKK/måned)",
+    "grossPlaceholder": "F.eks. 45000",
+    "calculating": "Beregner...",
+    "breakdown": {
+      "title": "Din lønseddel nedbrudt",
+      "gross": "Bruttoløn",
+      "amBidrag": "AM-bidrag (8%)",
+      "amGrundlag": "AM-grundlag",
+      "aSkat": "A-skat",
+      "atp": "ATP-bidrag",
+      "net": "Nettoløn",
+      "notes": "Beregningsnotater"
+    }
+  },
+  "taxPlanner": {
+    "title": "Skatteplan",
+    "subtitle": "Beregn dine fradrag og find ud af, hvad du kan trække fra i skat.",
+    "kmDaily": "Daglig pendlerafstand (km én vej)",
+    "workingDays": "Arbejdsdage per år",
+    "unionContrib": "Fagforeningskontingent (DKK/år)",
+    "deductions": {
+      "title": "Dine fradrag",
+      "commuting": "Befordringsfradrag",
+      "union": "Fagforeningskontingent",
+      "akasse": "A-kasse",
+      "craftsman": "Håndværkerfradrag",
+      "total": "Samlede fradrag"
+    }
+  },
+  "goals": {
+    "title": "Finansielle mål",
+    "subtitle": "Sæt og følg dine mål.",
+    "newGoal": "+ Nyt mål",
+    "createGoal": "Opret nyt mål",
+    "goalType": "Måltype",
+    "targetAmount": "Målbeløb (DKK)",
+    "targetPlaceholder": "F.eks. 50000",
+    "deadline": "Deadline",
+    "save": "Gem mål",
+    "cancel": "Annuller",
+    "saved": "kr. sparet",
+    "target": "Mål:",
+    "noGoals": "Du har ingen aktive mål endnu.",
+    "createFirst": "Opret dit første mål",
+    "types": {
+      "emergency_fund": "Nødreserve",
+      "house_deposit": "Boligopsparing",
+      "pension_boost": "Pensionsopsparing",
+      "debt_payoff": "Gældsafvikling",
+      "vacation": "Feriekasse",
+      "other": "Andet"
+    }
+  },
+  "chat": {
+    "title": "AI-finansassistent",
+    "subtitle": "Stil spørgsmål om din løn, skat og økonomi. Maks 20 beskeder per dag.",
+    "placeholder": "Skriv dit spørgsmål...",
+    "send": "Send",
+    "disclaimer": "AI-assistenten giver finansiel viden — ikke investeringsrådgivning. Konsulter en rådgiver ved vigtige beslutninger.",
+    "welcome": "Hej! Jeg er din finansielle assistent. Spørg mig om din lønseddel, fradrag, pension eller andet om din økonomi.",
+    "suggestions": {
+      "amBidrag": "Hvad er AM-bidrag?",
+      "aSkat": "Hvordan beregnes min A-skat?",
+      "personfradrag": "Hvad er personfradrag?"
+    },
+    "errors": {
+      "dailyLimit": "Daglig beskedgrænse nået. Besøg Læringsbiblioteket for flere ressourcer.",
+      "network": "Netværksfejl. Tjek din forbindelse og prøv igen.",
+      "generic": "Der opstod en fejl. Prøv igen."
+    }
+  },
+  "learning": {
+    "title": "Læringsbibliotek",
+    "subtitle": "Lær om dansk skat, pension og personlig økonomi i dit eget tempo.",
+    "loading": "Indlæser indhold...",
+    "markComplete": "Marker som gennemført",
+    "completed": "Gennemført",
+    "viewContent": "Se indhold",
+    "modules": {
+      "tax_basics": "Skattegrundlag",
+      "pension": "Pension",
+      "budgeting": "Budget",
+      "investing": "Opsparing",
+      "payslip": "Lønseddel"
+    }
+  },
+  "portal": {
+    "title": "HR Portal",
+    "subtitle": "Alle tal er anonymiserede aggregater. Minimum 5 medarbejdere per gruppe.",
+    "privacyNotice": "Du ser kun anonymiserede aggregater. Individuelle medarbejderdata er aldrig synlige her.",
+    "privacyGuarantee": "Bullaris viser aldrig individuelle medarbejderdata i HR portalen. Alle aggregater kræver minimum 5 medarbejdere.",
+    "insufficientData": "Utilstrækkelige data",
+    "stats": {
+      "activeEmployees": "Aktive medarbejdere",
+      "onboardingRate": "Onboarding-rate",
+      "totalGoals": "Mål oprettet (total)"
+    }
+  },
+  "employees": {
+    "title": "Medarbejdere",
+    "subtitle": "Inviter medarbejdere og se onboarding-status. Ingen finansielle data vises her.",
+    "invite": {
+      "title": "Inviter medarbejder",
+      "description": "Medarbejdere modtager et magic link og opretter selv deres profil.",
+      "placeholder": "medarbejder@virksomhed.dk",
+      "button": "Send invitation",
+      "sending": "Sender...",
+      "success": "Invitation sendt."
+    },
+    "list": {
+      "title": "Medarbejderliste",
+      "noEmployees": "Ingen medarbejdere endnu.",
+      "unnamed": "Unavngivet",
+      "status": {
+        "onboarded": "Onboardet",
+        "pending": "Afventer"
+      }
+    }
+  },
+  "analytics": {
+    "title": "Analyser",
+    "subtitle": "Anonymiserede aggregater for din organisation.",
+    "privacyThresholdNotice": "Data vises kun når gruppen har mindst 5 medarbejdere.",
+    "loading": "Indlæser analyser...",
+    "stats": {
+      "activeUsersLast30Days": "Aktive brugere (30 dage)",
+      "avgOnboardingRate": "Gennemsnitlig onboarding",
+      "totalGoalsCreated": "Mål oprettet i alt",
+      "learningCompletions": "Læringsmoduler gennemført"
+    },
+    "goalDistribution": "Fordeling af måltyper",
+    "moduleAdoption": "Modul-adoption"
+  },
+  "consent": {
+    "accept": "Jeg accepterer",
+    "decline": "Nej tak",
+    "dataCollected": "Hvilke data indsamles?",
+    "purpose": "Formål",
+    "retention": "Opbevaringstid",
+    "visibility": "Hvem kan se dine data?",
+    "versionNotice": "Du kan til enhver tid trække dit samtykke tilbage under Indstillinger.",
+    "modules": {
+      "payslip_module": "Lønseddel-forklarer",
+      "tax_planner": "Skatteplan",
+      "ai_chat": "AI-finansassistent",
+      "spending_tracker": "Forbrugsoversigt",
+      "profile": "Profil"
+    }
+  },
+  "errors": {
+    "unauthorized": "Du har ikke adgang til denne side.",
+    "notFound": "Siden blev ikke fundet.",
+    "generic": "Der opstod en uventet fejl. Prøv igen.",
+    "consentRequired": "Samtykke kræves for at bruge dette modul."
+  },
+  "common": {
+    "loading": "Indlæser...",
+    "save": "Gem",
+    "cancel": "Annuller",
+    "delete": "Slet",
+    "edit": "Rediger",
+    "back": "Tilbage",
+    "currency": "DKK",
+    "month": "månedligt",
+    "annual": "årligt"
+  },
+  "marketing": {
+    "meta": {
+      "title": "Bullaris — Finansiel wellness til danske arbejdspladser",
+      "description": "Hjælp dine medarbejdere til at føle sig trygge ved deres økonomi. Bullaris giver HR-teams en GDPR-kompatibel finansiel wellness-platform bygget til danske SMV'er."
+    },
+    "nav": {
+      "howItWorks": "Sådan virker det",
+      "pricing": "Priser",
+      "bookDemo": "Book en samtale"
+    },
+    "hero": {
+      "badge": "Finansiel wellness til medarbejdere",
+      "subheadline": "Finansiel stress er den #1 skjulte bremseklods for engagement og fastholdelse. Bullaris giver HR-teams de rette værktøjer til at handle på det — uden at tilføje kompleksitet til jeres benefits-pakke.",
+      "cta": "Tag den gratis Finansielle Stress-audit →",
+      "secondaryCta": "Book en samtale",
+      "cardTitle": "Nødreserve: opfyldt",
+      "cardSubtitle": "Anna nåede sit mål 🎉",
+      "card2Title": "Løn forstået",
+      "card2Subtitle": "Thomas forstod endelig sin lønseddel"
+    },
+    "trust": {
+      "dpa": "Databehandleraftale inkluderet",
+      "servers": "EU-servere (Frankfurt)",
+      "noHr": "Ingen individuel HR-adgang"
+    },
+    "stats": {
+      "source": "Kilder: Finansforbundet 2023, PwC Global Workforce Survey 2024, Velliv Association 2023",
+      "c1value": "68%",
+      "c1label": "af medarbejdere siger finansiel stress påvirker deres arbejde",
+      "c1source": "(Finansforbundet, 2023)",
+      "c2value": "3.2×",
+      "c2label": "højere fastholdelse i virksomheder med finansielle wellness-programmer",
+      "c2source": "(PwC, 2024)",
+      "c3value": "23%",
+      "c3label": "af sygedage i Danmark er koblet til finansiel stress",
+      "c3source": "(Velliv Association, 2023)",
+      "c4value": "100%",
+      "c4label": "GDPR-kompatibel — EU-data, altid",
+      "c4source": ""
+    },
+    "peopleStrip": "Bygget til danske arbejdspladser. Designet med HR-teams inden for detail, tech, byggeri og sundhedssektoren.",
+    "howItWorks": {
+      "h2": "Sådan virker Bullaris for HR-teams",
+      "headline": "Simpelt for HR. Meningsfuldt for medarbejderne.",
+      "subheadline": "Ingen komplekse integrationer. Intet ekstra administrativt arbejde. Op og køre på en eftermiddag.",
+      "step1title": "Du sætter det op på en eftermiddag",
+      "step1desc": "Tilslut din løndata eller indtast antal medarbejdere manuelt. Ingen IT-afdeling nødvendig. GDPR-kompatibel fra dag ét.",
+      "step2title": "Medarbejderne ser deres finansielle billede",
+      "step2desc": "Hver medarbejder får et privat dashboard: nettolønsdekoder, nødreserve-tracker og oversigt over samlet kompensation. Helt fortroligt — du ser aldrig individuelle data.",
+      "step3title": "Du ser den organisatoriske effekt",
+      "step3desc": "Anonymiserede, aggregerede indsigter til dit HR-dashboard. Track finansiel trivsel som en engagements-metrik ved siden af eNPS og fravær."
+    },
+    "pricing": {
+      "h2": "Gennemsigtig prissætning til danske SMV'er",
+      "headline": "Gennemsigtig prissætning. Ingen overraskelser.",
+      "label": "Per medarbejder, per måned",
+      "price": "Fra 49 DKK",
+      "subtext": "Faktureret årligt · Minimum 10 pladser · Inkluderer alle funktioner + dedikeret onboarding",
+      "f1": "Nettolønsdekoder",
+      "f2": "Nødreserve-tracker",
+      "f3": "Oversigt over samlet kompensation",
+      "f4": "HR aggregeret dashboard",
+      "cta": "Få et tilpasset tilbud →",
+      "below": "Alle planer inkluderer en gratis 30-dages pilot. Intet kreditkort nødvendigt."
+    },
+    "finalCta": {
+      "headline": "Start med en 5-minutters audit.",
+      "subheadline": "Find ud af præcis, hvor dine medarbejdere står — og hvad det koster din organisation.",
+      "primary": "Tag den Finansielle Stress-audit →",
+      "secondary": "Book en samtale",
+      "reassurance": "Gratis. Anonymt for medarbejdere. Ingen forpligtelse."
+    },
+    "footer": {
+      "tagline": "Finansiel wellness til danske arbejdspladser",
+      "l1": "Sådan virker det",
+      "l2": "Priser",
+      "l3": "Privatlivspolitik",
+      "l4": "Databehandleraftale",
+      "madeIn": "Lavet i Danmark 🇩🇰",
+      "email": "hello@bullaris.dk",
+      "bottom": "Bullaris ApS · CVR: XXXXXXXX · EU-servere · GDPR-kompatibel"
+    }
+  }
+}
