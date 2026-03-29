@@ -2,11 +2,14 @@
 
 import { useState } from 'react'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import type { Metadata } from 'next'
+import { useRouter } from 'next/navigation'
 
 export default function LoginPage() {
   const supabase = createClientComponentClient()
+  const router = useRouter()
   const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [mode, setMode] = useState<'magic' | 'password'>('magic')
   const [status, setStatus] = useState<'idle' | 'loading' | 'sent' | 'error'>('idle')
   const [errorMsg, setErrorMsg] = useState('')
 
@@ -14,6 +17,17 @@ export default function LoginPage() {
     e.preventDefault()
     setStatus('loading')
     setErrorMsg('')
+
+    if (mode === 'password') {
+      const { error } = await supabase.auth.signInWithPassword({ email, password })
+      if (error) {
+        setErrorMsg(error.message)
+        setStatus('error')
+      } else {
+        router.push('/auth/callback?code=password')
+      }
+      return
+    }
 
     const { error } = await supabase.auth.signInWithOtp({
       email,
@@ -52,10 +66,7 @@ export default function LoginPage() {
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-[#1E0F00] mb-1.5"
-              >
+              <label htmlFor="email" className="block text-sm font-medium text-[#1E0F00] mb-1.5">
                 E-mail
               </label>
               <input
@@ -69,6 +80,22 @@ export default function LoginPage() {
               />
             </div>
 
+            {mode === 'password' && (
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium text-[#1E0F00] mb-1.5">
+                  Adgangskode
+                </label>
+                <input
+                  id="password"
+                  type="password"
+                  required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full rounded-lg border border-input bg-white px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-bullaris-blue/30 focus:border-bullaris-blue transition"
+                />
+              </div>
+            )}
+
             {status === 'error' && (
               <p className="text-sm text-destructive">{errorMsg}</p>
             )}
@@ -78,7 +105,15 @@ export default function LoginPage() {
               disabled={status === 'loading'}
               className="w-full rounded-lg bg-bullaris-blue text-white px-4 py-2.5 text-sm font-semibold hover:bg-bullaris-blue/90 disabled:opacity-60 transition"
             >
-              {status === 'loading' ? 'Sender…' : 'Send login-link'}
+              {status === 'loading' ? 'Logger ind…' : mode === 'password' ? 'Log ind' : 'Send login-link'}
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setMode(mode === 'magic' ? 'password' : 'magic')}
+              className="w-full text-xs text-muted-foreground hover:text-foreground transition text-center"
+            >
+              {mode === 'magic' ? 'Log ind med adgangskode i stedet' : 'Log ind med magic link i stedet'}
             </button>
           </form>
         )}

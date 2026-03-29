@@ -9,15 +9,14 @@ export async function GET(request: Request) {
   const requestUrl = new URL(request.url)
   const code = requestUrl.searchParams.get('code')
 
-  if (!code) {
-    return NextResponse.redirect(new URL('/login', requestUrl.origin))
-  }
-
   const supabase = createRouteHandlerClient({ cookies })
-  const { error } = await supabase.auth.exchangeCodeForSession(code)
 
-  if (error) {
-    return NextResponse.redirect(new URL('/login?error=auth', requestUrl.origin))
+  // Password login already has a session — skip code exchange
+  if (code && code !== 'password') {
+    const { error } = await supabase.auth.exchangeCodeForSession(code)
+    if (error) {
+      return NextResponse.redirect(new URL('/login?error=auth', requestUrl.origin))
+    }
   }
 
   const {
