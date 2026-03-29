@@ -1,11 +1,7 @@
 {
-  "buildCommand": "cd apps/web && npm run build",
+  "buildCommand": "npm install && npx prisma generate --schema=packages/db/schema.prisma && cd apps/web && npm run build",
   "outputDirectory": "apps/web/.next",
-  "installCommand": "npm install",
+  "installCommand": "echo 'install handled in buildCommand'",
   "framework": "nextjs",
-  "regions": ["fra1"],
-  "env": {
-    "NEXT_PUBLIC_SUPABASE_URL": "@next_public_supabase_url",
-    "NEXT_PUBLIC_SITE_URL": "@next_public_site_url"
-  }
+  "regions": ["fra1"]
 }
