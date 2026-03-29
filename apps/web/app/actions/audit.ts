@@ -1,7 +1,7 @@
 'use server'
 
 import { createClient } from '@supabase/supabase-js'
-import { scoreAudit } from '@/lib/scoreAudit'
+import { localFallbackScore } from '@/lib/localScore'
 import { sendReport, type ReportData } from '@/lib/sendReport'
 import type { AuditAnswers, ScoredResult } from '@/components/audit/types'
 
@@ -15,7 +15,7 @@ function getServiceSupabase() {
 // ─── Score ────────────────────────────────────────────────────────────────────
 
 export async function scoreAuditAction(answers: AuditAnswers): Promise<ScoredResult> {
-  return scoreAudit(answers)
+  return localFallbackScore(answers)
 }
 
 // ─── Log completion (called after Q5, before result) ─────────────────────────
