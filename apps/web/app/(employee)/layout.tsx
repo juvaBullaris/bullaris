@@ -7,11 +7,7 @@ import { useRouter } from 'next/navigation'
 import { useLanguage } from '@/lib/language-context'
 import { LanguageSwitcher } from '@/components/language-switcher'
 
-export default function EmployeeLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function EmployeeLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const router = useRouter()
   const supabase = createClientComponentClient()
@@ -32,48 +28,46 @@ export default function EmployeeLayout({
   }
 
   return (
-    <div className="min-h-screen flex bg-background">
-      {/* Sidebar */}
-      <aside className="w-64 border-r bg-white flex flex-col">
-        <div className="p-6 border-b">
-          <Link href="/dashboard" className="text-xl font-bold text-bullaris-blue">
+    <div className="min-h-screen flex" style={{ background: '#FDF6EE' }}>
+      <aside className="w-60 flex flex-col shrink-0" style={{ background: '#FFF8F3', borderRight: '1px solid #EDE0D4' }}>
+        <div className="p-6" style={{ borderBottom: '1px solid #EDE0D4' }}>
+          <Link href="/dashboard" className="font-serif text-xl font-bold" style={{ color: '#1E0F00' }}>
             Bullaris
           </Link>
         </div>
-        <nav className="flex-1 p-4 space-y-1">
+        <nav className="flex-1 p-3 space-y-0.5">
           {navItems.map((item) => {
             const isActive = pathname.startsWith(item.href)
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
-                  isActive
-                    ? 'bg-bullaris-blue/10 text-bullaris-blue'
-                    : 'text-muted-foreground hover:bg-accent hover:text-foreground'
-                }`}
+                className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors"
+                style={{
+                  background: isActive ? '#E8634A' : 'transparent',
+                  color: isActive ? '#fff' : '#6B5C52',
+                }}
               >
-                <span>{item.icon}</span>
+                <span className="text-base">{item.icon}</span>
                 {item.label}
               </Link>
             )
           })}
         </nav>
-        <div className="p-4 border-t space-y-3">
+        <div className="p-4 space-y-3" style={{ borderTop: '1px solid #EDE0D4' }}>
           <LanguageSwitcher />
           <button
             onClick={handleSignOut}
-            className="w-full flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+            className="w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors"
+            style={{ color: '#6B5C52' }}
           >
             <span>🚪</span>
             {t.nav.signOut}
           </button>
         </div>
       </aside>
-
-      {/* Main content */}
       <main className="flex-1 overflow-auto">
-        <div className="container py-8">{children}</div>
+        <div className="max-w-5xl mx-auto px-8 py-8">{children}</div>
       </main>
     </div>
   )

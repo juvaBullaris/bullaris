@@ -1,81 +1,95 @@
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
-import type { Metadata } from 'next'
+'use client'
 
-export const dynamic = 'force-dynamic'
-export const metadata: Metadata = { title: 'Oversigt' }
+import Link from 'next/link'
+import { useLanguage } from '@/lib/language-context'
 
-export default async function DashboardPage() {
-  const supabase = createServerComponentClient({ cookies })
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+export default function DashboardPage() {
+  const { t } = useLanguage()
 
-  if (!user) redirect('/login')
+  const cards = [
+    {
+      label: t.dashboard.netPayThisMonth,
+      value: '– DKK',
+      link: '/payslip',
+      linkLabel: t.nav.payslip,
+    },
+    {
+      label: t.dashboard.activeGoals,
+      value: '0',
+      link: '/goals',
+      linkLabel: t.nav.goals,
+    },
+    {
+      label: t.dashboard.netWorth,
+      value: '– DKK',
+      link: null,
+      linkLabel: null,
+    },
+  ]
+
+  const quickActions = [
+    { href: '/payslip', icon: '📄', label: t.nav.payslip },
+    { href: '/tax-planner', icon: '🧮', label: t.nav.taxPlanner },
+    { href: '/chat', icon: '💬', label: t.nav.chat },
+    { href: '/learning', icon: '📚', label: t.nav.learning },
+  ]
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-2">God dag</h1>
-      <p className="text-muted-foreground mb-8">
-        Her er et overblik over din finansielle situation.
+      <h1 className="font-serif text-3xl font-bold mb-1" style={{ color: '#1E0F00' }}>
+        {t.dashboard.title}
+      </h1>
+      <p className="text-sm mb-8" style={{ color: '#A0917F' }}>
+        {t.dashboard.subtitle}
       </p>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="rounded-xl border bg-card p-6">
-          <p className="text-sm text-muted-foreground mb-1">Nettoløn denne måned</p>
-          <p className="text-2xl font-bold">– DKK</p>
-          <p className="text-xs text-muted-foreground mt-1">
-            <a href="/payslip" className="underline">
-              Se lønseddel
-            </a>
-          </p>
-        </div>
-        <div className="rounded-xl border bg-card p-6">
-          <p className="text-sm text-muted-foreground mb-1">Aktive mål</p>
-          <p className="text-2xl font-bold">0</p>
-          <p className="text-xs text-muted-foreground mt-1">
-            <a href="/goals" className="underline">
-              Opret mål
-            </a>
-          </p>
-        </div>
-        <div className="rounded-xl border bg-card p-6">
-          <p className="text-sm text-muted-foreground mb-1">Formue (netto)</p>
-          <p className="text-2xl font-bold">– DKK</p>
-          <p className="text-xs text-muted-foreground mt-1">Opdater formue</p>
-        </div>
+      {/* Stat cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        {cards.map((card) => (
+          <div
+            key={card.label}
+            className="rounded-2xl p-6"
+            style={{ background: '#fff', border: '1px solid #EDE0D4' }}
+          >
+            <p className="text-xs font-medium mb-2" style={{ color: '#A0917F' }}>{card.label}</p>
+            <p className="text-2xl font-bold mb-2" style={{ color: '#1E0F00' }}>{card.value}</p>
+            {card.link && (
+              <Link href={card.link} className="text-xs underline" style={{ color: '#E8634A' }}>
+                {card.linkLabel}
+              </Link>
+            )}
+          </div>
+        ))}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="rounded-xl border bg-card p-6">
-          <h2 className="font-semibold mb-4">Hurtige handlinger</h2>
-          <ul className="space-y-3 text-sm">
-            <li>
-              <a href="/payslip" className="flex items-center gap-2 text-bullaris-blue hover:underline">
-                📄 Forstå din lønseddel
-              </a>
-            </li>
-            <li>
-              <a href="/tax-planner" className="flex items-center gap-2 text-bullaris-blue hover:underline">
-                🧮 Beregn dine fradrag
-              </a>
-            </li>
-            <li>
-              <a href="/chat" className="flex items-center gap-2 text-bullaris-blue hover:underline">
-                💬 Spørg AI-assistenten
-              </a>
-            </li>
-            <li>
-              <a href="/learning" className="flex items-center gap-2 text-bullaris-blue hover:underline">
-                📚 Lær om pensionsopsparing
-              </a>
-            </li>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Quick actions */}
+        <div className="rounded-2xl p-6" style={{ background: '#fff', border: '1px solid #EDE0D4' }}>
+          <h2 className="font-serif font-semibold text-lg mb-4" style={{ color: '#1E0F00' }}>
+            {t.dashboard.quickActions}
+          </h2>
+          <ul className="space-y-2">
+            {quickActions.map((a) => (
+              <li key={a.href}>
+                <Link
+                  href={a.href}
+                  className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors"
+                  style={{ color: '#6B5C52' }}
+                >
+                  <span>{a.icon}</span>
+                  {a.label}
+                </Link>
+              </li>
+            ))}
           </ul>
         </div>
-        <div className="rounded-xl border bg-card p-6">
-          <h2 className="font-semibold mb-4">Seneste aktivitet</h2>
-          <p className="text-sm text-muted-foreground">Ingen aktivitet endnu.</p>
+
+        {/* Recent activity */}
+        <div className="rounded-2xl p-6" style={{ background: '#fff', border: '1px solid #EDE0D4' }}>
+          <h2 className="font-serif font-semibold text-lg mb-4" style={{ color: '#1E0F00' }}>
+            {t.dashboard.recentActivity}
+          </h2>
+          <p className="text-sm" style={{ color: '#A0917F' }}>{t.dashboard.noActivity}</p>
         </div>
       </div>
     </div>

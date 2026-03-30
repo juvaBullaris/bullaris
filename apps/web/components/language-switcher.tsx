@@ -12,7 +12,8 @@ export function LanguageSwitcher() {
 
   return (
     <div
-      className="flex items-center rounded-full border border-stone-200 bg-white p-0.5 text-xs font-semibold"
+      className="flex items-center rounded-full p-0.5 text-xs font-semibold"
+      style={{ background: '#EDE0D4' }}
       role="group"
       aria-label="Language switcher"
     >
@@ -21,12 +22,11 @@ export function LanguageSwitcher() {
           key={value}
           onClick={() => setLocale(value)}
           aria-pressed={locale === value}
-          aria-label={`Switch to ${value === 'da' ? 'Danish' : 'English'}`}
-          className={`rounded-full px-2.5 py-1 transition-colors ${
-            locale === value
-              ? 'bg-bullaris-blue text-white'
-              : 'text-muted-foreground hover:text-foreground'
-          }`}
+          className="rounded-full px-3 py-1 transition-colors"
+          style={{
+            background: locale === value ? '#E8634A' : 'transparent',
+            color: locale === value ? '#fff' : '#6B5C52',
+          }}
         >
           {label}
         </button>
