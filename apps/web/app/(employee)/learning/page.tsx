@@ -1,16 +1,10 @@
 'use client'
 
 import { trpc } from '@/lib/trpc'
-
-const MODULE_LABELS: Record<string, string> = {
-  tax_basics: 'Skattegrundlag',
-  pension: 'Pension',
-  budgeting: 'Budget',
-  investing: 'Opsparing',
-  payslip: 'Lønseddel',
-}
+import { useLanguage } from '@/lib/language-context'
 
 export default function LearningPage() {
+  const { t } = useLanguage()
   const contentQuery = trpc.learning.list.useQuery()
   const progressQuery = trpc.learning.myProgress.useQuery()
   const markComplete = trpc.learning.markComplete.useMutation({
@@ -21,18 +15,17 @@ export default function LearningPage() {
 
   return (
     <div className="max-w-3xl">
-      <h1 className="text-2xl font-bold mb-2">Læringsbibliotek</h1>
-      <p className="text-muted-foreground mb-8">
-        Lær om dansk skat, pension og personlig økonomi i dit eget tempo.
-      </p>
+      <h1 className="text-2xl font-bold mb-2">{t.learning.title}</h1>
+      <p className="text-muted-foreground mb-8">{t.learning.subtitle}</p>
 
       {contentQuery.isLoading && (
-        <div className="text-center py-12 text-muted-foreground">Indlæser indhold...</div>
+        <div className="text-center py-12 text-muted-foreground">{t.learning.loading}</div>
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {contentQuery.data?.map((item) => {
           const done = completedIds.has(item.id)
+          const moduleLabel = t.learning.modules[item.module as keyof typeof t.learning.modules] ?? item.module
           return (
             <div
               key={item.id}
@@ -41,7 +34,7 @@ export default function LearningPage() {
               <div className="flex items-start justify-between gap-2">
                 <div>
                   <span className="text-xs font-medium text-bullaris-blue uppercase tracking-wide">
-                    {MODULE_LABELS[item.module] ?? item.module}
+                    {moduleLabel}
                   </span>
                   <h3 className="font-semibold mt-1">{item.title}</h3>
                 </div>
@@ -50,20 +43,20 @@ export default function LearningPage() {
               <p className="text-sm text-muted-foreground">{item.description}</p>
               <div className="flex items-center justify-between mt-auto pt-2">
                 {done ? (
-                  <span className="text-xs text-bullaris-teal font-medium">✓ Gennemført</span>
+                  <span className="text-xs text-bullaris-teal font-medium">✓ {t.learning.completed}</span>
                 ) : (
                   <button
                     onClick={() => markComplete.mutate({ content_id: item.id })}
                     className="text-xs text-bullaris-blue hover:underline"
                   >
-                    Marker som gennemført
+                    {t.learning.markComplete}
                   </button>
                 )}
                 <a
                   href={`/learning/${item.id}`}
                   className="text-xs text-muted-foreground hover:text-foreground underline"
                 >
-                  Se indhold
+                  {t.learning.viewContent}
                 </a>
               </div>
             </div>

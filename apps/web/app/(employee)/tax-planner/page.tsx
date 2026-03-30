@@ -3,42 +3,36 @@
 import { useState } from 'react'
 import { ConsentModal } from '@/components/consent-modal'
 import { trpc } from '@/lib/trpc'
+import { useLanguage } from '@/lib/language-context'
+import { useConsent } from '@/lib/use-consent'
 
 export default function TaxPlannerPage() {
-  const [consentGiven, setConsentGiven] = useState(false)
-  const [showConsent, setShowConsent] = useState(true)
+  const { t } = useLanguage()
+  const { hasConsent, isLoading: consentLoading, grant } = useConsent('tax_planner')
 
-  // Deduction inputs
   const [kmDaily, setKmDaily] = useState('')
   const [workingDays, setWorkingDays] = useState('220')
   const [unionContrib, setUnionContrib] = useState('')
 
-  const logConsent = trpc.employee.logConsent.useMutation()
   const deductionsQuery = trpc.payslip.getDeductions.useQuery(
     {
       km_daily: Number(kmDaily),
       working_days: Number(workingDays),
       union_contrib_dkk: Number(unionContrib),
     },
-    { enabled: consentGiven && Number(kmDaily) >= 0 }
+    { enabled: hasConsent && Number(kmDaily) >= 0 }
   )
 
-  function handleAccept() {
-    logConsent.mutate({ module: 'tax_planner', action: 'grant' })
-    setConsentGiven(true)
-    setShowConsent(false)
+  if (consentLoading) {
+    return <div className="text-center py-12 text-muted-foreground text-sm">{t.common.loading}</div>
   }
 
-  function handleDecline() {
-    setShowConsent(false)
-  }
-
-  if (showConsent && !consentGiven) {
+  if (!hasConsent) {
     return (
       <ConsentModal
         module="tax_planner"
-        onAccept={handleAccept}
-        onDecline={handleDecline}
+        onAccept={grant}
+        onDecline={() => window.history.back()}
       />
     )
   }
@@ -47,16 +41,12 @@ export default function TaxPlannerPage() {
 
   return (
     <div className="max-w-2xl">
-      <h1 className="text-2xl font-bold mb-2">Skatteplan</h1>
-      <p className="text-muted-foreground mb-8">
-        Beregn dine fradrag og find ud af, hvad du kan trække fra i skat.
-      </p>
+      <h1 className="text-2xl font-bold mb-2">{t.taxPlanner.title}</h1>
+      <p className="text-muted-foreground mb-8">{t.taxPlanner.subtitle}</p>
 
       <div className="rounded-xl border bg-card p-6 mb-6 space-y-4">
         <div>
-          <label className="block text-sm font-medium mb-1">
-            Daglig pendlerafstand (km én vej)
-          </label>
+          <label className="block text-sm font-medium mb-1">{t.taxPlanner.kmDaily}</label>
           <input
             type="number"
             value={kmDaily}
@@ -66,9 +56,7 @@ export default function TaxPlannerPage() {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">
-            Arbejdsdage per år
-          </label>
+          <label className="block text-sm font-medium mb-1">{t.taxPlanner.workingDays}</label>
           <input
             type="number"
             value={workingDays}
@@ -78,9 +66,7 @@ export default function TaxPlannerPage() {
           />
         </div>
         <div>
-          <label className="block text-sm font-medium mb-1">
-            Fagforeningskontingent (DKK/år)
-          </label>
+          <label className="block text-sm font-medium mb-1">{t.taxPlanner.unionContrib}</label>
           <input
             type="number"
             value={unionContrib}
@@ -93,7 +79,7 @@ export default function TaxPlannerPage() {
 
       {deductionsQuery.data && (
         <div className="rounded-xl border bg-card p-6 space-y-3">
-          <h2 className="font-semibold mb-4">Dine fradrag</h2>
+          <h2 className="font-semibold mb-4">{t.taxPlanner.deductions.title}</h2>
           {deductionsQuery.data.map((item) => (
             <div key={item.label} className="flex justify-between text-sm">
               <span className="text-muted-foreground">{item.label}</span>
@@ -101,7 +87,7 @@ export default function TaxPlannerPage() {
             </div>
           ))}
           <div className="pt-3 border-t flex justify-between font-semibold">
-            <span>Samlede fradrag</span>
+            <span>{t.taxPlanner.deductions.total}</span>
             <span className="text-bullaris-teal">
               {fmt(deductionsQuery.data.reduce((s, d) => s + d.amount_dkk, 0))}
             </span>
