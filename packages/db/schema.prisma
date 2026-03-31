@@ -107,7 +107,7 @@ model NetWorthEntry {
 model Goal {
   id           String    @id @default(uuid())
   employeeId   String    @map("employee_id")
-  type         String    // emergency_fund | house_deposit | debt_payoff | pension_boost | investment | home_renovation | car | education | children_savings | vacation | other
+  type         String    // short: emergency_fund | debt_payoff | vacation | car | education  /  medium: house_deposit | home_renovation | children_savings | investment | side_income  /  long: pension_boost | financial_independence | passive_income | early_retirement | generational_wealth  /  other
   target_dkk   Decimal   @db.Decimal(12, 2)
   deadline     DateTime?
   progress_dkk Decimal   @default(0) @db.Decimal(12, 2)
