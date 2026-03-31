@@ -120,9 +120,9 @@ const ROWS: PayslipRow[] = [
     titleEn: 'A-skat — Income Tax',
     titleDa: 'A-skat — Indkomstskat',
     bodyEn:
-      'A-skat is your main income tax. The rate comes from your tax card (skattekort) issued by SKAT. It is calculated on your taxable income: gross minus AM-bidrag minus your personal allowance (personfradrag ≈4,160 DKK/month). Most Danes pay an effective rate of 32–42%.',
+      'A-skat is your main income tax. The rate comes from your tax card (skattekort) issued by SKAT. It is calculated on your taxable income: gross minus AM-bidrag minus your personal allowance (personfradrag ≈4,160 DKK/month). Most Danes pay an effective rate of 32–42%.\n\nCheck or update your skattekort at skat.dk → "Forskudsopgørelse".',
     bodyDa:
-      'A-skat er din primære indkomstskat. Satsen kommer fra dit skattekort udstedt af SKAT. Den beregnes af din skattepligtige indkomst: bruttoløn minus AM-bidrag minus dit personfradrag (≈4.160 kr./md). De fleste danskere betaler en effektiv sats på 32–42%.',
+      'A-skat er din primære indkomstskat. Satsen kommer fra dit skattekort udstedt af SKAT. Den beregnes af din skattepligtige indkomst: bruttoløn minus AM-bidrag minus dit personfradrag (≈4.160 kr./md). De fleste danskere betaler en effektiv sats på 32–42%.\n\nTjek eller opdater dit skattekort på skat.dk → "Forskudsopgørelse".',
     formula: {
       en: '(40,000 − 3,200 − 4,160) × 38% ≈ 12,393 DKK*\n*simplified — actual depends on your tax card',
       da: '(40.000 − 3.200 − 4.160) × 38% ≈ 12.393 kr.*\n*forenklet — faktisk afhænger af dit skattekort',
@@ -293,12 +293,16 @@ export default function PayslipGuidePage() {
                 ? "In Denmark, payslips are not emailed. They go to your e-Boks — a secure, government-run digital mailbox. Every person with a Danish CPR number has one. The payslip is sent at the end of each month by your employer (or Moderniseringsstyrelsen if you work in the public sector)."
                 : 'I Danmark sendes lønsedler ikke via e-mail. De går til din e-Boks — en sikker, statslig digital postkasse. Alle med et dansk CPR-nummer har en. Lønsedlen sendes ved udgangen af hver måned af din arbejdsgiver (eller Moderniseringsstyrelsen hvis du arbejder i den offentlige sektor).'}
             </p>
-            <div
-              className="mt-4 rounded-xl px-4 py-3 text-sm font-medium"
+            <a
+              href="https://www.e-boks.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-4 flex items-center justify-between rounded-xl px-4 py-3 text-sm font-medium transition-all hover:opacity-80"
               style={{ background: '#FDF6EE', border: '1px solid #EDE0D4', color: '#6B5C52' }}
             >
-              🔗 e-boks.dk — {en ? 'Usually set up automatically when you open a Danish bank account' : 'Oprettes normalt automatisk når du åbner en dansk bankkonto'}
-            </div>
+              <span>🔗 e-boks.dk — {en ? 'Usually set up automatically when you open a Danish bank account' : 'Oprettes normalt automatisk når du åbner en dansk bankkonto'}</span>
+              <span style={{ color: '#E8634A', fontSize: '12px' }}>↗</span>
+            </a>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -472,6 +476,17 @@ export default function PayslipGuidePage() {
                     >
                       {en ? activeRowData.formula.en : activeRowData.formula.da}
                     </div>
+                  )}
+                  {activeRowData.id === 'askat' && (
+                    <a
+                      href="https://www.skat.dk"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-4 flex items-center gap-1.5 text-xs font-medium hover:underline"
+                      style={{ color: '#E8634A' }}
+                    >
+                      🔗 {en ? 'Update your skattekort at skat.dk ↗' : 'Opdater dit skattekort på skat.dk ↗'}
+                    </a>
                   )}
                 </div>
               ) : (
@@ -738,6 +753,28 @@ export default function PayslipGuidePage() {
             ))}
           </div>
 
+          {/* Next module */}
+          <div className="max-w-sm mx-auto mb-8">
+            <p className="text-xs font-medium mb-2" style={{ color: '#9B8B7E' }}>
+              {en ? 'UP NEXT IN BASICS' : 'NÆSTE I DET GRUNDLÆGGENDE'}
+            </p>
+            <Link
+              href="/learning/tax-basics"
+              className="flex items-center justify-between rounded-xl px-5 py-4 transition-all hover:opacity-90"
+              style={{ background: '#FFF8F3', border: '1px solid #EDE0D4' }}
+            >
+              <div>
+                <p className="font-semibold text-sm" style={{ color: '#1E0F00' }}>
+                  📊 {en ? 'Danish Tax Basics 2026' : 'Danske skatter — det grundlæggende 2026'}
+                </p>
+                <p className="text-xs" style={{ color: '#6B5C52' }}>
+                  {en ? 'AM-bidrag, bundskat, live calculator →' : 'AM-bidrag, bundskat, live beregner →'}
+                </p>
+              </div>
+              <span style={{ color: '#E8634A' }}>→</span>
+            </Link>
+          </div>
+
           <div className="flex gap-3 justify-center flex-wrap">
             <button
               onClick={() => {
@@ -754,7 +791,7 @@ export default function PayslipGuidePage() {
             <Link
               href="/learning"
               className="rounded-xl px-6 py-3 text-sm font-semibold text-white"
-              style={{ background: '#E8634A' }}
+              style={{ background: '#1E0F00' }}
             >
               {en ? 'Back to Learning →' : 'Tilbage til Læring →'}
             </Link>

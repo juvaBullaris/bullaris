@@ -409,12 +409,23 @@ export default function TaxBasicsPage() {
             {[
               { icon: '🧱', en: 'Multi-layer', da: 'Flerlagsdelt', bodyEn: 'Tax is built in layers: AM-bidrag → bundskat → kommuneskat → higher brackets. Each layer only applies above its threshold.', bodyDa: 'Skat er bygget i lag: AM-bidrag → bundskat → kommuneskat → højere brackets. Hvert lag gælder kun over dets tærskel.' },
               { icon: '📍', en: 'Where you live matters', da: 'Bopæl betyder noget', bodyEn: 'Kommuneskat varies from 22.8% (Frederiksberg) to 26.3% (Brønderslev). Moving can save thousands per year.', bodyDa: 'Kommuneskat varierer fra 22,8% (Frederiksberg) til 26,3% (Brønderslev). At flytte kan spare tusindvis om året.' },
-              { icon: '📋', en: 'File every November', da: 'Indgiv hvert november', bodyEn: 'Update your forskudsopgørelse (preliminary return) at skat.dk each November. If you skip it, SKAT withholds at ~55%.', bodyDa: 'Opdater din forskudsopgørelse på skat.dk hvert november. Glemmer du det, trækker SKAT ca. 55% i skat.' },
+              { icon: '📋', en: 'File every November', da: 'Indgiv hvert november', bodyEn: 'Update your forskudsopgørelse (preliminary return) at skat.dk each November. If you skip it, SKAT withholds at ~55%.', bodyDa: 'Opdater din forskudsopgørelse på skat.dk hvert november. Glemmer du det, trækker SKAT ca. 55% i skat.', link: 'https://www.skat.dk', linkLabel: 'skat.dk ↗' },
             ].map((c) => (
               <div key={c.en} className="rounded-xl p-5" style={{ background: '#FFF8F3', border: '1px solid #EDE0D4' }}>
                 <div className="text-2xl mb-2">{c.icon}</div>
                 <h3 className="font-semibold text-sm mb-1" style={{ color: '#1E0F00' }}>{en ? c.en : c.da}</h3>
                 <p className="text-xs leading-relaxed" style={{ color: '#6B5C52' }}>{en ? c.bodyEn : c.bodyDa}</p>
+                {'link' in c && (
+                  <a
+                    href={c.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-2 inline-block text-xs font-medium hover:underline"
+                    style={{ color: '#E8634A' }}
+                  >
+                    {c.linkLabel}
+                  </a>
+                )}
               </div>
             ))}
           </div>
@@ -699,12 +710,34 @@ export default function TaxBasicsPage() {
               </div>
             ))}
           </div>
+          {/* Next module */}
+          <div className="max-w-sm mx-auto mb-8">
+            <p className="text-xs font-medium mb-2" style={{ color: '#9B8B7E' }}>
+              {en ? 'UP NEXT IN BASICS' : 'NÆSTE I DET GRUNDLÆGGENDE'}
+            </p>
+            <Link
+              href="/learning/goal-setting"
+              className="flex items-center justify-between rounded-xl px-5 py-4 transition-all hover:opacity-90"
+              style={{ background: '#FFF8F3', border: '1px solid #EDE0D4' }}
+            >
+              <div>
+                <p className="font-semibold text-sm" style={{ color: '#1E0F00' }}>
+                  🎯 {en ? 'How to Set Your Financial Goals' : 'Sådan sætter du dine finansielle mål'}
+                </p>
+                <p className="text-xs" style={{ color: '#6B5C52' }}>
+                  {en ? 'SMART-A, Three Horizons, 7-step system →' : 'SMART-A, tre horisonter, 7-trins plan →'}
+                </p>
+              </div>
+              <span style={{ color: '#E8634A' }}>→</span>
+            </Link>
+          </div>
+
           <div className="flex gap-3 justify-center flex-wrap">
             <button onClick={() => { setStep(0); setQuizIdx(0); setSelected(null); setAnswers(Array(QUIZ.length).fill(null)) }}
               className="rounded-xl px-6 py-3 text-sm font-medium border" style={{ borderColor: '#EDE0D4', color: '#6B5C52' }}>
               {en ? 'Restart' : 'Genstart'}
             </button>
-            <Link href="/learning" className="rounded-xl px-6 py-3 text-sm font-semibold text-white" style={{ background: '#E8634A' }}>
+            <Link href="/learning" className="rounded-xl px-6 py-3 text-sm font-semibold text-white" style={{ background: '#1E0F00' }}>
               {en ? 'Back to Learning →' : 'Tilbage til Læring →'}
             </Link>
           </div>

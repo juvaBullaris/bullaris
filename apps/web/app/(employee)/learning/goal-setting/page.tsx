@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { trpc } from '@/lib/trpc'
 import { useLanguage } from '@/lib/language-context'
 
@@ -259,530 +260,567 @@ const QUIZ_QUESTIONS = [
   },
 ]
 
-const TOTAL_STEPS = 5
+const CONTENT_STEPS = 5 // steps 0–4 are content, step 5 is the done screen
 
 export default function GoalSettingPage() {
   const { locale } = useLanguage()
   const en = locale === 'en'
 
-  const [currentStep, setCurrentStep] = useState(0)
+  const [step, setStep] = useState(0)
   const [failureActive, setFailureActive] = useState<number | null>(null)
   const [smartActive, setSmartActive] = useState<number | null>(null)
   const [activeHorizon, setActiveHorizon] = useState<number | null>(null)
   const [expandedStep7, setExpandedStep7] = useState<number | null>(0)
   const [activeBias, setActiveBias] = useState<number | null>(null)
   const [quizAnswers, setQuizAnswers] = useState<(number | null)[]>([null, null, null, null])
-  const [quizSubmitted, setQuizSubmitted] = useState(false)
 
   const markComplete = trpc.learning.markComplete.useMutation()
 
-  const stepLabels = en
+  const steps = en
     ? ['Why Goals Fail', 'SMART-A', 'Three Horizons', '7-Step Playbook', 'Biases & Quiz']
     : ['Hvorfor mål fejler', 'SMART-A', 'Tre horisonter', '7-trins plan', 'Bias & Quiz']
 
+  function goNext() { setStep((s) => Math.min(s + 1, CONTENT_STEPS)) }
+  function goPrev() { setStep((s) => Math.max(s - 1, 0)) }
+
   function handleQuizAnswer(qi: number, ai: number) {
-    if (quizSubmitted) return
     const updated = [...quizAnswers]
     updated[qi] = ai
     setQuizAnswers(updated)
   }
 
   function submitQuiz() {
-    setQuizSubmitted(true)
     markComplete.mutate({ content_id: 'goal-setting' })
+    setStep(CONTENT_STEPS)
   }
 
-  const score = quizSubmitted
+  const score = step === CONTENT_STEPS
     ? QUIZ_QUESTIONS.filter((q, i) => quizAnswers[i] === q.en.correct).length
     : 0
 
   return (
-    <div className="max-w-3xl">
+    <div className="max-w-4xl">
       {/* Header */}
       <div className="mb-6">
-        <div className="flex items-center gap-2 mb-3">
-          <span
-            className="text-xs font-bold uppercase tracking-widest px-2 py-0.5 rounded-full"
-            style={{ background: '#E8634A', color: '#fff' }}
-          >
-            {en ? 'Interactive' : 'Interaktiv'}
-          </span>
-          <span className="text-xs text-muted-foreground">
-            {en ? 'Goal Setting' : 'Målsætning'} · ~10 min
-          </span>
+        <Link
+          href="/learning"
+          className="text-sm flex items-center gap-1 mb-4 hover:underline"
+          style={{ color: '#9B8B7E' }}
+        >
+          ← {en ? 'Back to Learning' : 'Tilbage til Læring'}
+        </Link>
+        <div className="flex items-center gap-3 mb-1">
+          <span className="text-2xl">🎯</span>
+          <h1 className="font-serif text-2xl font-bold" style={{ color: '#1E0F00' }}>
+            {en ? 'How to Set Your Financial Goals' : 'Sådan sætter du dine finansielle mål'}
+          </h1>
         </div>
-        <h1 className="text-2xl font-bold mb-1">
-          🎯 {en ? 'How to Set Your Financial Goals' : 'Sådan sætter du dine finansielle mål'}
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          {en
-            ? 'A science-based guide to setting, executing, and reaching your financial goals.'
-            : 'En videnskabeligt baseret guide til at sætte, eksekvere og nå dine finansielle mål.'}
+        <p className="text-sm ml-10" style={{ color: '#9B8B7E' }}>
+          {en ? '5 sections · ~10 min · Interactive' : '5 sektioner · ≈10 min · Interaktiv'}
         </p>
       </div>
 
-      {/* Progress */}
-      <div className="mb-2 flex gap-1">
-        {stepLabels.map((label, i) => (
-          <button key={i} onClick={() => setCurrentStep(i)} className="flex-1 text-center">
-            <div
-              className="h-1.5 rounded-full mb-1 transition-all"
-              style={{ background: i <= currentStep ? '#E8634A' : '#E5E7EB' }}
-            />
-            <span
-              className={`text-xs hidden md:block ${
-                i === currentStep ? 'text-foreground font-medium' : 'text-muted-foreground'
-              }`}
-            >
-              {label}
-            </span>
-          </button>
-        ))}
-      </div>
-      <p className="text-xs text-muted-foreground mb-6 md:hidden">
-        {en ? `Step ${currentStep + 1} of ${TOTAL_STEPS}` : `Trin ${currentStep + 1} af ${TOTAL_STEPS}`}:{' '}
-        <span className="font-medium text-foreground">{stepLabels[currentStep]}</span>
-      </p>
+      {/* Progress bar */}
+      {step < CONTENT_STEPS && (
+        <div className="flex gap-2 mb-8">
+          {steps.map((s, i) => (
+            <div key={i} className="flex-1">
+              <div
+                className="h-1.5 rounded-full transition-all duration-300"
+                style={{ background: i <= step ? '#E8634A' : '#EDE0D4' }}
+              />
+              <p
+                className="text-xs mt-1.5 font-medium truncate"
+                style={{ color: i === step ? '#E8634A' : '#9B8B7E' }}
+              >
+                {s}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
 
-      {/* Content card */}
-      <div className="rounded-2xl border bg-card p-6 mb-6 min-h-[440px]">
-
-        {/* STEP 1: Why Goals Fail */}
-        {currentStep === 0 && (
-          <div>
-            <h2 className="text-xl font-bold mb-1">
+      {/* ── STEP 0: Why Goals Fail ───────────────────────────────────────────── */}
+      {step === 0 && (
+        <div className="space-y-5">
+          <div className="rounded-2xl p-6" style={{ background: '#FFF8F3', border: '1px solid #EDE0D4' }}>
+            <h2 className="font-serif text-xl font-bold mb-3" style={{ color: '#1E0F00' }}>
               {en ? 'Why Most Financial Goals Fail' : 'Hvorfor de fleste finansielle mål mislykkes'}
             </h2>
-            <p className="text-sm text-muted-foreground mb-5">
+            <p className="text-sm leading-relaxed" style={{ color: '#3D2B1F' }}>
               {en
-                ? 'The problem is rarely a lack of desire. Research points to three structural failure modes. Click each to see the fix.'
-                : 'Problemet er sjældent manglende ønske. Forskning peger på tre strukturelle fejlmoder. Klik på hver for at se løsningen.'}
+                ? 'The problem is rarely a lack of desire. Research consistently points to three structural failure modes. Click each one to see the fix.'
+                : 'Problemet er sjældent manglende ønske. Forskning peger konsekvent på tre strukturelle fejlmoder. Klik på hver for at se løsningen.'}
             </p>
-
-            <div className="space-y-3 mb-6">
-              {FAILURE_MODES.map((mode, i) => {
-                const m = en ? mode.en : mode.da
-                const active = failureActive === i
-                return (
-                  <button
-                    key={i}
-                    onClick={() => setFailureActive(active ? null : i)}
-                    className="w-full rounded-xl border-2 p-4 text-left transition-all"
-                    style={{
-                      borderColor: active ? mode.color : 'transparent',
-                      background: active ? `${mode.color}10` : '#F9FAFB',
-                    }}
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="text-2xl">{m.icon}</span>
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between">
-                          <span className="font-semibold">{m.label}</span>
-                          <span className="text-muted-foreground text-xs">{active ? '▲' : '▼'}</span>
-                        </div>
-                        {active && (
-                          <div className="mt-2 space-y-2">
-                            <p className="text-sm text-muted-foreground">{m.problem}</p>
-                            <div
-                              className="flex items-start gap-2 rounded-lg p-2"
-                              style={{ background: `${mode.color}15` }}
-                            >
-                              <span className="text-xs font-bold mt-0.5" style={{ color: mode.color }}>
-                                FIX
-                              </span>
-                              <p className="text-sm font-medium">{m.fix}</p>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </button>
-                )
-              })}
-            </div>
-
-            <div className="rounded-xl p-4 text-sm" style={{ background: '#FFF8F3', border: '1px solid #EDE0D4' }}>
-              <p className="font-medium mb-1">📚 {en ? 'The Science' : 'Videnskaben'}</p>
-              <p className="text-muted-foreground">
-                {en
-                  ? 'A 2024 systematic review in Frontiers in Behavioral Economics confirmed: the intention-to-behavior gap is driven primarily by failures at initiation. The solution is not better information — it is better systems.'
-                  : 'En systematisk gennemgang fra 2024 i Frontiers in Behavioral Economics bekræftede: intention-til-adfærd-kløften drives primært af fejl ved initiering. Løsningen er ikke bedre information — det er bedre systemer.'}
-              </p>
-            </div>
           </div>
-        )}
 
-        {/* STEP 2: SMART-A */}
-        {currentStep === 1 && (
-          <div>
-            <h2 className="text-xl font-bold mb-1">
-              {en ? 'The SMART-A Framework' : 'SMART-A-rammen'}
-            </h2>
-            <p className="text-sm text-muted-foreground mb-5">
-              {en
-                ? 'The most research-backed framework for financial goals. Click each letter to explore its meaning.'
-                : 'Den mest forskningsmæssigt understøttede ramme for finansielle mål. Klik på hvert bogstav for at udforske dets betydning.'}
-            </p>
-
-            <div className="flex gap-2 mb-5">
-              {SMARTA.map((s, i) => (
+          <div className="space-y-3">
+            {FAILURE_MODES.map((mode, i) => {
+              const m = en ? mode.en : mode.da
+              const active = failureActive === i
+              return (
                 <button
                   key={i}
-                  onClick={() => setSmartActive(smartActive === i ? null : i)}
-                  className="flex-1 h-12 rounded-xl font-bold text-lg transition-all"
+                  onClick={() => setFailureActive(active ? null : i)}
+                  className="w-full rounded-xl p-4 text-left transition-all"
                   style={{
-                    background: smartActive === i ? s.color : `${s.color}20`,
-                    color: smartActive === i ? '#fff' : s.color,
-                    border: `2px solid ${s.color}`,
+                    background: active ? `${mode.color}10` : '#FFF8F3',
+                    border: `2px solid ${active ? mode.color : '#EDE0D4'}`,
                   }}
                 >
-                  {s.letter}
-                </button>
-              ))}
-            </div>
-
-            {smartActive !== null && (() => {
-              const s = SMARTA[smartActive]
-              const d = en ? s.en : s.da
-              return (
-                <div
-                  className="rounded-xl p-5 mb-4"
-                  style={{ background: `${s.color}0D`, border: `1px solid ${s.color}40` }}
-                >
-                  <div className="flex items-center gap-3 mb-3">
-                    <div
-                      className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl text-white shrink-0"
-                      style={{ background: s.color }}
-                    >
-                      {s.letter}
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">{m.icon}</span>
+                    <div className="flex-1">
+                      <div className="flex items-center justify-between">
+                        <span className="font-semibold" style={{ color: '#1E0F00' }}>{m.label}</span>
+                        <span style={{ color: '#9B8B7E', fontSize: '10px' }}>{active ? '▲' : '▼'}</span>
+                      </div>
+                      {active && (
+                        <div className="mt-2 space-y-2">
+                          <p className="text-sm" style={{ color: '#6B5C52' }}>{m.problem}</p>
+                          <div
+                            className="flex items-start gap-2 rounded-lg p-2"
+                            style={{ background: `${mode.color}15` }}
+                          >
+                            <span className="text-xs font-bold mt-0.5" style={{ color: mode.color }}>FIX</span>
+                            <p className="text-sm font-medium" style={{ color: '#1E0F00' }}>{m.fix}</p>
+                          </div>
+                        </div>
+                      )}
                     </div>
-                    <p className="font-bold text-lg">{d.label}</p>
                   </div>
-                  <p className="text-sm text-muted-foreground mb-3">{d.desc}</p>
-                  <div className="rounded-lg p-3 text-sm" style={{ background: `${s.color}15` }}>
-                    <span className="font-medium" style={{ color: s.color }}>
-                      {en ? 'Example: ' : 'Eksempel: '}
-                    </span>
-                    {d.example}
-                  </div>
-                </div>
+                </button>
               )
-            })()}
+            })}
+          </div>
 
-            {smartActive === null && (
-              <div className="rounded-xl border p-5 text-center text-muted-foreground text-sm">
-                {en ? 'Click a letter above to explore that dimension' : 'Klik på et bogstav ovenfor for at udforske den dimension'}
+          <div className="rounded-xl p-4 text-sm" style={{ background: '#FFF8F3', border: '1px solid #EDE0D4' }}>
+            <p className="font-medium mb-1" style={{ color: '#1E0F00' }}>📚 {en ? 'Source' : 'Kilde'}</p>
+            <p style={{ color: '#6B5C52' }}>
+              {en
+                ? 'Frontiers in Behavioral Economics (2024): the intention-to-behavior gap in saving is driven by failures at initiation. The solution is not more information — it is better systems.'
+                : 'Frontiers in Behavioral Economics (2024): intention-til-adfærd-kløften drives af fejl ved initiering. Løsningen er ikke mere information — det er bedre systemer.'}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* ── STEP 1: SMART-A ─────────────────────────────────────────────────── */}
+      {step === 1 && (
+        <div className="space-y-5">
+          <div className="rounded-2xl p-6" style={{ background: '#FFF8F3', border: '1px solid #EDE0D4' }}>
+            <h2 className="font-serif text-xl font-bold mb-2" style={{ color: '#1E0F00' }}>
+              {en ? 'The SMART-A Framework' : 'SMART-A-rammen'}
+            </h2>
+            <p className="text-sm leading-relaxed" style={{ color: '#3D2B1F' }}>
+              {en
+                ? 'The most research-backed goal-setting framework. Click each letter below to explore its meaning and see a Danish financial example.'
+                : 'Den mest forskningsmæssigt understøttede ramme for målsætning. Klik på hvert bogstav for at udforske dets betydning og se et dansk finansielt eksempel.'}
+            </p>
+          </div>
+
+          <div className="flex gap-2">
+            {SMARTA.map((s, i) => (
+              <button
+                key={i}
+                onClick={() => setSmartActive(smartActive === i ? null : i)}
+                className="flex-1 h-12 rounded-xl font-bold text-lg transition-all"
+                style={{
+                  background: smartActive === i ? s.color : `${s.color}20`,
+                  color: smartActive === i ? '#fff' : s.color,
+                  border: `2px solid ${s.color}`,
+                }}
+              >
+                {s.letter}
+              </button>
+            ))}
+          </div>
+
+          {smartActive !== null ? (() => {
+            const s = SMARTA[smartActive]
+            const d = en ? s.en : s.da
+            return (
+              <div
+                className="rounded-xl p-5"
+                style={{ background: `${s.color}0D`, border: `1px solid ${s.color}40` }}
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <div
+                    className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-xl text-white shrink-0"
+                    style={{ background: s.color }}
+                  >
+                    {s.letter}
+                  </div>
+                  <p className="font-bold text-lg" style={{ color: '#1E0F00' }}>{d.label}</p>
+                </div>
+                <p className="text-sm mb-3" style={{ color: '#3D2B1F' }}>{d.desc}</p>
+                <div className="rounded-lg p-3 text-sm" style={{ background: `${s.color}15` }}>
+                  <span className="font-medium" style={{ color: s.color }}>
+                    {en ? 'Example: ' : 'Eksempel: '}
+                  </span>
+                  <span style={{ color: '#3D2B1F' }}>{d.example}</span>
+                </div>
               </div>
-            )}
-
-            <div className="rounded-xl p-4 text-sm mt-4" style={{ background: '#FFF8F3', border: '1px solid #EDE0D4' }}>
-              <p className="text-muted-foreground">
-                {en
-                  ? '📚 Archuleta et al. (2020) extended the classic SMART framework with Accountability in financial therapy research. Locke & Latham (2002): specific, challenging goals with feedback consistently outperform vague or easy ones.'
-                  : '📚 Archuleta et al. (2020) udvidede den klassiske SMART-ramme med Ansvarlighed i finansiel terapiforskning. Locke & Latham (2002): specifikke, udfordrende mål med feedback overgår konsekvent vage eller lette mål.'}
+            )
+          })() : (
+            <div className="rounded-xl p-5 text-center" style={{ background: '#FFF8F3', border: '1px solid #EDE0D4' }}>
+              <p className="text-sm" style={{ color: '#9B8B7E' }}>
+                {en ? 'Click a letter above to explore that dimension' : 'Klik på et bogstav ovenfor for at udforske den dimension'}
               </p>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* STEP 3: Three Horizons */}
-        {currentStep === 2 && (
-          <div>
-            <h2 className="text-xl font-bold mb-1">
+          <div className="rounded-xl p-4 text-sm" style={{ background: '#FFF8F3', border: '1px solid #EDE0D4' }}>
+            <p className="font-medium mb-1" style={{ color: '#1E0F00' }}>📚 {en ? 'Source' : 'Kilde'}</p>
+            <p style={{ color: '#6B5C52' }}>
+              {en
+                ? 'Archuleta et al. (2020) added Accountability to the classic SMART framework in financial therapy research. Locke & Latham (2002): specific, challenging goals consistently outperform vague or easy ones.'
+                : 'Archuleta et al. (2020) tilføjede Ansvarlighed til den klassiske SMART-ramme i finansiel terapiforskning. Locke & Latham (2002): specifikke, udfordrende mål overgår konsekvent vage eller lette mål.'}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* ── STEP 2: Three Horizons ───────────────────────────────────────────── */}
+      {step === 2 && (
+        <div className="space-y-5">
+          <div className="rounded-2xl p-6" style={{ background: '#FFF8F3', border: '1px solid #EDE0D4' }}>
+            <h2 className="font-serif text-xl font-bold mb-2" style={{ color: '#1E0F00' }}>
               {en ? 'The Three Horizons' : 'De tre horisonter'}
             </h2>
-            <p className="text-sm text-muted-foreground mb-5">
+            <p className="text-sm leading-relaxed" style={{ color: '#3D2B1F' }}>
               {en
-                ? 'Not all goals operate on the same timescale. Each horizon needs a different savings vehicle and risk level. Click to explore each one.'
-                : 'Ikke alle mål opererer på den samme tidsskala. Hver horisont kræver et andet opsparingsinstrument og risikoniveau. Klik for at udforske hver enkelt.'}
+                ? 'Not all goals operate on the same timescale. Each horizon needs a different savings vehicle and risk level. Click each horizon to explore.'
+                : 'Ikke alle mål opererer på samme tidsskala. Hver horisont kræver et andet opsparingsinstrument og risikoniveau. Klik for at udforske.'}
             </p>
+          </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
-              {HORIZONS.map((h, i) => {
-                const d = en ? h.en : h.da
-                const active = activeHorizon === i
-                return (
-                  <button
-                    key={i}
-                    onClick={() => setActiveHorizon(active ? null : i)}
-                    className="rounded-xl border-2 p-4 text-left transition-all"
-                    style={{
-                      borderColor: active ? h.color : 'transparent',
-                      background: active ? `${h.color}0D` : '#F9FAFB',
-                    }}
-                  >
-                    <div className="text-2xl mb-2">{h.icon}</div>
-                    <div className="font-bold mb-0.5" style={{ color: h.color }}>{d.label}</div>
-                    <div className="text-xs text-muted-foreground mb-3">{d.timeframe}</div>
-                    {active ? (
-                      <div>
-                        <p className="text-xs text-muted-foreground mb-2">{d.desc}</p>
-                        <ul className="space-y-1">
-                          {d.examples.map((ex, j) => (
-                            <li key={j} className="text-xs flex items-start gap-1.5">
-                              <span style={{ color: h.color }}>•</span>
-                              {ex}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ) : (
-                      <p className="text-xs text-muted-foreground">
-                        {en ? 'Click to expand' : 'Klik for at udvide'}
-                      </p>
-                    )}
-                  </button>
-                )
-              })}
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {HORIZONS.map((h, i) => {
+              const d = en ? h.en : h.da
+              const active = activeHorizon === i
+              return (
+                <button
+                  key={i}
+                  onClick={() => setActiveHorizon(active ? null : i)}
+                  className="rounded-xl p-4 text-left transition-all"
+                  style={{
+                    background: active ? `${h.color}0D` : '#FFF8F3',
+                    border: `2px solid ${active ? h.color : '#EDE0D4'}`,
+                  }}
+                >
+                  <div className="text-2xl mb-2">{h.icon}</div>
+                  <div className="font-bold mb-0.5" style={{ color: h.color }}>{d.label}</div>
+                  <div className="text-xs mb-3" style={{ color: '#9B8B7E' }}>{d.timeframe}</div>
+                  {active ? (
+                    <div>
+                      <p className="text-xs mb-2" style={{ color: '#6B5C52' }}>{d.desc}</p>
+                      <ul className="space-y-1">
+                        {d.examples.map((ex, j) => (
+                          <li key={j} className="text-xs flex items-start gap-1.5">
+                            <span style={{ color: h.color }}>•</span>
+                            <span style={{ color: '#3D2B1F' }}>{ex}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : (
+                    <p className="text-xs" style={{ color: '#9B8B7E' }}>
+                      {en ? 'Click to expand' : 'Klik for at udvide'}
+                    </p>
+                  )}
+                </button>
+              )
+            })}
+          </div>
 
-            <div className="rounded-xl p-4 text-sm" style={{ background: '#FFF8F3', border: '1px solid #EDE0D4' }}>
-              <p className="text-muted-foreground">
-                {en
-                  ? '📚 Shefrin & Statman (2000): goals-based portfolios — where each goal has a dedicated funding strategy — outperform generic total-wealth portfolios. Separating goals prevents emotional interference between buckets (e.g. panic-selling long-term investments to cover short-term needs).'
-                  : '📚 Shefrin & Statman (2000): målbaserede porteføljer — hvor hvert mål har en dedikeret finansieringsstrategi — overgår generiske totalformueporteføljer. Adskillelse af mål forhindrer følelsesmæssig interferens (f.eks. panikssalg af langsigtede investeringer for at dække kortsigtede behov).'}
+          <div className="rounded-xl p-4 text-sm" style={{ background: '#FFF8F3', border: '1px solid #EDE0D4' }}>
+            <p style={{ color: '#6B5C52' }}>
+              {en
+                ? '📚 Shefrin & Statman (2000): goals-based portfolios outperform generic total-wealth portfolios. Separating goals prevents emotional interference — e.g. panic-selling long-term investments to cover short-term needs.'
+                : '📚 Shefrin & Statman (2000): målbaserede porteføljer overgår generiske totalformueporteføljer. Adskillelse af mål forhindrer følelsesmæssig interferens — f.eks. panikssalg af langsigtede investeringer for at dække kortsigtede behov.'}
+            </p>
+          </div>
+
+          <div
+            className="rounded-xl px-5 py-4 flex items-center justify-between"
+            style={{ background: '#FDF6EE', border: '1px solid #EDE0D4' }}
+          >
+            <div>
+              <p className="text-sm font-semibold" style={{ color: '#1E0F00' }}>
+                {en ? 'Ready to set your goals?' : 'Klar til at sætte dine mål?'}
+              </p>
+              <p className="text-xs" style={{ color: '#6B5C52' }}>
+                {en ? 'Track them inside the app — finish this module first.' : 'Spor dem i appen — færdiggør dette modul først.'}
               </p>
             </div>
+            <Link
+              href="/goals"
+              className="rounded-xl px-4 py-2 text-xs font-semibold text-white shrink-0"
+              style={{ background: '#E8634A' }}
+            >
+              {en ? 'My Goals →' : 'Mine mål →'}
+            </Link>
           </div>
-        )}
+        </div>
+      )}
 
-        {/* STEP 4: 7-Step Playbook */}
-        {currentStep === 3 && (
-          <div>
-            <h2 className="text-xl font-bold mb-1">
+      {/* ── STEP 3: 7-Step Playbook ──────────────────────────────────────────── */}
+      {step === 3 && (
+        <div className="space-y-5">
+          <div className="rounded-2xl p-6" style={{ background: '#FFF8F3', border: '1px solid #EDE0D4' }}>
+            <h2 className="font-serif text-xl font-bold mb-2" style={{ color: '#1E0F00' }}>
               {en ? 'Your 7-Step Playbook' : 'Din 7-trins plan'}
             </h2>
-            <p className="text-sm text-muted-foreground mb-5">
+            <p className="text-sm leading-relaxed" style={{ color: '#3D2B1F' }}>
               {en
                 ? 'Built on implementation intentions research, goal gradient theory, and the behavioral lifecycle hypothesis. Click each step to expand.'
                 : 'Bygget på forskning i implementeringshensigter, goal gradient-teori og den adfærdsmæssige livscyklushypotese. Klik på hvert trin for at udvide.'}
             </p>
+          </div>
 
-            <div className="space-y-2">
-              {STEPS_7.map((s, i) => {
-                const d = en ? s.en : s.da
-                const active = expandedStep7 === i
-                return (
-                  <button
-                    key={i}
-                    onClick={() => setExpandedStep7(active ? null : i)}
-                    className="w-full rounded-xl border p-4 text-left transition-all hover:bg-accent"
-                  >
-                    <div className="flex items-start gap-3">
-                      <div
-                        className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-0.5"
-                        style={{
-                          background: active ? '#E8634A' : '#F3F4F6',
-                          color: active ? '#fff' : '#6B7280',
-                        }}
-                      >
-                        {i + 1}
-                      </div>
-                      <div className="flex-1">
-                        <div className="font-semibold text-sm">{d.title}</div>
-                        {active && (
-                          <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{d.body}</p>
-                        )}
-                      </div>
-                      <span className="text-muted-foreground text-xs mt-1">{active ? '▲' : '▼'}</span>
+          <div className="space-y-2">
+            {STEPS_7.map((s, i) => {
+              const d = en ? s.en : s.da
+              const active = expandedStep7 === i
+              return (
+                <button
+                  key={i}
+                  onClick={() => setExpandedStep7(active ? null : i)}
+                  className="w-full rounded-xl p-4 text-left transition-all"
+                  style={{
+                    background: active ? '#FDF6EE' : '#FFF8F3',
+                    border: `1px solid ${active ? '#E8634A40' : '#EDE0D4'}`,
+                  }}
+                >
+                  <div className="flex items-start gap-3">
+                    <div
+                      className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0 mt-0.5"
+                      style={{
+                        background: active ? '#E8634A' : '#EDE0D4',
+                        color: active ? '#fff' : '#6B5C52',
+                      }}
+                    >
+                      {i + 1}
                     </div>
-                  </button>
+                    <div className="flex-1">
+                      <div className="font-semibold text-sm" style={{ color: '#1E0F00' }}>{d.title}</div>
+                      {active && (
+                        <p className="text-sm mt-2 leading-relaxed" style={{ color: '#6B5C52' }}>{d.body}</p>
+                      )}
+                    </div>
+                    <span style={{ color: '#9B8B7E', fontSize: '10px', marginTop: '4px' }}>{active ? '▲' : '▼'}</span>
+                  </div>
+                </button>
+              )
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* ── STEP 4: Biases + Quiz ────────────────────────────────────────────── */}
+      {step === 4 && (
+        <div className="space-y-5">
+          <div className="rounded-2xl p-6" style={{ background: '#FFF8F3', border: '1px solid #EDE0D4' }}>
+            <h2 className="font-serif text-xl font-bold mb-2" style={{ color: '#1E0F00' }}>
+              {en ? 'The Biases That Will Derail You' : 'De bias der vil afspore dig'}
+            </h2>
+            <p className="text-sm leading-relaxed" style={{ color: '#3D2B1F' }}>
+              {en
+                ? 'Four biases most destructive to financial goal achievement — and how to counter each. Click each card to reveal the countermeasure.'
+                : 'Fire bias der er mest destruktive for finansiel målopnåelse — og hvordan du modvirker dem. Klik for at afsløre modtrækket.'}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            {BIASES.map((b, i) => {
+              const d = en ? b.en : b.da
+              const active = activeBias === i
+              return (
+                <button
+                  key={i}
+                  onClick={() => setActiveBias(active ? null : i)}
+                  className="rounded-xl p-4 text-left transition-all"
+                  style={{
+                    background: active ? `${b.color}0D` : '#FFF8F3',
+                    border: `2px solid ${active ? b.color : '#EDE0D4'}`,
+                  }}
+                >
+                  <div className="text-xl mb-1">{b.icon}</div>
+                  <div className="font-semibold text-sm mb-1" style={{ color: active ? b.color : '#1E0F00' }}>
+                    {d.name}
+                  </div>
+                  {active ? (
+                    <div className="space-y-2">
+                      <p className="text-xs" style={{ color: '#6B5C52' }}>{d.what}</p>
+                      <div className="rounded-lg p-2 text-xs" style={{ background: `${b.color}15` }}>
+                        <span className="font-bold" style={{ color: b.color }}>
+                          {en ? 'Counter: ' : 'Modtræk: '}
+                        </span>
+                        <span style={{ color: '#3D2B1F' }}>{d.counter}</span>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-xs" style={{ color: '#9B8B7E' }}>
+                      {en ? 'Click to reveal' : 'Klik for at afsløre'}
+                    </p>
+                  )}
+                </button>
+              )
+            })}
+          </div>
+
+          <div style={{ borderTop: '1px solid #EDE0D4', paddingTop: '20px' }}>
+            <h3 className="font-serif text-lg font-bold mb-1" style={{ color: '#1E0F00' }}>
+              {en ? 'Quick Check' : 'Hurtig test'}
+            </h3>
+            <p className="text-sm mb-5" style={{ color: '#6B5C52' }}>
+              {en ? '4 questions — select an answer for each, then submit.' : '4 spørgsmål — vælg et svar til hvert, og indsend derefter.'}
+            </p>
+            <div className="space-y-5">
+              {QUIZ_QUESTIONS.map((q, qi) => {
+                const qd = en ? q.en : q.da
+                return (
+                  <div key={qi}>
+                    <p className="text-sm font-medium mb-2" style={{ color: '#1E0F00' }}>{qi + 1}. {qd.q}</p>
+                    <div className="space-y-1.5">
+                      {qd.options.map((opt, ai) => (
+                        <button
+                          key={ai}
+                          onClick={() => handleQuizAnswer(qi, ai)}
+                          className="w-full rounded-xl px-4 py-3 text-sm text-left transition-all"
+                          style={{
+                            background: quizAnswers[qi] === ai ? '#FDF6EE' : '#FFF8F3',
+                            border: `2px solid ${quizAnswers[qi] === ai ? '#E8634A' : '#EDE0D4'}`,
+                            color: '#1E0F00',
+                          }}
+                        >
+                          <span className="mr-3 font-bold opacity-40">{String.fromCharCode(65 + ai)}.</span>
+                          {opt}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 )
               })}
             </div>
+            <button
+              onClick={submitQuiz}
+              disabled={quizAnswers.some((a) => a === null)}
+              className="mt-6 w-full rounded-xl py-3 text-sm font-semibold text-white transition-all disabled:opacity-40"
+              style={{ background: '#E8634A' }}
+            >
+              {en ? 'Submit & See Score →' : 'Indsend og se score →'}
+            </button>
           </div>
-        )}
+        </div>
+      )}
 
-        {/* STEP 5: Biases + Quiz */}
-        {currentStep === 4 && (
-          <div>
-            {!quizSubmitted ? (
-              <>
-                <h2 className="text-xl font-bold mb-1">
-                  {en ? 'The Biases That Will Derail You' : 'De bias der vil afspore dig'}
-                </h2>
-                <p className="text-sm text-muted-foreground mb-4">
-                  {en
-                    ? 'Four biases most destructive to financial goal achievement — and how to counter each. Click to reveal.'
-                    : 'Fire bias der er mest destruktive for finansiel målopnåelse — og hvordan du modvirker dem. Klik for at afsløre.'}
-                </p>
+      {/* ── STEP 5: Done ─────────────────────────────────────────────────────── */}
+      {step === CONTENT_STEPS && (
+        <div className="text-center py-10">
+          <div className="text-6xl mb-5">{score === 4 ? '🎉' : score >= 3 ? '👍' : '📚'}</div>
+          <h2 className="font-serif text-2xl font-bold mb-2" style={{ color: '#1E0F00' }}>
+            {en ? `${score} / 4 correct` : `${score} / 4 rigtige`}
+          </h2>
+          <p className="text-sm mb-8" style={{ color: '#6B5C52' }}>
+            {score === 4
+              ? (en ? 'Perfect! You\'re ready to set goals that stick.' : 'Perfekt! Du er klar til at sætte mål der holder.')
+              : score >= 3
+              ? (en ? 'Well done — review the explanations below.' : 'Godt klaret — gennemgå forklaringerne nedenfor.')
+              : (en ? 'Keep at it — revisit the steps and try again.' : 'Bliv ved — gennemgå trinnene og prøv igen.')}
+          </p>
 
-                <div className="grid grid-cols-2 gap-3 mb-6">
-                  {BIASES.map((b, i) => {
-                    const d = en ? b.en : b.da
-                    const active = activeBias === i
-                    return (
-                      <button
-                        key={i}
-                        onClick={() => setActiveBias(active ? null : i)}
-                        className="rounded-xl border-2 p-3 text-left transition-all"
-                        style={{
-                          borderColor: active ? b.color : 'transparent',
-                          background: active ? `${b.color}0D` : '#F9FAFB',
-                        }}
-                      >
-                        <div className="text-xl mb-1">{b.icon}</div>
-                        <div
-                          className="font-semibold text-sm mb-1"
-                          style={{ color: active ? b.color : undefined }}
-                        >
-                          {d.name}
-                        </div>
-                        {active ? (
-                          <div className="space-y-2">
-                            <p className="text-xs text-muted-foreground">{d.what}</p>
-                            <div className="rounded-lg p-2 text-xs" style={{ background: `${b.color}15` }}>
-                              <span className="font-bold" style={{ color: b.color }}>
-                                {en ? 'Counter: ' : 'Modtræk: '}
-                              </span>
-                              {d.counter}
-                            </div>
-                          </div>
-                        ) : (
-                          <p className="text-xs text-muted-foreground">
-                            {en ? 'Click to reveal' : 'Klik for at afsløre'}
-                          </p>
-                        )}
-                      </button>
-                    )
-                  })}
-                </div>
-
-                <div className="border-t pt-5">
-                  <h3 className="font-bold mb-4">
-                    {en ? 'Quick Check — 4 Questions' : 'Hurtig test — 4 spørgsmål'}
-                  </h3>
-                  <div className="space-y-5">
-                    {QUIZ_QUESTIONS.map((q, qi) => {
-                      const qd = en ? q.en : q.da
-                      return (
-                        <div key={qi}>
-                          <p className="text-sm font-medium mb-2">{qi + 1}. {qd.q}</p>
-                          <div className="space-y-1.5">
-                            {qd.options.map((opt, ai) => (
-                              <button
-                                key={ai}
-                                onClick={() => handleQuizAnswer(qi, ai)}
-                                className="w-full rounded-lg border px-3 py-2 text-sm text-left transition-all"
-                                style={{
-                                  background: quizAnswers[qi] === ai ? '#E8634A15' : undefined,
-                                  borderColor: quizAnswers[qi] === ai ? '#E8634A' : undefined,
-                                }}
-                              >
-                                {opt}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )
-                    })}
-                  </div>
-                  <button
-                    onClick={submitQuiz}
-                    disabled={quizAnswers.some((a) => a === null)}
-                    className="mt-5 w-full rounded-xl py-3 text-sm font-bold text-white transition-all disabled:opacity-40"
-                    style={{ background: '#E8634A' }}
+          <div className="rounded-2xl p-5 mb-8 text-left space-y-3 max-w-sm mx-auto" style={{ background: '#FFF8F3', border: '1px solid #EDE0D4' }}>
+            {QUIZ_QUESTIONS.map((q, i) => {
+              const correct = quizAnswers[i] === q.en.correct
+              const qd = en ? q.en : q.da
+              return (
+                <div key={i} className="flex items-start gap-3 text-sm">
+                  <span
+                    className="w-5 h-5 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0 mt-0.5"
+                    style={{ background: correct ? '#5B8A6B' : '#E8634A' }}
                   >
-                    {en ? 'Submit Answers' : 'Indsend svar'}
-                  </button>
+                    {correct ? '✓' : '✗'}
+                  </span>
+                  <span style={{ color: '#3D2B1F' }}>{qd.q}</span>
                 </div>
-              </>
-            ) : (
-              <div className="text-center">
-                <div className="text-5xl mb-3">
-                  {score === 4 ? '🏆' : score >= 3 ? '🎯' : '📚'}
-                </div>
-                <h2 className="text-xl font-bold mb-1">
-                  {score}/4 {en ? 'correct' : 'rigtige'}
-                </h2>
-                <p className="text-sm text-muted-foreground mb-6">
-                  {score === 4
-                    ? (en ? 'Perfect — you\'re ready to set goals that stick.' : 'Perfekt — du er klar til at sætte mål der holder.')
-                    : score >= 3
-                    ? (en ? 'Strong result. Review the explanations below.' : 'Stærkt resultat. Gennemgå forklaringerne nedenfor.')
-                    : (en ? 'Good effort — revisit the steps before starting.' : 'Godt forsøg — gennemgå trinnene inden du starter.')}
-                </p>
-
-                <div className="text-left space-y-4 mb-6">
-                  {QUIZ_QUESTIONS.map((q, qi) => {
-                    const qd = en ? q.en : q.da
-                    const correct = quizAnswers[qi] === q.en.correct
-                    return (
-                      <div
-                        key={qi}
-                        className="rounded-xl border p-4"
-                        style={{ borderColor: correct ? '#16A34A' : '#E8634A' }}
-                      >
-                        <div className="flex items-start gap-2 mb-2">
-                          <span style={{ color: correct ? '#16A34A' : '#E8634A' }}>
-                            {correct ? '✓' : '✗'}
-                          </span>
-                          <p className="text-sm font-medium">{qd.q}</p>
-                        </div>
-                        <p className="text-xs font-medium mb-1">
-                          {en ? 'Correct answer: ' : 'Rigtigt svar: '}
-                          <span style={{ color: '#16A34A' }}>{qd.options[q.en.correct]}</span>
-                        </p>
-                        <p className="text-xs text-muted-foreground">{qd.explanation}</p>
-                      </div>
-                    )
-                  })}
-                </div>
-
-                <div
-                  className="rounded-xl p-5"
-                  style={{
-                    background: 'linear-gradient(135deg, #1E0F00 0%, #3D2B1F 100%)',
-                    color: '#FFF8F3',
-                  }}
-                >
-                  <p className="font-serif text-lg font-bold mb-1">
-                    {en
-                      ? 'The best time to set a financial goal was yesterday.'
-                      : 'Det bedste tidspunkt at sætte et finansielt mål var i går.'}
-                  </p>
-                  <p className="text-sm" style={{ color: '#B5A89D' }}>
-                    {en ? 'The second best time is today.' : 'Det næstbedste tidspunkt er i dag.'}
-                  </p>
-                </div>
-              </div>
-            )}
+              )
+            })}
           </div>
-        )}
-      </div>
 
-      {/* Navigation */}
-      <div className="flex items-center justify-between">
-        <button
-          onClick={() => setCurrentStep((s) => Math.max(0, s - 1))}
-          disabled={currentStep === 0}
-          className="rounded-lg border px-4 py-2 text-sm font-medium hover:bg-accent disabled:opacity-40 transition-colors"
-        >
-          {en ? '← Back' : '← Tilbage'}
-        </button>
-        <span className="text-xs text-muted-foreground">
-          {currentStep + 1} / {TOTAL_STEPS}
-        </span>
-        {currentStep < TOTAL_STEPS - 1 && (
+          {/* Next steps */}
+          <div className="space-y-3 max-w-sm mx-auto mb-8">
+            <Link
+              href="/goals"
+              className="flex items-center justify-between rounded-xl px-5 py-4 text-left transition-all hover:opacity-90"
+              style={{ background: '#E8634A', color: '#fff' }}
+            >
+              <div>
+                <p className="font-semibold text-sm">{en ? 'Set your first goal' : 'Sæt dit første mål'}</p>
+                <p className="text-xs opacity-80">{en ? 'Apply what you just learned →' : 'Anvend det du netop lærte →'}</p>
+              </div>
+              <span className="text-2xl">🎯</span>
+            </Link>
+            <Link
+              href="/chat"
+              className="flex items-center justify-between rounded-xl px-5 py-4 text-left transition-all"
+              style={{ background: '#FFF8F3', border: '1px solid #EDE0D4', color: '#1E0F00' }}
+            >
+              <div>
+                <p className="font-semibold text-sm">{en ? 'Ask our AI assistant' : 'Spørg vores AI-assistent'}</p>
+                <p className="text-xs" style={{ color: '#6B5C52' }}>{en ? 'Questions about your specific situation →' : 'Spørgsmål om din specifikke situation →'}</p>
+              </div>
+              <span className="text-2xl">💬</span>
+            </Link>
+          </div>
+
+          <div className="flex gap-3 justify-center flex-wrap">
+            <button
+              onClick={() => { setStep(0); setQuizAnswers([null, null, null, null]) }}
+              className="rounded-xl px-6 py-3 text-sm font-medium border"
+              style={{ borderColor: '#EDE0D4', color: '#6B5C52' }}
+            >
+              {en ? 'Restart' : 'Genstart'}
+            </button>
+            <Link
+              href="/learning"
+              className="rounded-xl px-6 py-3 text-sm font-semibold text-white"
+              style={{ background: '#1E0F00' }}
+            >
+              {en ? 'Back to Learning →' : 'Tilbage til Læring →'}
+            </Link>
+          </div>
+        </div>
+      )}
+
+      {/* ── Bottom nav ───────────────────────────────────────────────────────── */}
+      {step < CONTENT_STEPS && (
+        <div className="flex justify-between items-center mt-8 pt-6" style={{ borderTop: '1px solid #EDE0D4' }}>
           <button
-            onClick={() => setCurrentStep((s) => Math.min(TOTAL_STEPS - 1, s + 1))}
-            className="rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
-            style={{ background: '#E8634A' }}
+            onClick={goPrev}
+            disabled={step === 0}
+            className="rounded-xl px-5 py-2.5 text-sm font-medium border disabled:opacity-30"
+            style={{ borderColor: '#EDE0D4', color: '#6B5C52' }}
           >
-            {en ? 'Next →' : 'Næste →'}
+            ← {en ? 'Previous' : 'Forrige'}
           </button>
-        )}
-        {currentStep === TOTAL_STEPS - 1 && !quizSubmitted && (
-          <span className="text-xs text-muted-foreground">
-            {en ? 'Complete the quiz to finish' : 'Gennemfør quizzen for at afslutte'}
-          </span>
-        )}
-        {currentStep === TOTAL_STEPS - 1 && quizSubmitted && (
-          <span className="text-xs font-medium" style={{ color: '#16A34A' }}>
-            ✓ {en ? 'Module complete' : 'Modul fuldført'}
-          </span>
-        )}
-      </div>
+          {step < CONTENT_STEPS - 1 && (
+            <button
+              onClick={goNext}
+              className="rounded-xl px-5 py-2.5 text-sm font-semibold text-white"
+              style={{ background: '#E8634A' }}
+            >
+              {en ? 'Next →' : 'Næste →'}
+            </button>
+          )}
+          {step === CONTENT_STEPS - 1 && (
+            <span className="text-xs" style={{ color: '#9B8B7E' }}>
+              {en ? 'Answer all questions to continue' : 'Besvar alle spørgsmål for at fortsætte'}
+            </span>
+          )}
+        </div>
+      )}
     </div>
   )
 }
