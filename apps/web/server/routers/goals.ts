@@ -23,7 +23,7 @@ export const goalsRouter = router({
       z.object({
         type: z.string().min(1),
         target_dkk: z.number().positive(),
-        deadline: z.date().optional(),
+        deadline: z.coerce.date().optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
