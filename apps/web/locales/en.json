@@ -72,8 +72,13 @@
     "types": {
       "emergency_fund": "Emergency fund",
       "house_deposit": "House deposit",
-      "pension_boost": "Pension savings",
       "debt_payoff": "Debt payoff",
+      "pension_boost": "Pension savings",
+      "investment": "Investment fund",
+      "home_renovation": "Home renovation",
+      "car": "Car fund",
+      "education": "Education fund",
+      "children_savings": "Children's savings",
       "vacation": "Holiday fund",
       "other": "Other"
     }

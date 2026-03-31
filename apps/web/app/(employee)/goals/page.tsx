@@ -15,8 +15,13 @@ export default function GoalsPage() {
   const GOAL_TYPES = [
     { value: 'emergency_fund', label: t.goals.types.emergency_fund },
     { value: 'house_deposit', label: t.goals.types.house_deposit },
-    { value: 'pension_boost', label: t.goals.types.pension_boost },
     { value: 'debt_payoff', label: t.goals.types.debt_payoff },
+    { value: 'pension_boost', label: t.goals.types.pension_boost },
+    { value: 'investment', label: t.goals.types.investment },
+    { value: 'home_renovation', label: t.goals.types.home_renovation },
+    { value: 'car', label: t.goals.types.car },
+    { value: 'education', label: t.goals.types.education },
+    { value: 'children_savings', label: t.goals.types.children_savings },
     { value: 'vacation', label: t.goals.types.vacation },
     { value: 'other', label: t.goals.types.other },
   ]

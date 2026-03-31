@@ -72,8 +72,13 @@
     "types": {
       "emergency_fund": "Nødreserve",
       "house_deposit": "Boligopsparing",
-      "pension_boost": "Pensionsopsparing",
       "debt_payoff": "Gældsafvikling",
+      "pension_boost": "Pensionsopsparing",
+      "investment": "Investering",
+      "home_renovation": "Boligrenovering",
+      "car": "Bilopsparing",
+      "education": "Uddannelse",
+      "children_savings": "Børneopsparing",
       "vacation": "Feriekasse",
       "other": "Andet"
     }
