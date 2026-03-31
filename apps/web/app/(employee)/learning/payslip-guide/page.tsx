@@ -753,6 +753,28 @@ export default function PayslipGuidePage() {
             ))}
           </div>
 
+          {/* Apply it CTA */}
+          <div className="max-w-sm mx-auto mb-6">
+            <p className="text-xs font-medium mb-2" style={{ color: '#9B8B7E' }}>
+              {en ? 'PUT IT INTO PRACTICE' : 'BRUG DET I PRAKSIS'}
+            </p>
+            <Link
+              href="/payslip"
+              className="flex items-center justify-between rounded-xl px-5 py-4 transition-all hover:opacity-90"
+              style={{ background: '#E8634A10', border: '1.5px solid #E8634A40' }}
+            >
+              <div>
+                <p className="font-semibold text-sm" style={{ color: '#1E0F00' }}>
+                  🧮 {en ? 'Try the Payslip Calculator' : 'Prøv lønseddelberegneren'}
+                </p>
+                <p className="text-xs" style={{ color: '#6B5C52' }}>
+                  {en ? 'Enter your gross salary and see your full breakdown →' : 'Indtast din bruttoløn og se hele din lønseddel →'}
+                </p>
+              </div>
+              <span style={{ color: '#E8634A' }}>→</span>
+            </Link>
+          </div>
+
           {/* Next module */}
           <div className="max-w-sm mx-auto mb-8">
             <p className="text-xs font-medium mb-2" style={{ color: '#9B8B7E' }}>

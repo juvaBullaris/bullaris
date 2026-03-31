@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { LearnBanner } from '@/components/learn-banner'
 import { trpc } from '@/lib/trpc'
 import { useLanguage } from '@/lib/language-context'
 
@@ -152,6 +153,23 @@ export default function GoalsPage() {
           )
         })}
       </div>
+
+      <LearnBanner
+        moduleId="goal-setting"
+        href="/learning/goal-setting"
+        icon="🎯"
+        duration="~10 min"
+        en={{
+          title: 'How to Set Your Financial Goals',
+          teaser: 'Science-backed goal setting using SMART-A, Three Horizons and a 7-step playbook.',
+          completedTeaser: 'You completed this module. Review it anytime.',
+        }}
+        da={{
+          title: 'Sådan sætter du dine finansielle mål',
+          teaser: 'Videnskabeligt understøttet målsætning med SMART-A, de tre horisonter og en 7-trins plan.',
+          completedTeaser: 'Du har gennemført dette modul. Gense det når som helst.',
+        }}
+      />
     </div>
   )
 }

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { ConsentModal } from '@/components/consent-modal'
 import { PayslipBreakdown } from '@/components/payslip-breakdown'
+import { LearnBanner } from '@/components/learn-banner'
 import { trpc } from '@/lib/trpc'
 import { useLanguage } from '@/lib/language-context'
 import { useConsent } from '@/lib/use-consent'
@@ -56,6 +57,23 @@ export default function PayslipPage() {
       {payslipQuery.isLoading && (
         <div className="text-center py-8 text-muted-foreground text-sm">{t.payslip.calculating}</div>
       )}
+
+      <LearnBanner
+        moduleId="payslip-guide"
+        href="/learning/payslip-guide"
+        icon="📄"
+        duration="~8 min"
+        en={{
+          title: 'Understanding Your Danish Payslip',
+          teaser: 'Learn every line of your lønseddel — AM-bidrag, A-skat, pension and more.',
+          completedTeaser: 'You completed this module. Review it anytime.',
+        }}
+        da={{
+          title: 'Forstå din danske lønseddel',
+          teaser: 'Lær hver linje på din lønseddel — AM-bidrag, A-skat, pension og mere.',
+          completedTeaser: 'Du har gennemført dette modul. Gense det når som helst.',
+        }}
+      />
     </div>
   )
 }

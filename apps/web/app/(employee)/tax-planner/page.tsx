@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { ConsentModal } from '@/components/consent-modal'
+import { LearnBanner } from '@/components/learn-banner'
 import { trpc } from '@/lib/trpc'
 import { useLanguage } from '@/lib/language-context'
 import { useConsent } from '@/lib/use-consent'
@@ -94,6 +95,23 @@ export default function TaxPlannerPage() {
           </div>
         </div>
       )}
+
+      <LearnBanner
+        moduleId="tax-basics"
+        href="/learning/tax-basics"
+        icon="📊"
+        duration="~10 min"
+        en={{
+          title: 'Danish Tax Basics 2026',
+          teaser: 'Understand AM-bidrag, bundskat, kommuneskat and the new 2026 brackets.',
+          completedTeaser: 'You completed this module. Review it anytime.',
+        }}
+        da={{
+          title: 'Danske skatter — det grundlæggende 2026',
+          teaser: 'Forstå AM-bidrag, bundskat, kommuneskat og de nye 2026-trin.',
+          completedTeaser: 'Du har gennemført dette modul. Gense det når som helst.',
+        }}
+      />
     </div>
   )
 }
