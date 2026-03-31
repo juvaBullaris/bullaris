@@ -1,10 +1,14 @@
 'use client'
 
 import Link from 'next/link'
+import { trpc } from '@/lib/trpc'
 import { useLanguage } from '@/lib/language-context'
 
 export default function DashboardPage() {
   const { t } = useLanguage()
+  const goalsQuery = trpc.goals.list.useQuery()
+
+  const activeGoalCount = goalsQuery.data?.length ?? '–'
 
   const cards = [
     {
@@ -15,7 +19,7 @@ export default function DashboardPage() {
     },
     {
       label: t.dashboard.activeGoals,
-      value: '0',
+      value: String(activeGoalCount),
       link: '/goals',
       linkLabel: t.nav.goals,
     },

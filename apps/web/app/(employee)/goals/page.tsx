@@ -174,6 +174,9 @@ export default function GoalsPage() {
       setTargetDkk('')
       setDeadline('')
     },
+    onError: (err) => {
+      console.error('createGoal error:', err)
+    },
   })
 
   const fmt       = (n: number) => n.toLocaleString('da-DK') + ' DKK'
@@ -389,6 +392,12 @@ export default function GoalsPage() {
             />
           </div>
 
+          {createGoal.error && (
+            <p className="text-xs font-medium" style={{ color: '#E8634A' }}>
+              {createGoal.error.message}
+            </p>
+          )}
+
           <div className="flex gap-3 pt-2">
             <button
               onClick={() =>
@@ -401,7 +410,7 @@ export default function GoalsPage() {
               disabled={!targetDkk || createGoal.isPending}
               className="rounded-md bg-bullaris-blue px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-60 transition-colors"
             >
-              {t.goals.save}
+              {createGoal.isPending ? '...' : t.goals.save}
             </button>
             <button
               onClick={() => setShowForm(false)}
