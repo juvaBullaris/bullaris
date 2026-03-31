@@ -516,7 +516,7 @@ export default function TaxBasicsPage() {
                 value={grossInput}
                 onChange={(e) => setGrossInput(Math.max(0, Number(e.target.value)))}
                 className="w-full rounded-lg border px-3 py-2 text-sm mb-3 focus:outline-none focus:ring-2"
-                style={{ borderColor: '#EDE0D4', focusRingColor: '#E8634A' }}
+                style={{ borderColor: '#EDE0D4' }}
               />
               <input
                 type="range"
