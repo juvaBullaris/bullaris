@@ -15,6 +15,7 @@ export default function LearningPage() {
 
   const completedIds = new Set(progressQuery.data?.map((p) => p.contentId) ?? [])
   const payslipDone = completedIds.has('payslip-guide')
+  const taxDone = completedIds.has('tax-basics')
 
   return (
     <div className="max-w-3xl">
@@ -49,6 +50,40 @@ export default function LearningPage() {
               <span>📚 {en ? '4 sections' : '4 sektioner'}</span>
               <span>⏱ ~8 min</span>
               <span>❓ {en ? '4-question quiz' : '4-spørgsmåls quiz'}</span>
+            </div>
+          </div>
+          <div className="text-4xl shrink-0">→</div>
+        </div>
+      </Link>
+
+      {/* Tax basics interactive module */}
+      <Link
+        href="/learning/tax-basics"
+        className="block rounded-2xl p-6 mb-8 transition-all hover:opacity-90"
+        style={{ background: 'linear-gradient(135deg, #0D1F2D 0%, #1A3A4A 100%)', color: '#F0F8FF', border: '1px solid #C8DFE8' }}
+      >
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex-1">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="text-xs font-bold uppercase tracking-widest px-2 py-0.5 rounded-full" style={{ background: '#E8634A', color: '#fff' }}>
+                {en ? 'Interactive' : 'Interaktiv'}
+              </span>
+              {taxDone && (
+                <span className="text-xs font-medium" style={{ color: '#A3C9B0' }}>✓ {t.learning.completed}</span>
+              )}
+            </div>
+            <h2 className="font-serif text-xl font-bold mb-1" style={{ color: '#F0F8FF' }}>
+              📊 {en ? 'Danish Tax Basics 2026' : 'Danske skatter — det grundlæggende 2026'}
+            </h2>
+            <p className="text-sm mb-3" style={{ color: '#9BB5C2' }}>
+              {en
+                ? 'Understand AM-bidrag, bundskat, kommuneskat and the new 2026 brackets. Includes a live tax calculator and a quiz.'
+                : 'Forstå AM-bidrag, bundskat, kommuneskat og de nye 2026-trin. Inkl. live skatteberegner og quiz.'}
+            </p>
+            <div className="flex gap-4 text-xs" style={{ color: '#7A9BAA' }}>
+              <span>📚 {en ? '4 sections' : '4 sektioner'}</span>
+              <span>⏱ ~10 min</span>
+              <span>🧮 {en ? 'Live calculator' : 'Live beregner'}</span>
             </div>
           </div>
           <div className="text-4xl shrink-0">→</div>
