@@ -69,6 +69,42 @@
     "target": "Target:",
     "noGoals": "You have no active goals yet.",
     "createFirst": "Create your first goal",
+    "recommendations": {
+      "title": "Your Personal Plan",
+      "subtitle": "Tailored to exactly the goals you have set",
+      "noGoals": "Add goals above to see your personalised plan.",
+      "tabs": {
+        "learning": "Learning Path",
+        "partners": "Partners",
+        "webinars": "Webinars"
+      },
+      "learning": {
+        "completed": "Completed",
+        "comingSoon": "Coming soon",
+        "start": "Start →",
+        "review": "Review →"
+      },
+      "partners": {
+        "visit": "Visit →",
+        "disclaimer": "Bullaris has no commercial relationship with any of these partners — recommendations are based solely on relevance to your goals.",
+        "categories": {
+          "bank": "Bank",
+          "investment": "Investment",
+          "pension": "Pension",
+          "mortgage": "Mortgage",
+          "comparison": "Comparison",
+          "business": "Business",
+          "insurance": "Insurance",
+          "tax": "Tax"
+        }
+      },
+      "webinars": {
+        "free": "Free",
+        "register": "Register →",
+        "registered": "Registered ✓",
+        "disclaimer": "Webinars are free for all Bullaris users. You will receive a confirmation email with a Zoom link."
+      }
+    },
     "horizons": {
       "short": "Short-term",
       "shortRange": "0–2 years",

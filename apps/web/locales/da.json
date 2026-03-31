@@ -69,6 +69,42 @@
     "target": "Mål:",
     "noGoals": "Du har ingen aktive mål endnu.",
     "createFirst": "Opret dit første mål",
+    "recommendations": {
+      "title": "Din personlige plan",
+      "subtitle": "Tilpasset præcis de mål du har sat",
+      "noGoals": "Tilføj mål ovenfor for at se din personlige plan.",
+      "tabs": {
+        "learning": "Læringssti",
+        "partners": "Partnere",
+        "webinars": "Webinarer"
+      },
+      "learning": {
+        "completed": "Fuldført",
+        "comingSoon": "Kommer snart",
+        "start": "Start →",
+        "review": "Gense →"
+      },
+      "partners": {
+        "visit": "Besøg →",
+        "disclaimer": "Bullaris har ingen kommerciel relation til disse partnere — anbefalingerne er udelukkende baseret på relevans for dine mål.",
+        "categories": {
+          "bank": "Bank",
+          "investment": "Investering",
+          "pension": "Pension",
+          "mortgage": "Realkreditlån",
+          "comparison": "Sammenligning",
+          "business": "Erhverv",
+          "insurance": "Forsikring",
+          "tax": "Skat"
+        }
+      },
+      "webinars": {
+        "free": "Gratis",
+        "register": "Tilmeld →",
+        "registered": "Tilmeldt ✓",
+        "disclaimer": "Webinarer er gratis for alle Bullaris-brugere. Du modtager en bekræftelses-e-mail med Zoom-link."
+      }
+    },
     "horizons": {
       "short": "Kortsigtet",
       "shortRange": "0–2 år",

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { LearnBanner } from '@/components/learn-banner'
+import { GoalRecommendations } from '@/components/goal-recommendations'
 import { trpc } from '@/lib/trpc'
 import { useLanguage } from '@/lib/language-context'
 
@@ -504,6 +505,10 @@ export default function GoalsPage() {
           })}
         </div>
       )}
+
+      <GoalRecommendations
+        goalTypes={Array.from(new Set(goalsQuery.data?.map((g) => g.type) ?? []))}
+      />
 
       <LearnBanner
         moduleId="goal-setting"
