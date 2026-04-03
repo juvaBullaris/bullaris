@@ -34,6 +34,10 @@ export function getCommutingDeduction(params: {
   return calculateCommutingDeduction(params)
 }
 
+// Max daycare deduction per child per year (SKAT 2026)
+const DAYCARE_DEDUCTION_PER_CHILD = 6400
+const DAYCARE_MAX_CHILDREN = 2
+
 /**
  * Get all standard deductions for a given employee situation.
  */
@@ -43,6 +47,7 @@ export function getDeductions(params: {
   union_contrib_dkk?: number
   akasse_dkk?: number
   craftsman_labour_dkk?: number
+  children_in_daycare?: number
 }): DeductionResult[] {
   const {
     km_daily = 0,
@@ -50,6 +55,7 @@ export function getDeductions(params: {
     union_contrib_dkk = 0,
     akasse_dkk = 0,
     craftsman_labour_dkk = 0,
+    children_in_daycare = 0,
   } = params
 
   const deductions: DeductionResult[] = []
@@ -97,6 +103,17 @@ export function getDeductions(params: {
       label: 'Håndværkerfradrag',
       amount_dkk: amount,
       note: `25% af arbejdsomkostninger, maks ${RATES_2024.CRAFTSMAN_DEDUCTION_MAX.toLocaleString('da-DK')} DKK`,
+    })
+  }
+
+  // Dagsinstitution/SFO fradrag (SKAT 2026: maks 6.400 DKK/barn/år, maks 2 børn)
+  if (children_in_daycare > 0) {
+    const eligible = Math.min(children_in_daycare, DAYCARE_MAX_CHILDREN)
+    const amount = eligible * DAYCARE_DEDUCTION_PER_CHILD
+    deductions.push({
+      label: 'Dagsinstitution/SFO',
+      amount_dkk: amount,
+      note: `${eligible} barn × ${DAYCARE_DEDUCTION_PER_CHILD.toLocaleString('da-DK')} DKK (SKAT 2026)`,
     })
   }
 

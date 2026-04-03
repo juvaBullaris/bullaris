@@ -1,11 +1,12 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { useRouter } from 'next/navigation'
 import { useLanguage } from '@/lib/language-context'
 import { LanguageSwitcher } from '@/components/language-switcher'
+import { trpc } from '@/lib/trpc'
 
 export default function EmployeeLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -13,11 +14,27 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
   const supabase = createClientComponentClient()
   const { t } = useLanguage()
 
+  const profileQuery = trpc.employee.getProfile.useQuery(undefined, {
+    retry: false,
+  })
+
+  // Redirect to onboarding if profile has never set countryOfResidence
+  useEffect(() => {
+    if (
+      profileQuery.data &&
+      profileQuery.data.data.countryOfResidence === null &&
+      !pathname.startsWith('/onboarding')
+    ) {
+      router.push('/onboarding')
+    }
+  }, [profileQuery.data, pathname, router])
+
   const navItems = [
     { href: '/dashboard', label: t.nav.dashboard, icon: '🏠' },
     { href: '/payslip', label: t.nav.payslip, icon: '📄' },
     { href: '/tax-planner', label: t.nav.taxPlanner, icon: '🧮' },
     { href: '/goals', label: t.nav.goals, icon: '🎯' },
+    { href: '/finance', label: t.nav.finance, icon: '💰' },
     { href: '/chat', label: t.nav.chat, icon: '💬' },
     { href: '/learning', label: t.nav.learning, icon: '📚' },
   ]

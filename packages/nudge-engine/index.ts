@@ -158,6 +158,37 @@ async function getEligibleEmployees(
         .then((r) => r.map((e) => e.id))
     }
 
+    case 'goal_80_percent': {
+      // Employees with any goal at 80–99% progress
+      const goals = await db.goal.findMany({
+        where: { NOT: { employeeId: { in: excludeIds } } },
+        select: { employeeId: true, progress_dkk: true, target_dkk: true },
+      })
+      const eligible = new Set<string>()
+      for (const g of goals) {
+        const pct = Number(g.progress_dkk) / Number(g.target_dkk)
+        if (pct >= 0.8 && pct < 1.0) eligible.add(g.employeeId)
+      }
+      return Array.from(eligible).filter((id) => !excludeIds.includes(id))
+    }
+
+    case 'goal_complete': {
+      // Employees who completed any goal in the last 7 days
+      const cutoff = subDays(new Date(), 7)
+      const goals = await db.goal.findMany({
+        where: {
+          createdAt: { gte: cutoff },
+          NOT: { employeeId: { in: excludeIds } },
+        },
+        select: { employeeId: true, progress_dkk: true, target_dkk: true },
+      })
+      const eligible = new Set<string>()
+      for (const g of goals) {
+        if (Number(g.progress_dkk) >= Number(g.target_dkk)) eligible.add(g.employeeId)
+      }
+      return Array.from(eligible).filter((id) => !excludeIds.includes(id))
+    }
+
     default:
       return []
   }

@@ -6,9 +6,12 @@
     "goals": "Goals",
     "chat": "AI Assistant",
     "learning": "Learn",
+    "finance": "Finance",
     "portal": "Overview",
     "employees": "Employees",
     "analytics": "Analytics",
+    "seats": "Seats",
+    "nudges": "Campaigns",
     "signOut": "Sign out",
     "signIn": "Sign in"
   },
@@ -51,7 +54,15 @@
       "union": "Union membership",
       "akasse": "Unemployment insurance (A-kasse)",
       "craftsman": "Home improvement deduction",
+      "daycare": "Daycare / SFO",
+      "daycareNotice": "Daycare deduction calculated automatically from your profile.",
       "total": "Total deductions"
+    },
+    "oresund": {
+      "notice": "You are an Øresund commuter — special tax rules apply",
+      "rateNote": "We use the national average municipality rate (25.1%) as an estimate. Consult SKAT or a tax advisor for your exact figure.",
+      "cta": "Under the Nordic double-taxation convention, Øresund commuters are typically taxed in Denmark.",
+      "ctaLabel": "Read more on SKAT.dk"
     }
   },
   "goals": {
@@ -133,6 +144,12 @@
       "early_retirement": "Early retirement",
       "generational_wealth": "Generational wealth",
       "other": "Other"
+    },
+    "celebration": {
+      "title": "You reached your goal! 🎉",
+      "subtitle": "A big step forward. What's next?",
+      "ctaNew": "Set a new goal",
+      "ctaLong": "Explore long-term goals"
     }
   },
   "chat": {
@@ -162,6 +179,7 @@
     "viewContent": "View content",
     "modules": {
       "tax_basics": "Tax basics",
+      "tax_return": "Annual tax return",
       "pension": "Pension",
       "budgeting": "Budgeting",
       "investing": "Savings",
@@ -206,6 +224,9 @@
     "subtitle": "Anonymised aggregates for your organisation.",
     "privacyThresholdNotice": "Data is only shown when the group has at least 5 employees.",
     "loading": "Loading analytics...",
+    "exportCsv": "Export CSV",
+    "wellbeingScore": "Wellbeing score",
+    "wellbeingTrend": "Monthly average from pulse survey (1–5). Shown only when ≥5 responses.",
     "stats": {
       "activeUsersLast30Days": "Active users (30 days)",
       "avgOnboardingRate": "Average onboarding rate",
@@ -214,6 +235,148 @@
     },
     "goalDistribution": "Goal type distribution",
     "moduleAdoption": "Module adoption"
+  },
+  "pulse": {
+    "question": "How financially confident do you feel this month?",
+    "submit": "Submit",
+    "dismiss": "Dismiss",
+    "thankYou": "Thanks for your response!"
+  },
+  "seats": {
+    "title": "Seats",
+    "subtitle": "Overview of your seat subscription and usage.",
+    "purchased": "Purchased",
+    "used": "In use",
+    "available": "Available",
+    "upgrade": "Need more seats?",
+    "upgradeDesc": "Contact us to upgrade your subscription and give more employees access."
+  },
+  "nudges": {
+    "title": "Nudge Campaigns",
+    "subtitle": "Send targeted messages to all employees at a scheduled time.",
+    "new": "New campaign",
+    "subject": "Subject",
+    "body": "Message",
+    "scheduledAt": "Send time",
+    "create": "Create campaign",
+    "cancel": "Cancel",
+    "noCampaigns": "No campaigns yet.",
+    "status": {
+      "scheduled": "Scheduled",
+      "sent": "Sent"
+    }
+  },
+  "finance": {
+    "title": "Your Finances",
+    "subtitle": "Budget, debt, net worth, and financial health — all in one place.",
+    "tabs": {
+      "overview": "Overview",
+      "budgetPlan": "Budget Plan",
+      "budgetTracker": "Budget Tracker",
+      "debt": "Debt",
+      "netWorth": "Net Worth"
+    },
+    "score": {
+      "title": "Financial health score",
+      "emergency": "Emergency fund",
+      "debt": "Debt burden",
+      "learning": "Learning",
+      "goals": "Goals",
+      "rating": {
+        "excellent": "Excellent",
+        "good": "Good",
+        "fair": "Fair",
+        "needsWork": "Needs work"
+      }
+    },
+    "savingsRate": {
+      "title": "Savings rate",
+      "yourRate": "Your rate",
+      "benchmark": "Recommended: 10–15%",
+      "low": "Below recommended level",
+      "good": "Above recommended level"
+    },
+    "budgetPlan": {
+      "toggle5030": "50/30/20 rule",
+      "toggle60": "60% Solution",
+      "recommended": "Recommended",
+      "yours": "Your budget",
+      "difference": "Difference",
+      "sources": "Scientific sources",
+      "categories": {
+        "housing": "Housing (rent/mortgage)",
+        "food": "Food & groceries",
+        "transport": "Transport",
+        "utilities": "Utilities & insurance",
+        "entertainment": "Entertainment & dining",
+        "clothing": "Clothing & personal",
+        "misc": "Subscriptions & misc",
+        "pension": "Pension",
+        "emergency": "Emergency fund",
+        "investments": "Investments & savings",
+        "committed": "Committed expenses",
+        "retirement": "Retirement savings",
+        "longTerm": "Long-term savings",
+        "shortTerm": "Short-term savings",
+        "fun": "Fun money"
+      }
+    },
+    "budgetTracker": {
+      "add": "Add category",
+      "label": "Category",
+      "limit": "Amount (DKK)",
+      "monthly": "Monthly",
+      "annual": "Annual",
+      "noCategories": "No categories yet."
+    },
+    "debt": {
+      "add": "Add debt",
+      "label": "Name",
+      "balance": "Remaining balance (DKK)",
+      "interest": "Interest rate (%)",
+      "strategy": "Strategy",
+      "avalanche": "Avalanche (highest interest first)",
+      "snowball": "Snowball (lowest balance first)",
+      "noDebts": "No debts recorded.",
+      "avalancheDesc": "Pay highest-interest debt first — saves the most in total interest.",
+      "snowballDesc": "Pay smallest balance first — builds momentum and motivation."
+    },
+    "netWorth": {
+      "add": "Add snapshot",
+      "assets": "Assets (DKK)",
+      "liabilities": "Liabilities (DKK)",
+      "net": "Net worth",
+      "noSnapshots": "No snapshots yet.",
+      "privacy": "Only you can see these figures — never your HR department."
+    }
+  },
+  "onboarding": {
+    "step1": {
+      "title": "Where do you live?",
+      "dk": "Denmark 🇩🇰",
+      "se": "Sweden (Øresund) 🇸🇪",
+      "eu": "Other EU country 🇪🇺",
+      "other": "Outside EU 🌍"
+    },
+    "step2": {
+      "title": "Your situation",
+      "fullTime": "Full-time employee",
+      "partTime": "Part-time employee",
+      "freelance": "Freelance / self-employed",
+      "hasChildren": "Do you have children in daycare or SFO?",
+      "yes": "Yes",
+      "no": "No",
+      "howMany": "How many?"
+    },
+    "step3": {
+      "title": "Name & salary"
+    },
+    "municipality": "Which municipality do you live in?",
+    "municipalityPlaceholder": "Search for municipality...",
+    "complete": "Get started",
+    "next": "Next",
+    "back": "Back",
+    "daycareNote": "Entitles you to a daycare deduction (SKAT 2026: up to DKK 6,400/child, max 2 children)"
   },
   "consent": {
     "accept": "I accept",

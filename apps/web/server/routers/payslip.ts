@@ -1,8 +1,7 @@
 import { z } from 'zod'
 import { router, protectedProcedure } from '../trpc'
-import { calculateNet, getCommutingDeduction } from '@bullaris/danish-tax'
+import { calculateNet, getDeductions } from '@bullaris/danish-tax'
 import { db } from '@bullaris/db'
-import { RATES_2024 } from '@bullaris/danish-tax'
 
 export const payslipRouter = router({
   /**
@@ -21,7 +20,6 @@ export const payslipRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
-      // Get profile for municipality and tax card defaults
       const profile = await db.profile.findUnique({
         where: { id: ctx.employee.id },
         select: { municipality: true, tax_card_type: true, frikort_limit_dkk: true },
@@ -39,6 +37,34 @@ export const payslipRouter = router({
     }),
 
   /**
+   * Estimate net pay from gross — lightweight, no DB write.
+   * Used by Finance page budget plan to pre-fill DKK amounts.
+   */
+  estimateNet: protectedProcedure
+    .input(
+      z.object({
+        gross_dkk: z.number().positive(),
+        tax_card_type: z.enum(['A', 'B', 'frikort']).optional(),
+        municipality_rate: z.number().optional(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const profile = await db.profile.findUnique({
+        where: { id: ctx.employee.id },
+        select: { tax_card_type: true, frikort_limit_dkk: true },
+      })
+
+      const result = calculateNet({
+        gross_dkk: input.gross_dkk,
+        tax_card_type: (input.tax_card_type ?? profile?.tax_card_type ?? 'A') as 'A' | 'B' | 'frikort',
+        municipality_rate: input.municipality_rate,
+        frikort_limit_dkk: profile?.frikort_limit_dkk != null ? Number(profile.frikort_limit_dkk) : undefined,
+      })
+
+      return { net_dkk: result.net_dkk }
+    }),
+
+  /**
    * Save payslip input for the current period.
    * Stores only gross_dkk, tax_card_type, and period — never net.
    * Requires payslip_module consent (checked via consent_events).
@@ -52,7 +78,6 @@ export const payslipRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      // Verify consent exists for payslip_module
       const consent = await db.consentEvent.findFirst({
         where: {
           employeeId: ctx.employee.id,
@@ -95,7 +120,7 @@ export const payslipRouter = router({
     }),
 
   /**
-   * Get commuting and other deductions.
+   * Get commuting and other deductions, including childcare from profile.
    */
   getDeductions: protectedProcedure
     .input(
@@ -107,59 +132,20 @@ export const payslipRouter = router({
         craftsman_labour_dkk: z.number().min(0).default(0),
       })
     )
-    .query(async ({ input }) => {
-      const deductions: Array<{ label: string; amount_dkk: number; note?: string }> = []
+    .query(async ({ ctx, input }) => {
+      const profile = await db.profile.findUnique({
+        where: { id: ctx.employee.id },
+        select: { childrenInDaycare: true },
+      })
 
-      // Commuting deduction (befordringsfradrag)
-      const commuting = getCommutingDeduction({
+      return getDeductions({
         km_daily: input.km_daily,
         working_days: input.working_days,
+        union_contrib_dkk: input.union_contrib_dkk,
+        akasse_dkk: input.akasse_dkk,
+        craftsman_labour_dkk: input.craftsman_labour_dkk,
+        children_in_daycare: profile?.childrenInDaycare ?? 0,
       })
-      if (commuting > 0) {
-        deductions.push({
-          label: 'Befordringsfradrag',
-          amount_dkk: commuting,
-          note: `${input.km_daily} km/dag × ${input.working_days} dage`,
-        })
-      }
-
-      // Union deduction (fagforeningskontingent)
-      const unionDeduction = Math.min(
-        input.union_contrib_dkk,
-        RATES_2024.UNION_DEDUCTION_MAX
-      )
-      if (unionDeduction > 0) {
-        deductions.push({
-          label: 'Fagforeningskontingent',
-          amount_dkk: unionDeduction,
-          note: unionDeduction < input.union_contrib_dkk
-            ? `Maks ${RATES_2024.UNION_DEDUCTION_MAX.toLocaleString('da-DK')} DKK/år`
-            : undefined,
-        })
-      }
-
-      // A-kasse (fully deductible)
-      if (input.akasse_dkk > 0) {
-        deductions.push({
-          label: 'A-kasse',
-          amount_dkk: input.akasse_dkk,
-        })
-      }
-
-      // Craftsman deduction (håndværkerfradrag)
-      if (input.craftsman_labour_dkk > 0) {
-        const craftsmanDeduction = Math.min(
-          input.craftsman_labour_dkk * RATES_2024.CRAFTSMAN_DEDUCTION_RATE,
-          RATES_2024.CRAFTSMAN_DEDUCTION_MAX
-        )
-        deductions.push({
-          label: 'Håndværkerfradrag',
-          amount_dkk: craftsmanDeduction,
-          note: `25% af arbejdsomkostninger, maks ${RATES_2024.CRAFTSMAN_DEDUCTION_MAX.toLocaleString('da-DK')} DKK`,
-        })
-      }
-
-      return deductions
     }),
 
   /**
@@ -169,13 +155,7 @@ export const payslipRouter = router({
     const inputs = await db.payslipInput.findMany({
       where: { employeeId: ctx.employee.id },
       orderBy: { period: 'desc' },
-      take: 24, // 2 years
-    })
-
-    // Recalculate net for each entry — never stored
-    const profile = await db.profile.findUnique({
-      where: { id: ctx.employee.id },
-      select: { municipality: true },
+      take: 24,
     })
 
     return inputs.map((input) => {

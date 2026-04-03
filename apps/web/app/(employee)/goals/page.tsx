@@ -165,6 +165,8 @@ export default function GoalsPage() {
   const [goalType, setGoalType]           = useState('emergency_fund')
   const [targetDkk, setTargetDkk]         = useState('')
   const [deadline, setDeadline]           = useState('')
+  const [editingProgress, setEditingProgress] = useState<Record<string, string>>({})
+  const [celebratedGoalId, setCelebratedGoalId] = useState<string | null>(null)
 
   const goalsQuery = trpc.goals.list.useQuery()
   const createGoal = trpc.goals.create.useMutation({
@@ -176,6 +178,16 @@ export default function GoalsPage() {
     },
     onError: (err) => {
       console.error('createGoal error:', err)
+    },
+  })
+  const updateProgress = trpc.goals.updateProgress.useMutation({
+    onSuccess: (_, variables) => {
+      goalsQuery.refetch().then(() => {
+        const goal = goalsQuery.data?.find((g) => g.id === variables.goal_id)
+        if (goal && variables.progress_dkk >= Number(goal.target_dkk)) {
+          setCelebratedGoalId(variables.goal_id)
+        }
+      })
     },
   })
 
@@ -465,45 +477,102 @@ export default function GoalsPage() {
                     const pct   = Math.min(100, Math.round((Number(goal.progress_dkk) / Number(goal.target_dkk)) * 100))
                     const meta  = getMeta(goal.type)
                     const label = getLabel(goal.type)
+                    const isCelebrated = celebratedGoalId === goal.id
 
                     return (
-                      <div key={goal.id} className="rounded-xl border bg-card p-5">
-                        <div className="flex items-start justify-between mb-3">
-                          <div className="flex items-center gap-2.5">
-                            <span
-                              className="w-9 h-9 rounded-full flex items-center justify-center text-lg shrink-0"
-                              style={{ background: style.bg, border: `1.5px solid ${style.border}` }}
-                            >
-                              {meta?.icon ?? '⭐'}
-                            </span>
-                            <div>
-                              <h3 className="font-semibold text-sm leading-tight">{label}</h3>
-                              {goal.deadline && (
-                                <p className="text-xs text-muted-foreground">
-                                  {en ? 'Deadline' : 'Deadline'}:{' '}
-                                  {new Date(goal.deadline).toLocaleDateString('da-DK')}
-                                </p>
-                              )}
+                      <div key={goal.id}>
+                        {/* Celebration banner */}
+                        {isCelebrated && (
+                          <div className="rounded-xl p-4 mb-2 text-center animate-bounce"
+                            style={{ background: '#F0FDF4', border: '1px solid #86EFAC' }}>
+                            <p className="text-2xl mb-1">{meta?.icon ?? '⭐'}</p>
+                            <p className="font-bold text-sm" style={{ color: '#166534' }}>
+                              {t.goals.celebration.title}
+                            </p>
+                            <p className="text-xs mb-3" style={{ color: '#166534' }}>
+                              {t.goals.celebration.subtitle}
+                            </p>
+                            <div className="flex gap-2 justify-center flex-wrap">
+                              <button
+                                onClick={() => { setCelebratedGoalId(null); setShowForm(true) }}
+                                className="text-xs px-3 py-1.5 rounded-lg font-semibold text-white"
+                                style={{ background: '#16A34A' }}
+                              >
+                                {t.goals.celebration.ctaNew}
+                              </button>
+                              <button
+                                onClick={() => setCelebratedGoalId(null)}
+                                className="text-xs px-3 py-1.5 rounded-lg font-medium"
+                                style={{ color: '#6B5C52', border: '1px solid #EDE0D4' }}
+                              >
+                                {en ? 'Close' : 'Luk'}
+                              </button>
                             </div>
                           </div>
-                          <span
-                            className="text-sm font-bold shrink-0"
-                            style={{ color: pct === 100 ? '#16A34A' : style.color }}
-                          >
-                            {pct === 100 ? '✓ 100%' : `${pct}%`}
-                          </span>
-                        </div>
+                        )}
 
-                        <div className="h-1.5 bg-muted rounded-full mb-3">
-                          <div
-                            className="h-1.5 rounded-full transition-all"
-                            style={{ width: `${pct}%`, background: pct === 100 ? '#16A34A' : style.bar }}
-                          />
-                        </div>
+                        <div className="rounded-xl border bg-card p-5">
+                          <div className="flex items-start justify-between mb-3">
+                            <div className="flex items-center gap-2.5">
+                              <span
+                                className="w-9 h-9 rounded-full flex items-center justify-center text-lg shrink-0"
+                                style={{ background: style.bg, border: `1.5px solid ${style.border}` }}
+                              >
+                                {meta?.icon ?? '⭐'}
+                              </span>
+                              <div>
+                                <h3 className="font-semibold text-sm leading-tight">{label}</h3>
+                                {goal.deadline && (
+                                  <p className="text-xs text-muted-foreground">
+                                    {en ? 'Deadline' : 'Deadline'}:{' '}
+                                    {new Date(goal.deadline).toLocaleDateString('da-DK')}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+                            <span
+                              className="text-sm font-bold shrink-0"
+                              style={{ color: pct === 100 ? '#16A34A' : style.color }}
+                            >
+                              {pct === 100 ? '✓ 100%' : `${pct}%`}
+                            </span>
+                          </div>
 
-                        <div className="flex justify-between text-xs text-muted-foreground">
-                          <span>{fmt(Number(goal.progress_dkk))} {t.goals.saved}</span>
-                          <span>{t.goals.target} {fmt(Number(goal.target_dkk))}</span>
+                          <div className="h-1.5 bg-muted rounded-full mb-3">
+                            <div
+                              className="h-1.5 rounded-full transition-all"
+                              style={{ width: `${pct}%`, background: pct === 100 ? '#16A34A' : style.bar }}
+                            />
+                          </div>
+
+                          <div className="flex justify-between text-xs text-muted-foreground mb-3">
+                            <span>{fmt(Number(goal.progress_dkk))} {t.goals.saved}</span>
+                            <span>{t.goals.target} {fmt(Number(goal.target_dkk))}</span>
+                          </div>
+
+                          {/* Update progress input */}
+                          {pct < 100 && (
+                            <div className="flex gap-2 mt-2">
+                              <input
+                                type="number"
+                                placeholder={en ? 'Update saved amount (DKK)' : 'Opdater sparet beløb (DKK)'}
+                                value={editingProgress[goal.id] ?? ''}
+                                onChange={(e) => setEditingProgress((prev) => ({ ...prev, [goal.id]: e.target.value }))}
+                                className="flex-1 rounded-lg border border-input px-3 py-1.5 text-xs outline-none focus:ring-1 focus:ring-bullaris-blue/30"
+                              />
+                              <button
+                                disabled={!editingProgress[goal.id] || updateProgress.isPending}
+                                onClick={() => {
+                                  updateProgress.mutate({ goal_id: goal.id, progress_dkk: Number(editingProgress[goal.id]) })
+                                  setEditingProgress((prev) => ({ ...prev, [goal.id]: '' }))
+                                }}
+                                className="rounded-lg px-3 py-1.5 text-xs font-semibold text-white disabled:opacity-50"
+                                style={{ background: style.color }}
+                              >
+                                {en ? 'Save' : 'Gem'}
+                              </button>
+                            </div>
+                          )}
                         </div>
                       </div>
                     )

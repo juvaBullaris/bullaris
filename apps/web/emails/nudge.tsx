@@ -1,4 +1,4 @@
-type NudgeType = 'payslip_reminder' | 'goal_progress' | 'learning_suggestion' | 'tax_deduction_tip'
+type NudgeType = 'payslip_reminder' | 'goal_progress' | 'learning_suggestion' | 'tax_deduction_tip' | 'goal_milestone' | 'goal_complete'
 
 interface NudgeEmailProps {
   employeeName: string
@@ -31,6 +31,18 @@ const NUDGE_CONTENT: Record<NudgeType, { subject: string; heading: string; body:
     heading: 'Har du husket dine fradrag?',
     body: 'Mange glemmer at registrere befordringsfradrag og fagforeningskontingent. Tjek om du går glip af fradrag.',
     cta: 'Beregn mine fradrag',
+  },
+  goal_milestone: {
+    subject: 'Du er næsten i mål — 80% nået! 🚀',
+    heading: 'Du er tæt på!',
+    body: 'Et af dine finansielle mål er nu over 80 %. Du er i den bedste position til at gennemføre det helt. Giv det det sidste skub.',
+    cta: 'Se dine mål',
+  },
+  goal_complete: {
+    subject: 'Tillykke — du nåede dit mål! 🎉',
+    heading: 'Mål nået!',
+    body: 'Du har nået et af dine finansielle mål. Det er et rigtig stort skridt. Hvad er det næste mål du vil sætte?',
+    cta: 'Sæt næste mål',
   },
 }
 

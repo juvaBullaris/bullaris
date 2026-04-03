@@ -3,12 +3,18 @@
 import Link from 'next/link'
 import { trpc } from '@/lib/trpc'
 import { useLanguage } from '@/lib/language-context'
+import { PulseSurveyCard } from '@/components/pulse-survey-card'
 
 export default function DashboardPage() {
   const { t } = useLanguage()
-  const goalsQuery = trpc.goals.list.useQuery()
+  const goalsQuery    = trpc.goals.list.useQuery()
+  const netWorthQuery = trpc.netWorth.list.useQuery()
 
   const activeGoalCount = goalsQuery.data?.length ?? '–'
+  const latestNW = netWorthQuery.data?.[0]
+  const netWorthValue = latestNW
+    ? (Number(latestNW.assets_dkk) - Number(latestNW.liabilities_dkk)).toLocaleString('da-DK', { maximumFractionDigits: 0 }) + ' DKK'
+    : '– DKK'
 
   const cards = [
     {
@@ -25,9 +31,9 @@ export default function DashboardPage() {
     },
     {
       label: t.dashboard.netWorth,
-      value: '– DKK',
-      link: null,
-      linkLabel: null,
+      value: netWorthValue,
+      link: '/finance',
+      linkLabel: t.nav.finance,
     },
   ]
 
@@ -46,6 +52,8 @@ export default function DashboardPage() {
       <p className="text-sm mb-8" style={{ color: '#A0917F' }}>
         {t.dashboard.subtitle}
       </p>
+
+      <PulseSurveyCard />
 
       {/* Stat cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">

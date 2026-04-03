@@ -84,6 +84,22 @@ const CATEGORIES: Category[] = [
         sections: 5,
         extra: '4-question quiz',
       },
+      {
+        id: 'tax-return',
+        href: '/learning/tax-return',
+        icon: '📬',
+        en: {
+          title: 'TastSelv & Your Annual Tax Return',
+          description: 'Learn how to use TastSelv, what SKAT pre-fills, which deductions you must add yourself, and how to read your årsopgørelse.',
+        },
+        da: {
+          title: 'TastSelv og din årsopgørelse',
+          description: 'Lær at bruge TastSelv, hvad SKAT udfylder for dig, hvilke fradrag du selv skal tilføje, og hvordan du læser din årsopgørelse.',
+        },
+        duration: '~12 min',
+        sections: 4,
+        extra: 'Inkl. fradragsoversigt',
+      },
     ],
   },
 ]

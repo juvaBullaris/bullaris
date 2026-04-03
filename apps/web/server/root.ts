@@ -10,6 +10,8 @@ import { debtRouter } from './routers/debt'
 import { budgetRouter } from './routers/budget'
 import { webinarsRouter } from './routers/webinars'
 import { ebooksRouter } from './routers/ebooks'
+import { pulseRouter } from './routers/pulse'
+import { campaignsRouter } from './routers/campaigns'
 
 export { router, publicProcedure, protectedProcedure, hrAdminProcedure } from './trpc'
 
@@ -25,6 +27,8 @@ export const appRouter = router({
   budget: budgetRouter,
   webinars: webinarsRouter,
   ebooks: ebooksRouter,
+  pulse: pulseRouter,
+  campaigns: campaignsRouter,
 })
 
 export type AppRouter = typeof appRouter

@@ -6,9 +6,12 @@
     "goals": "Mål",
     "chat": "AI-assistent",
     "learning": "Lær mere",
+    "finance": "Økonomi",
     "portal": "Overblik",
     "employees": "Medarbejdere",
     "analytics": "Analyser",
+    "seats": "Pladser",
+    "nudges": "Kampagner",
     "signOut": "Log ud",
     "signIn": "Log ind"
   },
@@ -51,7 +54,15 @@
       "union": "Fagforeningskontingent",
       "akasse": "A-kasse",
       "craftsman": "Håndværkerfradrag",
+      "daycare": "Dagsinstitution/SFO",
+      "daycareNotice": "Dagsinstitutionsfradrag er automatisk beregnet baseret på din profil.",
       "total": "Samlede fradrag"
+    },
+    "oresund": {
+      "notice": "Du er Øresundspendler — særlige skatteregler gælder",
+      "rateNote": "Vi bruger det nationale kommuneskatgennemsnit (25,1%) som estimat. Konsulter SKAT eller en rådgiver for dit præcise tal.",
+      "cta": "Under den nordiske dobbeltbeskatningsaftale beskattes Øresundspendlere typisk i Danmark.",
+      "ctaLabel": "Læs mere på SKAT.dk"
     }
   },
   "goals": {
@@ -133,6 +144,12 @@
       "early_retirement": "Tidlig pension",
       "generational_wealth": "Generationsformue",
       "other": "Andet"
+    },
+    "celebration": {
+      "title": "Du nåede dit mål! 🎉",
+      "subtitle": "Et stort skridt fremad. Hvad er næste skridt?",
+      "ctaNew": "Sæt et nyt mål",
+      "ctaLong": "Udforsk langsigtede mål"
     }
   },
   "chat": {
@@ -162,6 +179,7 @@
     "viewContent": "Se indhold",
     "modules": {
       "tax_basics": "Skattegrundlag",
+      "tax_return": "Årsopgørelse",
       "pension": "Pension",
       "budgeting": "Budget",
       "investing": "Opsparing",
@@ -206,6 +224,9 @@
     "subtitle": "Anonymiserede aggregater for din organisation.",
     "privacyThresholdNotice": "Data vises kun når gruppen har mindst 5 medarbejdere.",
     "loading": "Indlæser analyser...",
+    "exportCsv": "Eksporter CSV",
+    "wellbeingScore": "Trivselsscore",
+    "wellbeingTrend": "Månedlig gns. baseret på pulsmåling (1–5). Vises kun ved ≥5 svar.",
     "stats": {
       "activeUsersLast30Days": "Aktive brugere (30 dage)",
       "avgOnboardingRate": "Gennemsnitlig onboarding",
@@ -214,6 +235,148 @@
     },
     "goalDistribution": "Fordeling af måltyper",
     "moduleAdoption": "Modul-adoption"
+  },
+  "pulse": {
+    "question": "Hvor tryg er du finansielt denne måned?",
+    "submit": "Indsend svar",
+    "dismiss": "Luk",
+    "thankYou": "Tak for dit svar!"
+  },
+  "seats": {
+    "title": "Pladser",
+    "subtitle": "Overblik over jeres pladsabonnement og forbrug.",
+    "purchased": "Købt",
+    "used": "I brug",
+    "available": "Tilgængelige",
+    "upgrade": "Brug for flere pladser?",
+    "upgradeDesc": "Kontakt os for at opgradere jeres abonnement og give adgang til flere medarbejdere."
+  },
+  "nudges": {
+    "title": "Nudge-kampagner",
+    "subtitle": "Send målrettede beskeder til alle medarbejdere på et bestemt tidspunkt.",
+    "new": "Ny kampagne",
+    "subject": "Emne",
+    "body": "Besked",
+    "scheduledAt": "Afsendingstidspunkt",
+    "create": "Opret kampagne",
+    "cancel": "Annuller",
+    "noCampaigns": "Ingen kampagner endnu.",
+    "status": {
+      "scheduled": "Planlagt",
+      "sent": "Afsendt"
+    }
+  },
+  "finance": {
+    "title": "Din økonomi",
+    "subtitle": "Budget, gæld, formue og finansiel sundhed — samlet ét sted.",
+    "tabs": {
+      "overview": "Overblik",
+      "budgetPlan": "Budgetplan",
+      "budgetTracker": "Budgetsporing",
+      "debt": "Gæld",
+      "netWorth": "Formue"
+    },
+    "score": {
+      "title": "Finansiel sundhedsscore",
+      "emergency": "Nødreserve",
+      "debt": "Gældsbyrde",
+      "learning": "Læring",
+      "goals": "Mål",
+      "rating": {
+        "excellent": "Fremragende",
+        "good": "God",
+        "fair": "Acceptabel",
+        "needsWork": "Kræver opmærksomhed"
+      }
+    },
+    "savingsRate": {
+      "title": "Opsparingsrate",
+      "yourRate": "Din rate",
+      "benchmark": "Anbefalet: 10–15%",
+      "low": "Under anbefalet niveau",
+      "good": "Over anbefalet niveau"
+    },
+    "budgetPlan": {
+      "toggle5030": "50/30/20-metoden",
+      "toggle60": "60%-løsningen",
+      "recommended": "Anbefalet",
+      "yours": "Dit budget",
+      "difference": "Forskel",
+      "sources": "Videnskabelige kilder",
+      "categories": {
+        "housing": "Husleje/bolig",
+        "food": "Mad og dagligvarer",
+        "transport": "Transport",
+        "utilities": "Forsyning og forsikring",
+        "entertainment": "Underholdning og restauranter",
+        "clothing": "Tøj og personligt",
+        "misc": "Abonnementer og andet",
+        "pension": "Pension",
+        "emergency": "Nødreserve",
+        "investments": "Investering og opsparing",
+        "committed": "Faste udgifter",
+        "retirement": "Pensionsopsparing",
+        "longTerm": "Langsigtet opsparing",
+        "shortTerm": "Kortsigtet opsparing",
+        "fun": "Fritidspenge"
+      }
+    },
+    "budgetTracker": {
+      "add": "Tilføj kategori",
+      "label": "Kategori",
+      "limit": "Beløb (DKK)",
+      "monthly": "Månedligt",
+      "annual": "Årligt",
+      "noCategories": "Ingen kategorier endnu."
+    },
+    "debt": {
+      "add": "Tilføj gæld",
+      "label": "Betegnelse",
+      "balance": "Restgæld (DKK)",
+      "interest": "Rente (%)",
+      "strategy": "Strategi",
+      "avalanche": "Lavine (højeste rente først)",
+      "snowball": "Snebold (laveste saldo først)",
+      "noDebts": "Ingen gæld registreret.",
+      "avalancheDesc": "Betal den dyreste gæld først — sparer flest renter over tid.",
+      "snowballDesc": "Betal den mindste gæld først — giver hurtige gevinster og motivation."
+    },
+    "netWorth": {
+      "add": "Tilføj snapshot",
+      "assets": "Aktiver (DKK)",
+      "liabilities": "Passiver (DKK)",
+      "net": "Nettoformue",
+      "noSnapshots": "Ingen snapshots endnu.",
+      "privacy": "Kun du kan se disse tal — aldrig din HR-afdeling."
+    }
+  },
+  "onboarding": {
+    "step1": {
+      "title": "Hvor bor du?",
+      "dk": "Danmark 🇩🇰",
+      "se": "Sverige (Øresund) 🇸🇪",
+      "eu": "Andet EU-land 🇪🇺",
+      "other": "Uden for EU 🌍"
+    },
+    "step2": {
+      "title": "Din situation",
+      "fullTime": "Fuldtidsansat",
+      "partTime": "Deltidsansat",
+      "freelance": "Freelance / selvstændig",
+      "hasChildren": "Har du børn i daginstituion eller SFO?",
+      "yes": "Ja",
+      "no": "Nej",
+      "howMany": "Hvor mange?"
+    },
+    "step3": {
+      "title": "Navn og løn"
+    },
+    "municipality": "Hvilken kommune bor du i?",
+    "municipalityPlaceholder": "Søg efter kommune...",
+    "complete": "Kom i gang",
+    "next": "Næste",
+    "back": "Tilbage",
+    "daycareNote": "Giver dig ret til dagsinstitutionsfradrag (SKAT 2026: op til 6.400 kr./barn, maks. 2 børn)"
   },
   "consent": {
     "accept": "Jeg accepterer",

@@ -17,6 +17,8 @@ export default function EmployerLayout({ children }: { children: React.ReactNode
     { href: '/portal', label: t.nav.portal, icon: '🏢' },
     { href: '/employees', label: t.nav.employees, icon: '👥' },
     { href: '/analytics', label: t.nav.analytics, icon: '📊' },
+    { href: '/seats', label: t.nav.seats, icon: '🪑' },
+    { href: '/nudges', label: t.nav.nudges, icon: '📣' },
   ]
 
   async function handleSignOut() {

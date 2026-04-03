@@ -27,10 +27,12 @@ export const employeeRouter = router({
         display_name: z.string().min(1).max(100).optional(),
         age: z.number().int().min(16).max(80).optional(),
         municipality: z.string().optional(),
-        employment_type: z.enum(['full_time', 'part_time']).optional(),
+        employment_type: z.enum(['full_time', 'part_time', 'freelance']).optional(),
         gross_dkk: z.number().positive().optional(),
         tax_card_type: z.enum(['A', 'B', 'frikort']).optional(),
         frikort_limit_dkk: z.number().positive().optional(),
+        countryOfResidence: z.enum(['DK', 'SE', 'EU', 'OTHER']).optional(),
+        childrenInDaycare: z.number().int().min(0).max(5).optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {

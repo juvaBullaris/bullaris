@@ -11,9 +11,14 @@ export default function TaxPlannerPage() {
   const { t } = useLanguage()
   const { hasConsent, isLoading: consentLoading, grant } = useConsent('tax_planner')
 
-  const [kmDaily, setKmDaily] = useState('')
-  const [workingDays, setWorkingDays] = useState('220')
+  const [kmDaily,      setKmDaily]      = useState('')
+  const [workingDays,  setWorkingDays]  = useState('220')
   const [unionContrib, setUnionContrib] = useState('')
+
+  const profileQuery = trpc.employee.getProfile.useQuery(undefined, { enabled: hasConsent })
+  const profile = profileQuery.data?.data
+  const isOresund = profile?.countryOfResidence === 'SE'
+  const childrenCount = profile?.childrenInDaycare ?? 0
 
   const deductionsQuery = trpc.payslip.getDeductions.useQuery(
     {
@@ -43,7 +48,43 @@ export default function TaxPlannerPage() {
   return (
     <div className="max-w-2xl">
       <h1 className="text-2xl font-bold mb-2">{t.taxPlanner.title}</h1>
-      <p className="text-muted-foreground mb-8">{t.taxPlanner.subtitle}</p>
+      <p className="text-muted-foreground mb-6">{t.taxPlanner.subtitle}</p>
+
+      {/* Øresund notice */}
+      {isOresund && (
+        <div className="rounded-xl p-4 mb-6 flex gap-3" style={{ background: '#FEF3C7', border: '1px solid #FCD34D' }}>
+          <span className="text-xl shrink-0">🇸🇪</span>
+          <div>
+            <p className="text-sm font-semibold mb-0.5" style={{ color: '#92400E' }}>
+              {t.taxPlanner.oresund.notice}
+            </p>
+            <p className="text-xs" style={{ color: '#92400E' }}>
+              {t.taxPlanner.oresund.rateNote}
+            </p>
+            <a
+              href="https://www.skat.dk/data.aspx?oid=2234788"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs underline mt-1 inline-block"
+              style={{ color: '#92400E' }}
+            >
+              {t.taxPlanner.oresund.ctaLabel} →
+            </a>
+          </div>
+        </div>
+      )}
+
+      {/* Childcare notice (if applicable) */}
+      {childrenCount > 0 && (
+        <div className="rounded-xl p-4 mb-6 flex gap-3" style={{ background: '#F0FDF4', border: '1px solid #86EFAC' }}>
+          <span className="text-xl shrink-0">👶</span>
+          <p className="text-sm" style={{ color: '#166534' }}>
+            {t.taxPlanner.deductions.daycareNotice
+              .replace('{count}', String(Math.min(childrenCount, 2)))
+              .replace('{amount}', (Math.min(childrenCount, 2) * 6400).toLocaleString('da-DK'))}
+          </p>
+        </div>
+      )}
 
       <div className="rounded-xl border bg-card p-6 mb-6 space-y-4">
         <div>
@@ -83,7 +124,10 @@ export default function TaxPlannerPage() {
           <h2 className="font-semibold mb-4">{t.taxPlanner.deductions.title}</h2>
           {deductionsQuery.data.map((item) => (
             <div key={item.label} className="flex justify-between text-sm">
-              <span className="text-muted-foreground">{item.label}</span>
+              <div>
+                <span className="text-muted-foreground">{item.label}</span>
+                {item.note && <p className="text-xs text-muted-foreground">{item.note}</p>}
+              </div>
               <span className="font-medium">{fmt(item.amount_dkk)}</span>
             </div>
           ))}
@@ -96,22 +140,40 @@ export default function TaxPlannerPage() {
         </div>
       )}
 
-      <LearnBanner
-        moduleId="tax-basics"
-        href="/learning/tax-basics"
-        icon="📊"
-        duration="~10 min"
-        en={{
-          title: 'Danish Tax Basics 2026',
-          teaser: 'Understand AM-bidrag, bundskat, kommuneskat and the new 2026 brackets.',
-          completedTeaser: 'You completed this module. Review it anytime.',
-        }}
-        da={{
-          title: 'Danske skatter — det grundlæggende 2026',
-          teaser: 'Forstå AM-bidrag, bundskat, kommuneskat og de nye 2026-trin.',
-          completedTeaser: 'Du har gennemført dette modul. Gense det når som helst.',
-        }}
-      />
+      <div className="mt-6 space-y-4">
+        <LearnBanner
+          moduleId="tax-basics"
+          href="/learning/tax-basics"
+          icon="📊"
+          duration="~10 min"
+          en={{
+            title: 'Danish Tax Basics 2026',
+            teaser: 'Understand AM-bidrag, bundskat, kommuneskat and the new 2026 brackets.',
+            completedTeaser: 'You completed this module. Review it anytime.',
+          }}
+          da={{
+            title: 'Danske skatter — det grundlæggende 2026',
+            teaser: 'Forstå AM-bidrag, bundskat, kommuneskat og de nye 2026-trin.',
+            completedTeaser: 'Du har gennemført dette modul. Gense det når som helst.',
+          }}
+        />
+        <LearnBanner
+          moduleId="tax-return"
+          href="/learning/tax-return"
+          icon="📋"
+          duration="~12 min"
+          en={{
+            title: 'Annual Tax Return Guide (TastSelv)',
+            teaser: 'Step-by-step: how to check and submit your årsopgørelse before May 1.',
+            completedTeaser: 'You completed this module. Review it anytime.',
+          }}
+          da={{
+            title: 'Årsopgørelse — trin for trin (TastSelv)',
+            teaser: 'Sådan tjekker og indsender du din årsopgørelse inden 1. maj.',
+            completedTeaser: 'Du har gennemført dette modul. Gense det når som helst.',
+          }}
+        />
+      </div>
     </div>
   )
 }
