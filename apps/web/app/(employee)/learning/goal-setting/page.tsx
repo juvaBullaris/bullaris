@@ -632,7 +632,7 @@ export default function GoalSettingPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {BIASES.map((b, i) => {
               const d = en ? b.en : b.da
               const active = activeBias === i

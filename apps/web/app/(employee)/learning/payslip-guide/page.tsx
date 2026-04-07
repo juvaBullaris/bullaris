@@ -357,7 +357,7 @@ export default function PayslipGuidePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             {/* Mock payslip */}
             <div
-              className="rounded-xl overflow-hidden"
+              className="rounded-xl overflow-hidden overflow-x-auto"
               style={{ border: '1px solid #EDE0D4', fontSize: '11px', fontFamily: 'ui-monospace, monospace' }}
             >
               {/* Header bar */}

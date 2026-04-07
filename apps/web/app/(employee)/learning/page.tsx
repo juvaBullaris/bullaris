@@ -456,7 +456,7 @@ export default function LearningPage() {
         <p className="text-sm font-medium mb-3">
           {da ? 'Dybdegående lektioner' : 'Deep-dive lessons'}
         </p>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {LESSONS.map((lesson) => (
             <Link
               key={lesson.href}
