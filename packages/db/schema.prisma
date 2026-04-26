@@ -171,13 +171,11 @@ model PayslipInput {
 model LearningContent {
   id          String   @id @default(uuid())
   sanityId    String   @map("sanity_id")
-  type        String   // article | video
+  type        String   // article | video | podcast | quiz
   module      String   // tax_basics | pension | budgeting | investing | payslip
   title       String
   description String?
   publishedAt DateTime @map("published_at")
-
-  progress LearningProgress[]
 
   @@map("learning_content")
 }
@@ -185,11 +183,10 @@ model LearningContent {
 model LearningProgress {
   id          String   @id @default(uuid())
   employeeId  String   @map("employee_id")
-  contentId   String   @map("content_id")
+  contentId   String   @map("content_id") // opaque lesson ID — format: {courseSlug}-{levelSlug}-{moduleSlug}-{type}-{index}
   completedAt DateTime @map("completed_at")
 
-  employee Employee        @relation(fields: [employeeId], references: [id], onDelete: Cascade)
-  content  LearningContent @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  employee Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
 
   @@unique([employeeId, contentId])
   @@map("learning_progress")

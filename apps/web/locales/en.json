@@ -184,6 +184,33 @@
       "budgeting": "Budgeting",
       "investing": "Savings",
       "payslip": "Payslip"
+    },
+    "course": {
+      "back": "Back to Learning",
+      "startCourse": "Start course",
+      "continueCourse": "Continue course",
+      "comingSoon": "Coming soon",
+      "noContentYet": "Content coming soon",
+      "videoLesson": "Video",
+      "podcastLesson": "Podcast",
+      "quizLesson": "Quiz",
+      "nextLesson": "Next lesson →",
+      "nextModule": "Next module →",
+      "quizScore": "Your score:",
+      "of": "of",
+      "correct": "correct",
+      "retakeQuiz": "Retake quiz",
+      "backToModule": "Back to module",
+      "modulesCompleted": "modules completed",
+      "levelBadgeBasics": "Beginner",
+      "levelBadgeIntermediate": "Intermediate",
+      "levelBadgeAdvanced": "Advanced",
+      "allLevels": "All levels",
+      "celebrate": {
+        "video": "Video complete!",
+        "quiz": "Quiz complete! Well done!",
+        "module": "Module complete!"
+      }
     }
   },
   "portal": {

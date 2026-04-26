@@ -6,9 +6,15 @@ node_modules
 # Local env files — NEVER commit
 .env
 .env.local
+.env.vercel
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Demo / migration scripts — contain credentials, never commit
+fix-demo-passwords.mjs
+demo-seed.sql
+supabase-migration.sql
 
 # Build outputs
 .next/

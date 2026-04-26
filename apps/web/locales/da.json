@@ -184,6 +184,33 @@
       "budgeting": "Budget",
       "investing": "Opsparing",
       "payslip": "Lønseddel"
+    },
+    "course": {
+      "back": "Tilbage til læring",
+      "startCourse": "Start kursus",
+      "continueCourse": "Fortsæt kursus",
+      "comingSoon": "Kommer snart",
+      "noContentYet": "Indhold produceres snart",
+      "videoLesson": "Video",
+      "podcastLesson": "Podcast",
+      "quizLesson": "Quiz",
+      "nextLesson": "Næste lektion →",
+      "nextModule": "Næste modul →",
+      "quizScore": "Din score:",
+      "of": "af",
+      "correct": "rigtige",
+      "retakeQuiz": "Tag quizzen igen",
+      "backToModule": "Tilbage til modul",
+      "modulesCompleted": "moduler gennemført",
+      "levelBadgeBasics": "Begynder",
+      "levelBadgeIntermediate": "Øvet",
+      "levelBadgeAdvanced": "Avanceret",
+      "allLevels": "Alle niveauer",
+      "celebrate": {
+        "video": "Video gennemført!",
+        "quiz": "Quiz gennemført! Fantastisk!",
+        "module": "Modul gennemført!"
+      }
     }
   },
   "portal": {

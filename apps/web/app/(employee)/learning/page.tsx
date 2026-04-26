@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { trpc } from '@/lib/trpc'
 import { useLanguage } from '@/lib/language-context'
+import { CURRICULUM as COURSES } from '@/lib/curriculum-data'
+import { buildContentId } from '@/lib/curriculum-types'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -329,8 +331,110 @@ export default function LearningPage() {
     0
   )
 
+  const LEVEL_BADGE_LABELS: Record<string, { en: string; da: string }> = {
+    basics:       { en: 'Basics',       da: 'Begynder' },
+    intermediate: { en: 'Intermediate', da: 'Øvet' },
+    advanced:     { en: 'Advanced',     da: 'Avanceret' },
+  }
+
   return (
     <div className="max-w-3xl">
+      {/* Courses section */}
+      <div className="mb-12">
+        <h2 className="text-lg font-semibold mb-1">
+          {da ? 'Kurser' : 'Courses'}
+        </h2>
+        <p className="text-sm text-muted-foreground mb-5">
+          {da
+            ? '7 strukturerede kurser med videoer, podcasts og quizzer'
+            : '7 structured courses with videos, podcasts, and quizzes'}
+        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {COURSES.map((course) => {
+            const courseTitle = da ? course.titleDa : course.titleEn
+            const courseDesc  = da ? course.descriptionDa : course.descriptionEn
+
+            // Count all lesson IDs for this course and how many are done
+            const allIds = course.levels.flatMap((l) =>
+              l.modules.flatMap((m) => [
+                ...m.videos.map((_, i) => buildContentId(course.slug, l.slug, m.slug, 'video', i)),
+                buildContentId(course.slug, l.slug, m.slug, 'podcast', 0),
+                buildContentId(course.slug, l.slug, m.slug, 'quiz', 0),
+              ]),
+            )
+            const doneCount  = allIds.filter((id) => completedIds.has(id)).length
+            const totalCount = allIds.length
+            const pct        = totalCount > 0 ? (doneCount / totalCount) * 100 : 0
+            const started    = doneCount > 0
+
+            return (
+              <Link
+                key={course.slug}
+                href={`/learning/${course.slug}`}
+                className="flex flex-col gap-3 rounded-xl border p-4 transition-all hover:shadow-sm"
+                style={{ borderColor: '#EDE0D4', background: '#fff' }}
+              >
+                {/* Color dot + title */}
+                <div className="flex items-start gap-2">
+                  <div
+                    className="w-2.5 h-2.5 rounded-full flex-shrink-0 mt-1"
+                    style={{ background: course.color }}
+                  />
+                  <p className="font-serif text-base leading-snug" style={{ color: '#1E0F00' }}>
+                    {courseTitle}
+                  </p>
+                </div>
+
+                {/* Description */}
+                <p className="text-xs leading-relaxed line-clamp-2" style={{ color: '#9B8B7E' }}>
+                  {courseDesc}
+                </p>
+
+                {/* Level badges */}
+                <div className="flex gap-1.5 flex-wrap">
+                  {course.levels.map((l) => {
+                    const badge = LEVEL_BADGE_LABELS[l.slug] ?? { en: l.slug, da: l.slug }
+                    return (
+                      <span
+                        key={l.slug}
+                        className="text-xs px-2 py-0.5 rounded-full"
+                        style={{ background: '#EDE0D4', color: '#6B5B4E' }}
+                      >
+                        {da ? badge.da : badge.en}
+                      </span>
+                    )
+                  })}
+                </div>
+
+                {/* Progress bar */}
+                <div>
+                  <div className="w-full h-1.5 rounded-full" style={{ background: '#EDE0D4' }}>
+                    <div
+                      className="h-1.5 rounded-full transition-all"
+                      style={{ width: `${pct}%`, background: pct === 100 ? '#5B8A6B' : course.color }}
+                    />
+                  </div>
+                  <div className="flex items-center justify-between mt-1">
+                    <p className="text-xs" style={{ color: '#9B8B7E' }}>
+                      {doneCount}/{totalCount}{' '}
+                      {da ? 'gennemført' : 'completed'}
+                    </p>
+                    <span
+                      className="text-xs font-medium"
+                      style={{ color: course.color }}
+                    >
+                      {started
+                        ? (da ? 'Fortsæt →' : 'Continue →')
+                        : (da ? 'Start →' : 'Start →')}
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            )
+          })}
+        </div>
+      </div>
+
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold mb-1">

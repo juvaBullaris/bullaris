@@ -31,20 +31,12 @@ export const learningRouter = router({
   }),
 
   /**
-   * Mark a learning content item as complete.
+   * Mark a lesson as complete. content_id is an opaque string — no FK required.
+   * Format: {courseSlug}-{levelSlug}-{moduleSlug}-{type}-{index}
    */
   markComplete: protectedProcedure
-    .input(z.object({ content_id: z.string() }))
+    .input(z.object({ content_id: z.string().min(1) }))
     .mutation(async ({ ctx, input }) => {
-      // Verify content exists
-      const content = await db.learningContent.findUnique({
-        where: { id: input.content_id },
-      })
-
-      if (!content) {
-        throw new TRPCError({ code: 'NOT_FOUND', message: 'Content not found' })
-      }
-
       const progress = await db.learningProgress.upsert({
         where: {
           employeeId_contentId: {
