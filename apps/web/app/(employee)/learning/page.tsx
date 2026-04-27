@@ -447,15 +447,35 @@ export default function LearningPage() {
         <h2 className="text-lg font-semibold mb-1">
           {da ? 'Kurser' : 'Courses'}
         </h2>
-        <p className="text-sm text-muted-foreground mb-5">
+        <p className="text-sm text-muted-foreground mb-4">
           {da
             ? '7 strukturerede kurser med videoer, podcasts og quizzer'
             : '7 structured courses with videos, podcasts, and quizzes'}
         </p>
+
+        {/* Goal context banner */}
+        {goalsQuery.data && goalsQuery.data.length > 0 && relevantCategories.size > 0 && (
+          <div className="mb-5 px-4 py-3 rounded-lg bg-primary/5 border border-primary/10 text-sm text-muted-foreground">
+            <span className="text-foreground font-medium">
+              {da ? 'Anbefalet til dine mål · ' : 'Recommended for your goals · '}
+            </span>
+            {da
+              ? 'Kurserne markeret med ★ er mest relevante for det, du arbejder hen imod.'
+              : "Courses marked ★ are the most relevant to what you're working towards."}
+          </div>
+        )}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {COURSES.map((course) => {
+          {[...COURSES]
+            .sort((a, b) => {
+              const aRel = relevantCategories.has(a.slug) ? 1 : 0
+              const bRel = relevantCategories.has(b.slug) ? 1 : 0
+              return bRel - aRel
+            })
+            .map((course) => {
             const courseTitle = da ? course.titleDa : course.titleEn
             const courseDesc  = da ? course.descriptionDa : course.descriptionEn
+            const isRelevant  = relevantCategories.has(course.slug)
 
             const allIds = course.levels.flatMap((l) =>
               l.modules.flatMap((m) => [
@@ -474,16 +494,29 @@ export default function LearningPage() {
                 key={course.slug}
                 href={`/learning/${course.slug}`}
                 className="flex flex-col gap-3 rounded-xl border p-4 transition-all hover:shadow-sm"
-                style={{ borderColor: '#EDE0D4', background: '#fff' }}
+                style={{
+                  borderColor: isRelevant ? course.color : '#EDE0D4',
+                  background: '#fff',
+                }}
               >
-                <div className="flex items-start gap-2">
-                  <div
-                    className="w-2.5 h-2.5 rounded-full flex-shrink-0 mt-1"
-                    style={{ background: course.color }}
-                  />
-                  <p className="font-serif text-base leading-snug" style={{ color: '#1E0F00' }}>
-                    {courseTitle}
-                  </p>
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-start gap-2 min-w-0">
+                    <div
+                      className="w-2.5 h-2.5 rounded-full flex-shrink-0 mt-1"
+                      style={{ background: course.color }}
+                    />
+                    <p className="font-serif text-base leading-snug" style={{ color: '#1E0F00' }}>
+                      {courseTitle}
+                    </p>
+                  </div>
+                  {isRelevant && (
+                    <span
+                      className="text-xs font-medium px-2 py-0.5 rounded-full flex-shrink-0"
+                      style={{ background: course.color + '20', color: course.color }}
+                    >
+                      ★ {da ? 'Anbefalet' : 'Recommended'}
+                    </span>
+                  )}
                 </div>
 
                 <p className="text-xs leading-relaxed line-clamp-2" style={{ color: '#9B8B7E' }}>
