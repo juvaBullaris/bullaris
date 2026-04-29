@@ -40,7 +40,7 @@ const CURRICULUM: Category[] = [
         { id: 'income-vs-expenses',   label: 'Are you earning more than you spend?',                          labelDa: 'Tjener du mere, end du bruger?' },
         { id: 'net-worth-basics',     label: 'What are you actually worth today?',                            labelDa: 'Hvad er du egentlig værd i dag?' },
         { id: 'budgeting-methods',    label: 'Which budgeting method fits your life?',                        labelDa: 'Hvilken budgetmetode passer til dit liv?' },
-        { id: 'emergency-fund',       label: 'How much should you keep for emergencies — and where?',         labelDa: 'Hvor meget skal du have til nødsituationer — og hvor?' },
+        { id: 'emergency-fund',       label: 'How much should you keep for emergencies — and where?',         labelDa: 'Hvor meget skal du have til nødsituationer — og hvor?',         href: '/learning/practical/emergency-fund' },
         { id: 'good-vs-bad-debt',     label: 'When is borrowing smart — and when is it dangerous?',           labelDa: 'Hvornår er det smart at låne — og hvornår er det farligt?' },
         { id: 'power-of-compounding', label: 'Why starting to save 10 years earlier makes a massive difference', labelDa: 'Hvorfor det gør en kæmpe forskel at starte med at spare 10 år tidligere' },
       ],
@@ -74,7 +74,7 @@ const CURRICULUM: Category[] = [
         { id: 'simple-vs-compound',     label: 'Why some loans grow much faster than others',                   labelDa: 'Hvorfor nogle lån vokser meget hurtigere end andre' },
         { id: 'apr-vs-nominal',         label: 'The real cost of a loan — beyond the headline rate',            labelDa: 'Den reelle omkostning ved et lån — ud over den annoncerede rente' },
         { id: 'credit-score-basics',    label: 'What is a credit score and how does it affect your loan terms?',labelDa: 'Hvad er en kreditvurdering, og hvordan påvirker den dine lånevilkår?' },
-        { id: 'types-of-loans',         label: 'Consumer loan, car loan, mortgage — what is the difference?',  labelDa: 'Forbrugslån, billån, boliglån — hvad er forskellen?' },
+        { id: 'types-of-loans',         label: 'Consumer loan, car loan, mortgage — what is the difference?',  labelDa: 'Forbrugslån, billån, boliglån — hvad er forskellen?',           href: '/learning/practical/types-of-loans' },
         { id: 'overdraft-credit-cards', label: 'When does a credit card become expensive debt?',               labelDa: 'Hvornår bliver et kreditkort til dyr gæld?' },
       ],
       intermediate: [
@@ -104,7 +104,7 @@ const CURRICULUM: Category[] = [
       beginner: [
         { id: 'what-is-gdp',           label: 'What does it mean when the economy grows — and why should you care?',     labelDa: 'Hvad betyder det, når økonomien vokser — og hvorfor bør du gide?' },
         { id: 'unemployment-explained',label: 'How unemployment is measured — and what it means for your job security',  labelDa: 'Hvordan arbejdsløshed måles — og hvad det betyder for din jobsikkerhed' },
-        { id: 'what-is-inflation',     label: 'Why your grocery bill is higher than it was two years ago',               labelDa: 'Hvorfor din dagligvareregning er højere end for to år siden' },
+        { id: 'what-is-inflation',     label: 'Why your grocery bill is higher than it was two years ago',               labelDa: 'Hvorfor din dagligvareregning er højere end for to år siden',          href: '/learning/practical/what-is-inflation' },
         { id: 'why-prices-rise',       label: 'What drives inflation — and who benefits from it?',                       labelDa: 'Hvad driver inflation — og hvem tjener på det?' },
         { id: 'government-budgets',    label: 'Where does your tax money actually go?',                                  labelDa: 'Hvor går dine skattepenge egentlig hen?' },
         { id: 'what-central-banks-do', label: 'What does Danmarks Nationalbank actually do with interest rates?',        labelDa: 'Hvad gør Danmarks Nationalbank egentlig med renterne?' },
@@ -138,7 +138,7 @@ const CURRICULUM: Category[] = [
         { id: 'what-is-dividend',      label: 'What does it mean when a company pays you just for owning a share?',   labelDa: 'Hvad betyder det, når en virksomhed betaler dig bare for at eje en aktie?' },
         { id: 'risk-return-tradeoff',  label: 'Why higher returns always come with higher risk',                      labelDa: 'Hvorfor højere afkast altid kommer med højere risiko' },
         { id: 'diversification-basics',label: 'Why you should never put all your money in one place',                 labelDa: 'Hvorfor du aldrig bør sætte alle dine penge ét sted' },
-        { id: 'what-is-index-fund',    label: 'The simplest, cheapest way most people should invest',                 labelDa: 'Den simpleste og billigste måde de fleste bør investere på' },
+        { id: 'what-is-index-fund',    label: 'The simplest, cheapest way most people should invest',                 labelDa: 'Den simpleste og billigste måde de fleste bør investere på',        href: '/learning/practical/what-is-index-fund' },
         { id: 'long-vs-short-term',    label: 'How long you invest changes everything about what you should buy',     labelDa: 'Hvor længe du investerer ændrer alt ved, hvad du bør købe' },
       ],
       intermediate: [
@@ -169,7 +169,7 @@ const CURRICULUM: Category[] = [
     topics: {
       beginner: [
         { id: 'what-is-atp',              label: 'What is ATP and how much will you actually receive?',            labelDa: 'Hvad er ATP, og hvor meget vil du egentlig modtage?' },
-        { id: 'folkepension',             label: 'When do you qualify for folkepension — and how much is it?',    labelDa: 'Hvornår er du berettiget til folkepension — og hvor meget er det?' },
+        { id: 'folkepension',             label: 'When do you qualify for folkepension — and how much is it?',    labelDa: 'Hvornår er du berettiget til folkepension — og hvor meget er det?',  href: '/learning/practical/folkepension' },
         { id: 'workplace-pension',        label: 'How your employer pension works and what it is actually worth', labelDa: 'Hvordan din firmapension fungerer, og hvad den egentlig er værd' },
         { id: 'why-start-early',          label: 'What starting your pension 10 years earlier does to your retirement', labelDa: 'Hvad det gør ved din pension at starte 10 år tidligere' },
         { id: 'state-vs-private-pension', label: 'What the state will give you — and what you need to provide yourself', labelDa: 'Hvad staten giver dig — og hvad du selv skal sørge for' },
@@ -202,7 +202,7 @@ const CURRICULUM: Category[] = [
         { id: 'rent-vs-buy',           label: 'Is it better to rent or buy in Denmark right now?',                    labelDa: 'Er det bedre at leje eller købe i Danmark lige nu?' },
         { id: 'what-is-boliglan',      label: 'What is a Danish mortgage and how does it work?',                      labelDa: 'Hvad er et dansk boliglån, og hvordan fungerer det?' },
         { id: 'how-mortgages-work',    label: 'How your monthly mortgage payment is actually calculated',             labelDa: 'Hvordan din månedlige ydelse på boliglånet egentlig beregnes' },
-        { id: 'down-payment-basics',   label: 'How much do you actually need saved before buying a home?',            labelDa: 'Hvor meget skal du egentlig have sparet op, inden du køber bolig?' },
+        { id: 'down-payment-basics',   label: 'How much do you actually need saved before buying a home?',            labelDa: 'Hvor meget skal du egentlig have sparet op, inden du køber bolig?',  href: '/learning/practical/down-payment-basics' },
         { id: 'ejendomsskat',          label: 'What is ejendomsskat and how much will you pay?',                      labelDa: 'Hvad er ejendomsskat, og hvor meget skal du betale?' },
         { id: 'housing-costs-beyond',  label: 'What does owning a home really cost beyond the mortgage?',            labelDa: 'Hvad koster det egentlig at eje en bolig ud over boliglånet?' },
       ],
@@ -233,7 +233,7 @@ const CURRICULUM: Category[] = [
       beginner: [
         { id: 'why-insurance-exists',    label: 'What is insurance actually for — and when do you need it?',          labelDa: 'Hvad er forsikring egentlig til — og hvornår har du brug for det?' },
         { id: 'health-insurance-dk',     label: 'What does the Danish healthcare system cover — and what does it not?',labelDa: 'Hvad dækker det danske sundhedssystem — og hvad dækker det ikke?' },
-        { id: 'life-insurance-basics',   label: 'Do you need life insurance — and how much?',                         labelDa: 'Har du brug for livsforsikring — og hvor meget?' },
+        { id: 'life-insurance-basics',   label: 'Do you need life insurance — and how much?',                         labelDa: 'Har du brug for livsforsikring — og hvor meget?',                  href: '/learning/practical/life-insurance-basics' },
         { id: 'a-kasse',                 label: 'What does an a-kasse give you and how do you choose one?',           labelDa: 'Hvad giver en a-kasse dig, og hvordan vælger du den rigtige?' },
         { id: 'contents-home-insurance', label: 'What should your home insurance actually cover?',                    labelDa: 'Hvad bør din indboforsikring egentlig dække?' },
       ],
