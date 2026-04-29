@@ -68,6 +68,10 @@ model Profile {
   frikort_limit_dkk   Decimal? @map("frikort_limit_dkk") @db.Decimal(12, 2)
   countryOfResidence  String?  @map("country_of_residence") // DK | SE | EU | OTHER
   childrenInDaycare   Int?     @map("children_in_daycare")  // 0–5
+  bonus_dkk           Decimal? @map("bonus_dkk") @db.Decimal(12, 2)
+  bonus_frequency     String?  @map("bonus_frequency")      // monthly | quarterly | annual | irregular
+  other_income_dkk    Decimal? @map("other_income_dkk") @db.Decimal(12, 2)
+  other_income_label  String?  @map("other_income_label")
   updatedAt           DateTime @updatedAt @map("updated_at")
 
   employee Employee @relation(fields: [id], references: [id], onDelete: Cascade)

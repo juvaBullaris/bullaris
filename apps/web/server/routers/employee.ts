@@ -33,6 +33,10 @@ export const employeeRouter = router({
         frikort_limit_dkk: z.number().positive().optional(),
         countryOfResidence: z.enum(['DK', 'SE', 'EU', 'OTHER']).optional(),
         childrenInDaycare: z.number().int().min(0).max(5).optional(),
+        bonus_dkk: z.number().nonnegative().optional(),
+        bonus_frequency: z.enum(['monthly', 'quarterly', 'annual', 'irregular']).optional(),
+        other_income_dkk: z.number().nonnegative().optional(),
+        other_income_label: z.string().max(100).optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -43,6 +47,33 @@ export const employeeRouter = router({
       })
       return { success: true, data: profile }
     }),
+
+  /**
+   * Delete all salary data from the employee's profile.
+   * Called when the user revokes consent for salary storage.
+   * Logs a consent revoke event as required by GDPR.
+   */
+  deleteSalaryData: protectedProcedure.mutation(async ({ ctx }) => {
+    await db.profile.update({
+      where: { id: ctx.employee.id },
+      data: {
+        gross_dkk: null,
+        bonus_dkk: null,
+        bonus_frequency: null,
+        other_income_dkk: null,
+        other_income_label: null,
+      },
+    })
+    await db.consentEvent.create({
+      data: {
+        employeeId: ctx.employee.id,
+        source: 'payslip_module',
+        version: '1.0',
+        action: 'revoke',
+      },
+    })
+    return { success: true }
+  }),
 
   /**
    * Log a consent event. Called by ConsentModal on accept/decline.
