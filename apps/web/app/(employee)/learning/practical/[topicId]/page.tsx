@@ -1,17 +1,13 @@
 'use client'
 
 import { notFound } from 'next/navigation'
-import { use } from 'react'
+import { useParams } from 'next/navigation'
 import { getPracticalTopic } from '@/lib/practical-topics'
 import { usePersonalProfile } from '@/lib/use-personal-profile'
 import { PracticalTopicLayout } from '@/components/learning/practical/PracticalTopicLayout'
 
-interface Props {
-  params: Promise<{ topicId: string }>
-}
-
-export default function PracticalTopicPage({ params }: Props) {
-  const { topicId } = use(params)
+export default function PracticalTopicPage() {
+  const { topicId } = useParams<{ topicId: string }>()
   const topic = getPracticalTopic(topicId)
 
   if (!topic) notFound()
