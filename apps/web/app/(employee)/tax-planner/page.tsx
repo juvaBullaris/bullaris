@@ -8,7 +8,7 @@ import { useLanguage } from '@/lib/language-context'
 import { useConsent } from '@/lib/use-consent'
 
 export default function TaxPlannerPage() {
-  const { t } = useLanguage()
+  const { t, locale } = useLanguage()
   const { hasConsent, isLoading: consentLoading, grant } = useConsent('tax_planner')
 
   const [kmDaily,      setKmDaily]      = useState('')
@@ -26,7 +26,7 @@ export default function TaxPlannerPage() {
       working_days: Number(workingDays),
       union_contrib_dkk: Number(unionContrib),
     },
-    { enabled: hasConsent && Number(kmDaily) >= 0 }
+    { enabled: hasConsent && kmDaily !== '' && Number(kmDaily) >= 0 }
   )
 
   if (consentLoading) {
@@ -43,7 +43,7 @@ export default function TaxPlannerPage() {
     )
   }
 
-  const fmt = (n: number) => n.toLocaleString('da-DK') + ' DKK'
+  const fmt = (n: number) => n.toLocaleString(locale === 'da' ? 'da-DK' : 'en-GB') + ' DKK'
 
   return (
     <div className="max-w-2xl">
@@ -81,7 +81,7 @@ export default function TaxPlannerPage() {
           <p className="text-sm" style={{ color: '#166534' }}>
             {t.taxPlanner.deductions.daycareNotice
               .replace('{count}', String(Math.min(childrenCount, 2)))
-              .replace('{amount}', (Math.min(childrenCount, 2) * 6400).toLocaleString('da-DK'))}
+              .replace('{amount}', (Math.min(childrenCount, 2) * 6400).toLocaleString(locale === 'da' ? 'da-DK' : 'en-GB'))}
           </p>
         </div>
       )}
@@ -93,7 +93,7 @@ export default function TaxPlannerPage() {
             type="number"
             value={kmDaily}
             onChange={(e) => setKmDaily(e.target.value)}
-            placeholder="F.eks. 35"
+            placeholder={locale === 'da' ? 'F.eks. 35' : 'e.g. 35'}
             className="w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-bullaris-blue"
           />
         </div>
@@ -113,7 +113,7 @@ export default function TaxPlannerPage() {
             type="number"
             value={unionContrib}
             onChange={(e) => setUnionContrib(e.target.value)}
-            placeholder="F.eks. 4200"
+            placeholder={locale === 'da' ? 'F.eks. 4.200' : 'e.g. 4,200'}
             className="w-full rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-bullaris-blue"
           />
         </div>

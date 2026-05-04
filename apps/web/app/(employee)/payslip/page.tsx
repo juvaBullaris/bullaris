@@ -19,16 +19,13 @@ const BONUS_FREQ_LABELS: Record<BonusFreq, { en: string; da: string }> = {
 }
 
 export default function PayslipPage() {
-  const { locale } = useLanguage()
+  const { locale, t } = useLanguage()
   const en = locale === 'en'
-  const { t } = useLanguage()
   const { hasConsent, isLoading: consentLoading, grant } = useConsent('payslip_module')
 
   // ── Profile data ─────────────────────────────────────────────────────────────
   const profileQuery = trpc.employee.getProfile.useQuery(undefined, { retry: false })
-  const updateProfile = trpc.employee.updateProfile.useMutation({
-    onSuccess: () => profileQuery.refetch(),
-  })
+  const updateProfile = trpc.employee.updateProfile.useMutation()
   const deleteSalaryData = trpc.employee.deleteSalaryData.useMutation({
     onSuccess: () => {
       profileQuery.refetch()
@@ -43,7 +40,7 @@ export default function PayslipPage() {
   const utils = trpc.useUtils()
 
   // ── Form state ────────────────────────────────────────────────────────────────
-  const profile = (profileQuery.data?.data as any) ?? null
+  const profile = profileQuery.data?.data ?? null
   const hasSavedSalary = !!profile?.gross_dkk
 
   const [grossInput, setGrossInput] = useState('')
@@ -195,7 +192,7 @@ export default function PayslipPage() {
                   {en ? 'Monthly gross salary' : 'Månedlig bruttoløn'}
                 </p>
                 <p className="text-sm font-bold font-mono" style={{ color: '#1E0F00' }}>
-                  {savedGross?.toLocaleString('da-DK')} kr.
+                  {savedGross?.toLocaleString(en ? 'en-GB' : 'da-DK')} kr.
                 </p>
               </div>
               {savedBonus !== null && (
@@ -204,7 +201,7 @@ export default function PayslipPage() {
                     {en ? 'Bonus' : 'Bonus'} ({profile.bonus_frequency ? BONUS_FREQ_LABELS[profile.bonus_frequency as BonusFreq]?.[en ? 'en' : 'da'] : ''})
                   </p>
                   <p className="text-sm font-bold font-mono" style={{ color: '#1E0F00' }}>
-                    {savedBonus.toLocaleString('da-DK')} kr.
+                    {savedBonus.toLocaleString(en ? 'en-GB' : 'da-DK')} kr.
                   </p>
                 </div>
               )}
@@ -214,7 +211,7 @@ export default function PayslipPage() {
                     {profile.other_income_label || (en ? 'Other compensation' : 'Anden kompensation')}
                   </p>
                   <p className="text-sm font-bold font-mono" style={{ color: '#1E0F00' }}>
-                    {savedOther.toLocaleString('da-DK')} kr.
+                    {savedOther.toLocaleString(en ? 'en-GB' : 'da-DK')} kr.
                   </p>
                 </div>
               )}
@@ -404,8 +401,8 @@ export default function PayslipPage() {
           </p>
           <p className="text-xs mt-0.5" style={{ color: '#9B8B7E' }}>
             {en
-              ? `Showing breakdown for ${grossNum > 0 ? grossNum.toLocaleString('da-DK') + ' kr./month' : '—'}`
-              : `Viser nedbrydning for ${grossNum > 0 ? grossNum.toLocaleString('da-DK') + ' kr./md' : '—'}`}
+              ? `Showing breakdown for ${grossNum > 0 ? grossNum.toLocaleString(en ? 'en-GB' : 'da-DK') + ' kr./month' : '—'}`
+              : `Viser nedbrydning for ${grossNum > 0 ? grossNum.toLocaleString(en ? 'en-GB' : 'da-DK') + ' kr./md' : '—'}`}
           </p>
         </div>
         <div className="px-6 py-5">

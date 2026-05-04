@@ -10,11 +10,11 @@ export function usePersonalProfile() {
   const raw = profileQuery.data?.data
   const profile: PersonalProfile | null = raw
     ? {
-        gross_dkk: (raw as any).gross_dkk ?? null,
-        age: (raw as any).age ?? null,
-        municipality: (raw as any).municipality ?? null,
-        employment_type: (raw as any).employment_type ?? null,
-        childrenInDaycare: (raw as any).childrenInDaycare ?? null,
+        gross_dkk:        raw.gross_dkk        ?? null,
+        age:              raw.age               ?? null,
+        municipality:     raw.municipality      ?? null,
+        employment_type:  raw.employmentType     ?? null,
+        childrenInDaycare: raw.childrenInDaycare ?? null,
       }
     : null
 

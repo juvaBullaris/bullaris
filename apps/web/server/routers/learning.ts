@@ -49,9 +49,7 @@ export const learningRouter = router({
           contentId: input.content_id,
           completedAt: new Date(),
         },
-        update: {
-          completedAt: new Date(),
-        },
+        update: {},
       })
 
       return { success: true, data: progress }

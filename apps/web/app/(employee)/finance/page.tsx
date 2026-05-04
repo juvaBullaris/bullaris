@@ -36,37 +36,37 @@ const BUDGET_ROWS: BudgetRow[] = [
   { key: 'investments', pct5030: 3,  pct60: 10, bucket5030: 'savings', bucket60: 'shortterm',  source: 'Trinity Study, Cooley et al. (1998)' },
 ]
 
-const BUCKET_LABELS_5030: Record<string, string> = {
-  needs: 'Behov (50%)',
-  wants: 'Ønsker (30%)',
-  savings: 'Opsparing (20%)',
+const BUCKET_LABELS_5030: Record<string, { en: string; da: string }> = {
+  needs:   { en: 'Needs (50%)',    da: 'Behov (50%)' },
+  wants:   { en: 'Wants (30%)',    da: 'Ønsker (30%)' },
+  savings: { en: 'Savings (20%)', da: 'Opsparing (20%)' },
 }
 
-const BUCKET_LABELS_60: Record<string, string> = {
-  committed: 'Faste udgifter (60%)',
-  retirement: 'Pension (10%)',
-  longterm: 'Langsigtede opsparing (10%)',
-  shortterm: 'Kortsigtede opsparing (10%)',
-  fun: 'Frihed (10%)',
+const BUCKET_LABELS_60: Record<string, { en: string; da: string }> = {
+  committed:  { en: 'Fixed costs (60%)',        da: 'Faste udgifter (60%)' },
+  retirement: { en: 'Pension (10%)',             da: 'Pension (10%)' },
+  longterm:   { en: 'Long-term savings (10%)',   da: 'Langsigtede opsparing (10%)' },
+  shortterm:  { en: 'Short-term savings (10%)',  da: 'Kortsigtede opsparing (10%)' },
+  fun:        { en: 'Freedom (10%)',             da: 'Frihed (10%)' },
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function fmt(n: number) {
-  return n.toLocaleString('da-DK', { maximumFractionDigits: 0 }) + ' kr.'
-}
 
-function healthRating(score: number) {
-  if (score >= 80) return { label: 'Fremragende', color: '#16A34A' }
-  if (score >= 60) return { label: 'God', color: '#2563EB' }
-  if (score >= 40) return { label: 'Fair', color: '#E8634A' }
-  return { label: 'Behøver fokus', color: '#DC2626' }
+type RatingLabels = { excellent: string; good: string; fair: string; needsWork: string }
+function healthRating(score: number, labels: RatingLabels) {
+  if (score >= 80) return { label: labels.excellent, color: '#16A34A' }
+  if (score >= 60) return { label: labels.good,      color: '#2563EB' }
+  if (score >= 40) return { label: labels.fair,      color: '#E8634A' }
+  return            { label: labels.needsWork,   color: '#DC2626' }
 }
 
 // ─── Main component ────────────────────────────────────────────────────────────
 
 export default function FinancePage() {
-  const { t } = useLanguage()
+  const { t, locale } = useLanguage()
+  const fmt = (n: number) => n.toLocaleString(locale === 'da' ? 'da-DK' : 'en-GB', { maximumFractionDigits: 0 }) + ' kr.'
+
   const [tab, setTab] = useState<Tab>('overview')
   const [framework, setFramework] = useState<Framework>('503020')
 
@@ -133,7 +133,7 @@ export default function FinancePage() {
   const goalScore = (hasShort ? 12 : 0) + (hasLong ? 13 : 0)
 
   const totalScore = Math.round(efScore + debtScore + learningScore + goalScore)
-  const rating = healthRating(totalScore)
+  const rating = healthRating(totalScore, t.finance.score.rating)
 
   const savingsRate = netDkk && netDkk > 0
     ? goals.reduce((s, g) => s + Number(g.target_dkk), 0) / netDkk * 100
@@ -141,11 +141,11 @@ export default function FinancePage() {
 
   // ── Tabs ───────────────────────────────────────────────────────────────────
   const tabs: { key: Tab; label: string }[] = [
-    { key: 'overview',      label: 'Overblik' },
-    { key: 'budgetplan',    label: 'Budgetplan' },
-    { key: 'budgettracker', label: 'Budgetsporing' },
-    { key: 'debt',          label: 'Gæld' },
-    { key: 'networth',      label: 'Formue' },
+    { key: 'overview',      label: t.finance.tabs.overview },
+    { key: 'budgetplan',    label: t.finance.tabs.budgetPlan },
+    { key: 'budgettracker', label: t.finance.tabs.budgetTracker },
+    { key: 'debt',          label: t.finance.tabs.debt },
+    { key: 'networth',      label: t.finance.tabs.netWorth },
   ]
 
   return (
@@ -248,7 +248,11 @@ export default function FinancePage() {
                   </p>
                 </>
               ) : (
-                <p className="text-sm" style={{ color: '#A0917F' }}>Udfyld din løn i profilen for at se din opsparingsrate.</p>
+                <p className="text-sm" style={{ color: '#A0917F' }}>
+                  {locale === 'da'
+                    ? 'Udfyld din løn i profilen for at se din opsparingsrate.'
+                    : 'Add your salary in your profile to see your savings rate.'}
+                </p>
               )}
             </div>
           )}
@@ -281,7 +285,9 @@ export default function FinancePage() {
           {!grossDkk ? (
             <div className="rounded-2xl p-6" style={{ background: '#fff', border: '1px solid #EDE0D4' }}>
               <p className="text-sm" style={{ color: '#A0917F' }}>
-                Tilføj din bruttoløn i profilen for at se din personlige budgetplan.
+                {locale === 'da'
+                  ? 'Tilføj din bruttoløn i profilen for at se din personlige budgetplan.'
+                  : 'Add your gross salary in your profile to see your personalised budget plan.'}
               </p>
             </div>
           ) : (
@@ -289,15 +295,18 @@ export default function FinancePage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr style={{ background: '#FFF8F3' }}>
-                    <th className="px-4 py-3 text-left font-semibold" style={{ color: '#1E0F00' }}>Kategori</th>
+                    <th className="px-4 py-3 text-left font-semibold" style={{ color: '#1E0F00' }}>{locale === 'da' ? 'Kategori' : 'Category'}</th>
                     <th className="px-4 py-3 text-right font-semibold" style={{ color: '#1E0F00' }}>%</th>
                     <th className="px-4 py-3 text-right font-semibold" style={{ color: '#1E0F00' }}>{t.finance.budgetPlan.recommended}</th>
-                    <th className="px-4 py-3 text-right font-semibold" style={{ color: '#A0917F', fontSize: '0.7rem' }}>Kilde</th>
+                    <th className="px-4 py-3 text-right font-semibold" style={{ color: '#A0917F', fontSize: '0.7rem' }}>{locale === 'da' ? 'Kilde' : 'Source'}</th>
                   </tr>
                 </thead>
                 <tbody>
                   {(() => {
-                    const bucketMap = framework === '503020' ? BUCKET_LABELS_5030 : BUCKET_LABELS_60
+                    const bucketSrc = framework === '503020' ? BUCKET_LABELS_5030 : BUCKET_LABELS_60
+                    const bucketMap = Object.fromEntries(
+                      Object.entries(bucketSrc).map(([k, v]) => [k, locale === 'da' ? v.da : v.en])
+                    )
                     const buckets = framework === '503020'
                       ? ['needs', 'wants', 'savings']
                       : ['committed', 'retirement', 'longterm', 'shortterm', 'fun']
@@ -345,8 +354,12 @@ export default function FinancePage() {
               <div className="px-4 py-3" style={{ background: '#FFF8F3', borderTop: '1px solid #EDE0D4' }}>
                 <p className="text-xs" style={{ color: '#A0917F' }}>
                   {framework === '503020'
-                    ? 'Baseret på Warren & Tyagi (2005) "All Your Worth". Beregnet ud fra din estimerede nettoløn.'
-                    : 'Baseret på Richard Jenkins (2003) "The 60% Solution". Beregnet ud fra din estimerede nettoløn.'}
+                    ? locale === 'da'
+                      ? 'Baseret på Warren & Tyagi (2005) "All Your Worth". Beregnet ud fra din estimerede nettoløn.'
+                      : 'Based on Warren & Tyagi (2005) "All Your Worth". Calculated from your estimated net pay.'
+                    : locale === 'da'
+                      ? 'Baseret på Richard Jenkins (2003) "The 60% Solution". Beregnet ud fra din estimerede nettoløn.'
+                      : 'Based on Richard Jenkins (2003) "The 60% Solution". Calculated from your estimated net pay.'}
                 </p>
               </div>
             </div>
@@ -471,7 +484,7 @@ export default function FinancePage() {
                     <div>
                       <p className="text-sm font-medium" style={{ color: '#1E0F00' }}>{debt.label}</p>
                       <p className="text-xs" style={{ color: '#A0917F' }}>
-                        {fmt(Number(debt.balance_dkk))} · {(Number(debt.interestRate) * 100).toFixed(1)}% rente
+                        {fmt(Number(debt.balance_dkk))} · {(Number(debt.interestRate) * 100).toFixed(1)}% {locale === 'da' ? 'rente' : 'interest'}
                       </p>
                     </div>
                   </div>
@@ -479,7 +492,9 @@ export default function FinancePage() {
                     <span className="text-xs px-2 py-0.5 rounded-full font-medium"
                       style={{ background: debt.strategy === 'snowball' ? '#16A34A18' : '#2563EB18',
                                color: debt.strategy === 'snowball' ? '#16A34A' : '#2563EB' }}>
-                      {debt.strategy === 'snowball' ? 'Snebold' : 'Lavine'}
+                      {debt.strategy === 'snowball'
+                        ? (locale === 'da' ? 'Snebold' : 'Snowball')
+                        : (locale === 'da' ? 'Lavine'  : 'Avalanche')}
                     </span>
                     <button onClick={() => deleteDebt.mutate({ id: debt.id })} className="text-xs px-2 py-1 rounded" style={{ color: '#DC2626' }}>
                       {t.common.delete}
@@ -506,7 +521,9 @@ export default function FinancePage() {
                     <button key={s} onClick={() => setNewDebtStrategy(s)}
                       className="flex-1 px-2 py-2 transition text-xs"
                       style={{ background: newDebtStrategy === s ? '#E8634A' : '#fff', color: newDebtStrategy === s ? '#fff' : '#6B5C52' }}>
-                      {s === 'avalanche' ? 'Lavine' : 'Snebold'}
+                      {s === 'avalanche'
+                        ? (locale === 'da' ? 'Lavine'  : 'Avalanche')
+                        : (locale === 'da' ? 'Snebold' : 'Snowball')}
                     </button>
                   ))}
                 </div>
@@ -533,7 +550,9 @@ export default function FinancePage() {
           {/* Latest value */}
           {netWorthQuery.data && netWorthQuery.data.length > 0 && (
             <div className="rounded-2xl p-6" style={{ background: '#fff', border: '1px solid #EDE0D4' }}>
-              <p className="text-xs font-medium mb-1" style={{ color: '#A0917F' }}>Nuværende formue (netto)</p>
+              <p className="text-xs font-medium mb-1" style={{ color: '#A0917F' }}>
+                {locale === 'da' ? 'Nuværende formue (netto)' : 'Current net worth'}
+              </p>
               <p className="text-3xl font-bold" style={{ color: '#1E0F00' }}>
                 {fmt(Number(netWorthQuery.data[0].assets_dkk) - Number(netWorthQuery.data[0].liabilities_dkk))}
               </p>
@@ -583,7 +602,7 @@ export default function FinancePage() {
               style={{ background: '#fff', border: '1px solid #EDE0D4' }}>
               <div>
                 <p className="text-xs" style={{ color: '#A0917F' }}>
-                  {new Date(entry.recordedAt).toLocaleDateString('da-DK', { month: 'long', year: 'numeric' })}
+                  {new Date(entry.recordedAt).toLocaleDateString(locale === 'da' ? 'da-DK' : 'en-GB', { month: 'long', year: 'numeric' })}
                 </p>
                 <p className="text-sm font-medium" style={{ color: '#1E0F00' }}>
                   {t.finance.netWorth.assets}: {fmt(Number(entry.assets_dkk))} · {t.finance.netWorth.liabilities}: {fmt(Number(entry.liabilities_dkk))}

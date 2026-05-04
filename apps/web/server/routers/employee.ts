@@ -15,7 +15,16 @@ export const employeeRouter = router({
     if (!profile) {
       throw new TRPCError({ code: 'NOT_FOUND', message: 'Profile not found' })
     }
-    return { success: true, data: profile }
+    return {
+      success: true,
+      data: {
+        ...profile,
+        gross_dkk:         profile.gross_dkk         != null ? Number(profile.gross_dkk)         : null,
+        frikort_limit_dkk: profile.frikort_limit_dkk != null ? Number(profile.frikort_limit_dkk) : null,
+        bonus_dkk:         profile.bonus_dkk         != null ? Number(profile.bonus_dkk)         : null,
+        other_income_dkk:  profile.other_income_dkk  != null ? Number(profile.other_income_dkk)  : null,
+      },
+    }
   }),
 
   /**
@@ -102,19 +111,6 @@ export const employeeRouter = router({
           action: input.action,
         },
       })
-
-      // If consent is revoked, schedule data deletion (sets a flag)
-      if (input.action === 'revoke') {
-        // Mark module data for deletion — purge cron handles actual deletion
-        await db.consentEvent.create({
-          data: {
-            employeeId: ctx.employee.id,
-            source: input.module,
-            version: input.version,
-            action: 'revoke',
-          },
-        })
-      }
 
       return { success: true }
     }),

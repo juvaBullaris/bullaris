@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { LearnBanner } from '@/components/learn-banner'
 import { GoalRecommendations } from '@/components/goal-recommendations'
 import { trpc } from '@/lib/trpc'
@@ -181,17 +181,15 @@ export default function GoalsPage() {
     },
   })
   const updateProgress = trpc.goals.updateProgress.useMutation({
-    onSuccess: (_, variables) => {
-      goalsQuery.refetch().then(() => {
-        const goal = goalsQuery.data?.find((g) => g.id === variables.goal_id)
-        if (goal && variables.progress_dkk >= Number(goal.target_dkk)) {
-          setCelebratedGoalId(variables.goal_id)
-        }
-      })
+    onSuccess: (data, variables) => {
+      goalsQuery.refetch()
+      if (data.data && Number(data.data.progress_dkk) >= Number(data.data.target_dkk)) {
+        setCelebratedGoalId(variables.goal_id)
+      }
     },
   })
 
-  const fmt       = (n: number) => n.toLocaleString('da-DK') + ' DKK'
+  const fmt       = (n: number) => n.toLocaleString(en ? 'en-GB' : 'da-DK') + ' DKK'
   const getMeta   = (type: string) => GOAL_META.find((m) => m.value === type)
   const getLabel  = (type: string) => (t.goals.types as Record<string, string>)[type] ?? type
 
@@ -201,8 +199,16 @@ export default function GoalsPage() {
     long:   { label: t.goals.horizons.long,   range: t.goals.horizons.longRange,   desc: t.goals.horizons.longDesc   },
   }
 
-  const goalsByHorizon = (h: Horizon) =>
-    goalsQuery.data?.filter((g) => (getMeta(g.type)?.horizon ?? 'short') === h) ?? []
+  const goalsByHorizonMap = useMemo(() => {
+    const map: Record<Horizon, typeof goalsQuery.data> = { short: [], medium: [], long: [] }
+    for (const goal of (goalsQuery.data ?? [])) {
+      const horizon = (getMeta(goal.type)?.horizon ?? 'short') as Horizon
+      map[horizon] = [...(map[horizon] ?? []), goal]
+    }
+    return map
+  }, [goalsQuery.data])
+
+  const goalsByHorizon = (h: Horizon) => goalsByHorizonMap[h] ?? []
 
   const typesByHorizon = (h: Horizon) => GOAL_META.filter((m) => m.horizon === h)
   const selectedMeta = getMeta(goalType)
@@ -474,7 +480,8 @@ export default function GoalsPage() {
 
                 <div className="space-y-3">
                   {goals.map((goal) => {
-                    const pct   = Math.min(100, Math.round((Number(goal.progress_dkk) / Number(goal.target_dkk)) * 100))
+                    const target = Number(goal.target_dkk)
+                    const pct   = target > 0 ? Math.min(100, Math.round((Number(goal.progress_dkk) / target) * 100)) : 0
                     const meta  = getMeta(goal.type)
                     const label = getLabel(goal.type)
                     const isCelebrated = celebratedGoalId === goal.id
@@ -525,7 +532,7 @@ export default function GoalsPage() {
                                 {goal.deadline && (
                                   <p className="text-xs text-muted-foreground">
                                     {en ? 'Deadline' : 'Deadline'}:{' '}
-                                    {new Date(goal.deadline).toLocaleDateString('da-DK')}
+                                    {new Date(goal.deadline).toLocaleDateString(en ? 'en-GB' : 'da-DK')}
                                   </p>
                                 )}
                               </div>
