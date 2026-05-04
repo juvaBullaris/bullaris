@@ -36,13 +36,13 @@ const CURRICULUM: Category[] = [
     labelDa: 'Dine pengebasics',
     topics: {
       beginner: [
-        { id: 'how-money-works',      label: 'How money actually works — and why it matters to you',          labelDa: 'Hvordan penge egentlig fungerer — og hvorfor det betyder noget for dig' },
-        { id: 'income-vs-expenses',   label: 'Are you earning more than you spend?',                          labelDa: 'Tjener du mere, end du bruger?' },
-        { id: 'net-worth-basics',     label: 'What are you actually worth today?',                            labelDa: 'Hvad er du egentlig værd i dag?' },
-        { id: 'budgeting-methods',    label: 'Which budgeting method fits your life?',                        labelDa: 'Hvilken budgetmetode passer til dit liv?' },
-        { id: 'emergency-fund',       label: 'How much should you keep for emergencies — and where?',         labelDa: 'Hvor meget skal du have til nødsituationer — og hvor?',         href: '/learning/practical/emergency-fund' },
-        { id: 'good-vs-bad-debt',     label: 'When is borrowing smart — and when is it dangerous?',           labelDa: 'Hvornår er det smart at låne — og hvornår er det farligt?' },
-        { id: 'power-of-compounding', label: 'Why starting to save 10 years earlier makes a massive difference', labelDa: 'Hvorfor det gør en kæmpe forskel at starte med at spare 10 år tidligere' },
+        { id: 'how-money-works',      label: 'How money actually works — and why it matters to you',          labelDa: 'Hvordan penge egentlig fungerer — og hvorfor det betyder noget for dig',          href: '/learning/practical/how-money-works' },
+        { id: 'income-vs-expenses',   label: 'Are you earning more than you spend?',                          labelDa: 'Tjener du mere, end du bruger?',                                             href: '/learning/practical/income-vs-expenses' },
+        { id: 'net-worth-basics',     label: 'What are you actually worth today?',                            labelDa: 'Hvad er du egentlig værd i dag?',                                            href: '/learning/practical/net-worth-basics' },
+        { id: 'budgeting-methods',    label: 'Which budgeting method fits your life?',                        labelDa: 'Hvilken budgetmetode passer til dit liv?',                                   href: '/learning/practical/budgeting-methods' },
+        { id: 'emergency-fund',       label: 'How much should you keep for emergencies — and where?',         labelDa: 'Hvor meget skal du have til nødsituationer — og hvor?',                     href: '/learning/practical/emergency-fund' },
+        { id: 'good-vs-bad-debt',     label: 'When is borrowing smart — and when is it dangerous?',           labelDa: 'Hvornår er det smart at låne — og hvornår er det farligt?',                  href: '/learning/practical/good-vs-bad-debt' },
+        { id: 'power-of-compounding', label: 'Why starting to save 10 years earlier makes a massive difference', labelDa: 'Hvorfor det gør en kæmpe forskel at starte med at spare 10 år tidligere', href: '/learning/practical/power-of-compounding' },
       ],
       intermediate: [
         { id: 'cash-flow-statement',        label: 'Where does your money actually go each month?',                            labelDa: 'Hvor går dine penge egentlig hen hver måned?' },

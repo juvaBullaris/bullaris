@@ -5,6 +5,12 @@ import { IndexFundCalculator } from '@/components/learning/practical/calculators
 import { FolkepensionCalculator } from '@/components/learning/practical/calculators/FolkepensionCalculator'
 import { DownPaymentCalculator } from '@/components/learning/practical/calculators/DownPaymentCalculator'
 import { LifeInsuranceCalculator } from '@/components/learning/practical/calculators/LifeInsuranceCalculator'
+import { InflationErosionCalculator } from '@/components/learning/practical/calculators/InflationErosionCalculator'
+import { CashFlowCalculator } from '@/components/learning/practical/calculators/CashFlowCalculator'
+import { NetWorthCalculator } from '@/components/learning/practical/calculators/NetWorthCalculator'
+import { BudgetMethodCalculator } from '@/components/learning/practical/calculators/BudgetMethodCalculator'
+import { DebtCostCalculator } from '@/components/learning/practical/calculators/DebtCostCalculator'
+import { CompoundGrowthCalculator } from '@/components/learning/practical/calculators/CompoundGrowthCalculator'
 
 import type { PracticalTopic, PersonalProfile } from './practical-topic-types'
 
@@ -13,6 +19,632 @@ const fmt = (n: number) => Math.round(n).toLocaleString('da-DK') + ' kr.'
 export const PRACTICAL_TOPICS: Record<string, PracticalTopic> = {
 
   // ── financial-foundations ────────────────────────────────────────────────────
+
+  'how-money-works': {
+    id: 'how-money-works',
+    category: 'financial-foundations',
+    level: 'beginner',
+    icon: '💡',
+    mins: '~5 min',
+    question: {
+      en: 'How money actually works — and why it matters to you',
+      da: 'Hvordan penge egentlig fungerer — og hvorfor det betyder noget for dig',
+    },
+    tldrFn: (p: PersonalProfile | null) => {
+      const saved = p?.gross_dkk ? Math.round(p.gross_dkk * 6 / 10000) * 10000 : 100000
+      const cashIn10 = Math.round(saved * Math.pow(0.97, 10))
+      const investedIn10 = Math.round(saved * Math.pow(1.04, 10))
+      return {
+        en: `Money is a tool that loses value over time. ${fmt(saved)} held in cash for 10 years at 3% inflation is worth only ${fmt(cashIn10)} in today's terms. The same amount invested in a global index fund would be worth ~${fmt(investedIn10)}.`,
+        da: `Penge er et redskab der mister værdi over tid. ${fmt(saved)} i kontanter i 10 år ved 3% inflation er kun ${fmt(cashIn10)} i nutidstermer. Det samme beløb investeret i en global indeksfond ville være ~${fmt(investedIn10)} værd.`,
+      }
+    },
+    whyCards: [
+      {
+        icon: '⏳',
+        title: { en: 'Money is a store of value — until it isn\'t', da: 'Penge er en værdiopbevaring — indtil de ikke er' },
+        body: {
+          en: 'For most of history, money was backed by gold or silver — something real that held value. Today, it is backed by trust and government policy. The consequence: every major currency has lost purchasing power every decade for the last 100 years. A 100 kr note from 1975 buys roughly what 15 kr bought then.',
+          da: 'Det meste af historien var penge støttet af guld eller sølv — noget reelt der holdt sin værdi. I dag er de støttet af tillid og offentlig politik. Konsekvensen: enhver vigtig valuta har mistet købekraft hvert årti de seneste 100 år. En 100 kr seddel fra 1975 køber omtrent hvad 15 kr gjorde dengang.',
+        },
+      },
+      {
+        icon: '📊',
+        title: { en: 'The three jobs money has to do', da: 'De tre opgaver penge skal udføre' },
+        body: {
+          en: 'Money serves three functions: a medium of exchange (makes buying and selling easy), a unit of account (lets you compare prices), and a store of value (holds purchasing power over time). The Danish kroner performs well on the first two. The third is where inflation quietly erodes your position — unless you take action.',
+          da: 'Penge tjener tre formål: byttemiddel (gør køb og salg nemt), regningsenhed (lader dig sammenligne priser) og værdiopbevaring (fastholder købekraft over tid). Den danske krone klarer sig godt på de to første. Den tredje er hvor inflation stille og roligt nedbryder din position — medmindre du handler.',
+        },
+      },
+      {
+        icon: '🔄',
+        title: { en: 'Inflation is not random — it\'s structural', da: 'Inflation er ikke tilfældig — det er strukturelt' },
+        body: {
+          en: "The European Central Bank (ECB) explicitly targets 2% annual inflation. Denmark follows this target via the krone-euro peg. That means policymakers consider a 2% annual loss of your savings' purchasing power acceptable. Over a 40-year career, that target alone reduces purchasing power by nearly 55%.",
+          da: 'Den Europæiske Centralbank (ECB) sigter eksplicit efter 2% årlig inflation. Danmark følger dette mål via krone-euro pegningen. Det betyder at beslutningstagere betragter et 2% årligt tab af din opsparing som acceptabelt. Over en 40-årig karriere reducerer det målet alene købekraften med næsten 55%.',
+        },
+      },
+      {
+        icon: '🛡️',
+        title: { en: 'The response: own assets, not just money', da: 'Svaret: eje aktiver, ikke bare penge' },
+        body: {
+          en: "Cash erodes. Assets that produce real value — a share in a business, property, a pension — tend to rise in price alongside inflation because they represent real things, not just a number. The goal is not to \"get rich\" — it is to prevent silently getting poorer. Investing is a defence mechanism against the system you're already in.",
+          da: 'Kontanter eroderer. Aktiver der producerer reel værdi — en andel i en virksomhed, ejendom, en pension — stiger typisk i pris i takt med inflation fordi de repræsenterer reelle ting, ikke bare et tal. Målet er ikke at "blive rig" — det er at forhindre stille og roligt at blive fattigere. Investering er en forsvarsmekanisme mod det system du allerede er i.',
+        },
+      },
+    ],
+    Calculator: InflationErosionCalculator,
+    action: {
+      icon: '📈',
+      cta: { en: 'Start beating inflation — open an investment account', da: 'Begynd at slå inflationen — åbn en investeringskonto' },
+      href: '/learning/practical/what-is-index-fund',
+    },
+    quiz: [
+      {
+        id: 'hmwq1',
+        en: 'What does the ECB\'s 2% inflation target mean for your savings?',
+        da: 'Hvad betyder ECB\'s inflationsmål på 2% for din opsparing?',
+        options: [
+          { en: 'Your savings grow by 2% per year automatically', da: 'Din opsparing vokser automatisk med 2% om året' },
+          { en: 'Your savings lose roughly 2% of purchasing power per year', da: 'Din opsparing mister ca. 2% købekraft om året' },
+          { en: 'The government tops up your savings to compensate', da: 'Staten supplerer din opsparing for at kompensere' },
+          { en: 'It only affects businesses, not individuals', da: 'Det påvirker kun virksomheder, ikke enkeltpersoner' },
+        ],
+        correct: 1,
+        explanationEn: 'A 2% inflation target means prices rise 2% per year on average. If your savings earn less than 2%, you lose purchasing power — even though the number in your account stays the same or rises slightly.',
+        explanationDa: 'Et inflationsmål på 2% betyder at priserne stiger 2% om året i gennemsnit. Hvis din opsparing tjener under 2%, mister du købekraft — selvom tallet på din konto forbliver det samme eller stiger lidt.',
+      },
+      {
+        id: 'hmwq2',
+        en: 'Which of the three functions of money does inflation primarily undermine?',
+        da: 'Hvilken af de tre pengefunktioner underminerer inflation primært?',
+        options: [
+          { en: 'Medium of exchange', da: 'Byttemiddel' },
+          { en: 'Unit of account', da: 'Regningsenhed' },
+          { en: 'Store of value', da: 'Værdiopbevaring' },
+          { en: 'All three equally', da: 'Alle tre ens' },
+        ],
+        correct: 2,
+        explanationEn: "Inflation directly erodes money's store of value function — money held over time buys progressively less. The exchange and accounting functions still work fine in the short term.",
+        explanationDa: 'Inflation eroderer direkte penges værdiopbevaringsfunktion — penge opbevaret over tid køber progressivt mindre. Bytte- og regningsenhedsfunktionerne fungerer stadig fint på kort sigt.',
+      },
+      {
+        id: 'hmwq3',
+        en: 'Why do investments in equities or property help protect against inflation?',
+        da: 'Hvorfor hjælper investeringer i aktier eller ejendom med at beskytte mod inflation?',
+        options: [
+          { en: 'They are guaranteed to rise faster than inflation', da: 'De er garanteret til at stige hurtigere end inflation' },
+          { en: 'They represent ownership of real assets whose prices tend to rise with inflation', da: 'De repræsenterer ejerskab af reale aktiver hvis priser tenderer til at stige med inflation' },
+          { en: 'The Danish government protects investors from inflation', da: 'Den danske stat beskytter investorer mod inflation' },
+          { en: 'They generate cash that is exempt from inflation', da: 'De genererer kontanter der er fritaget fra inflation' },
+        ],
+        correct: 1,
+        explanationEn: 'Real assets — businesses, property — tend to rise in price alongside inflation because they have underlying value independent of any currency. No guarantee, but historically the most reliable inflation protection.',
+        explanationDa: 'Reale aktiver — virksomheder, ejendom — tenderer til at stige i pris i takt med inflation fordi de har underliggende værdi uafhængig af enhver valuta. Ingen garanti, men historisk set den mest pålidelige inflationsbeskyttelse.',
+      },
+    ],
+  },
+
+  'income-vs-expenses': {
+    id: 'income-vs-expenses',
+    category: 'financial-foundations',
+    level: 'beginner',
+    icon: '💰',
+    mins: '~6 min',
+    question: {
+      en: 'Are you earning more than you spend?',
+      da: 'Tjener du mere, end du bruger?',
+    },
+    tldrFn: (p: PersonalProfile | null) => {
+      const gross = p?.gross_dkk ?? 45000
+      const takeHome = Math.round(gross * 0.65)
+      const surplus20 = Math.round(takeHome * 0.2)
+      return {
+        en: `Your take-home pay is roughly ${fmt(takeHome)}/month (gross × ~65%). If you save just 20%, that's ${fmt(surplus20)}/month — ${fmt(surplus20 * 12)}/year that can work for you instead of just passing through.`,
+        da: `Din nettoløn er cirka ${fmt(takeHome)}/måned (brutto × ~65%). Hvis du bare sparer 20%, er det ${fmt(surplus20)}/måned — ${fmt(surplus20 * 12)}/år der kan arbejde for dig i stedet for bare at passere igennem.`,
+      }
+    },
+    whyCards: [
+      {
+        icon: '🏆',
+        title: { en: 'The only number that predicts financial outcomes', da: 'Det eneste tal der forudsiger finansielle resultater' },
+        body: {
+          en: "Income is what comes in. Expenses are what go out. The gap between them — your monthly surplus — is the single most important number in personal finance. A high earner who spends everything is less financially healthy than a moderate earner who consistently saves 20%. It's not what you earn — it's what you keep.",
+          da: 'Indkomst er det der kommer ind. Udgifter er det der går ud. Forskellen — dit månedlige overskud — er det vigtigste enkelttal i privatøkonomi. En højtlønnet der bruger alt er finansielt ringere stillet end en moderat lønnet der konsekvent sparer 20%. Det er ikke hvad du tjener — det er hvad du beholder.',
+        },
+      },
+      {
+        icon: '🔒',
+        title: { en: 'Fixed vs. variable — which to cut first', da: 'Fast vs. variabel — hvad skal du skære i først' },
+        body: {
+          en: "Fixed costs (rent, insurance, subscriptions) are the hardest to change but have the biggest impact. Variable costs (restaurants, shopping) are easy to reduce temporarily but hard to sustain long-term. The most effective strategy: reduce fixed costs once, permanently. This takes one decision that pays off every single month for years.",
+          da: 'Faste udgifter (husleje, forsikring, abonnementer) er sværest at ændre men har størst effekt. Variable udgifter (restauranter, shopping) er nemme at reducere midlertidigt men svære at opretholde på lang sigt. Den mest effektive strategi: reducer faste udgifter én gang, permanent. Det kræver én beslutning der betaler sig hver eneste måned i årevis.',
+        },
+      },
+      {
+        icon: '👻',
+        title: { en: 'The forgotten expenses that drain you silently', da: 'De glemte udgifter der tømmer dig stille og roligt' },
+        body: {
+          en: "The average Danish household pays ~2,400 kr/year on subscriptions they've forgotten about. Add annual insurance auto-renewals, bank fees, and unused gym memberships, and silent drain can reach 5,000–8,000 kr/year. A quarterly review — one hour, once every three months — finds and eliminates these without any sacrifice.",
+          da: 'Den gennemsnitlige danske husstand betaler ~2.400 kr/år på abonnementer de har glemt. Læg automatisk fornyede forsikringer, bankgebyrer og ubrugte fitnessmedlemskaber til, og stille og roligt tab kan nå 5.000–8.000 kr/år. En kvartalsmæssig gennemgang — én time, én gang hvert kvartal — finder og eliminerer disse uden noget offer.',
+        },
+      },
+      {
+        icon: '⚡',
+        title: { en: 'Pay yourself first — automate it', da: 'Betal dig selv først — automatiser det' },
+        body: {
+          en: "The most reliable savings strategy: treat savings as a fixed cost. On payday, a scheduled transfer moves your savings amount before you can spend it. What's left is what you live on. This removes decision fatigue and the temptation to 'save what's left' — which is usually nothing.",
+          da: 'Den mest pålidelige opsparingsstrategi: behandl opsparing som en fast udgift. På lønningsdag overfører en planlagt overførsel dit opsparingsbeløb, inden du kan bruge det. Det der er tilbage er hvad du lever af. Det fjerner beslutningstræthed og fristelsen til at "spare hvad der er tilbage" — hvilket normalt er ingenting.',
+        },
+      },
+    ],
+    Calculator: CashFlowCalculator,
+    action: {
+      icon: '📊',
+      cta: { en: 'See your spending in the finance overview', da: 'Se dit forbrug i finansoversigten' },
+      href: '/finance',
+    },
+    quiz: [
+      {
+        id: 'iveq1',
+        en: 'Why is a high earner who spends everything less financially healthy than a moderate earner who saves 20%?',
+        da: 'Hvorfor er en højtlønnet der bruger alt finansielt ringere stillet end en moderat lønnet der sparer 20%?',
+        options: [
+          { en: 'They pay more in taxes', da: 'De betaler mere i skat' },
+          { en: 'Wealth is built from the surplus, not the income level', da: 'Formue bygges fra overskuddet, ikke indkomstniveauet' },
+          { en: 'High earners always have worse spending habits', da: 'Højtlønnede har altid dårligere forbrugsvaner' },
+          { en: 'There is no difference — income determines financial health', da: 'Der er ingen forskel — indkomst bestemmer finansiel sundhed' },
+        ],
+        correct: 1,
+        explanationEn: 'Wealth is built from surplus — what remains after expenses. Zero surplus means zero saved, regardless of income. Consistently saving even a small percentage creates compound wealth over decades.',
+        explanationDa: 'Formue bygges fra overskud — hvad der er tilbage efter udgifter. Nul overskud betyder nul sparet, uanset indkomst. Konsekvent at spare selv en lille procentdel skaber akkumuleret formue over årtier.',
+      },
+      {
+        id: 'iveq2',
+        en: 'Which type of expense reduction has the largest long-term impact?',
+        da: 'Hvilken type udgiftsreduktion har den største langsigtede effekt?',
+        options: [
+          { en: 'Cutting coffee and small daily purchases', da: 'Skære ned på kaffe og småindkøb' },
+          { en: 'Reducing variable spending like restaurants once a month', da: 'Reducere variable udgifter som restauranter én gang om måneden' },
+          { en: 'Reducing fixed costs permanently (rent, subscriptions, insurance)', da: 'Reducere faste udgifter permanent (husleje, abonnementer, forsikring)' },
+          { en: 'All expense types have equal impact', da: 'Alle udgiftstyper har ens effekt' },
+        ],
+        correct: 2,
+        explanationEn: "Reducing a fixed cost once pays off every month for years. Reducing a 300 kr/month subscription saves 3,600 kr/year, compounding into tens of thousands in opportunity cost over a decade.",
+        explanationDa: 'At reducere en fast udgift én gang betaler sig hvert måned i årevis. At reducere et abonnement på 300 kr/måned sparer 3.600 kr/år, der akkumulerer til titusinder i mulighedsomkostninger over et årti.',
+      },
+      {
+        id: 'iveq3',
+        en: 'What does "paying yourself first" mean in practice?',
+        da: 'Hvad betyder "betal dig selv først" i praksis?',
+        options: [
+          { en: 'Spending on yourself before paying bills', da: 'Bruge penge på dig selv inden du betaler regninger' },
+          { en: 'Automatically transferring savings on payday before spending anything', da: 'Automatisk overføre opsparing på lønningsdag inden du bruger noget' },
+          { en: 'Paying down debt before investing', da: 'Betale gæld ned inden du investerer' },
+          { en: 'Keeping a large cash reserve in a current account', da: 'Holde en stor kontantreserve på en lønkonto' },
+        ],
+        correct: 1,
+        explanationEn: "Automating savings on payday removes the decision entirely. You spend what's left — which is enough. Waiting to 'save what's left' almost never works.",
+        explanationDa: 'Automatisering af opsparing på lønningsdag fjerner beslutningen fuldstændigt. Du bruger hvad der er tilbage — det er nok. At vente på at "spare hvad der er tilbage" virker næsten aldrig.',
+      },
+    ],
+  },
+
+  'net-worth-basics': {
+    id: 'net-worth-basics',
+    category: 'financial-foundations',
+    level: 'beginner',
+    icon: '📋',
+    mins: '~6 min',
+    question: {
+      en: 'What are you actually worth today?',
+      da: 'Hvad er du egentlig værd i dag?',
+    },
+    tldrFn: (_p: PersonalProfile | null) => ({
+      en: "Net worth = what you own minus what you owe. It's the single most useful financial health number — better than income, better than bank balance. Most people have never calculated it.",
+      da: 'Nettoformue = hvad du ejer minus hvad du skylder. Det er det enkelt mest nyttige finansielle sundhedstal — bedre end indkomst, bedre end banksaldo. De fleste har aldrig beregnet det.',
+    }),
+    whyCards: [
+      {
+        icon: '🗺️',
+        title: { en: "Why net worth beats 'how much do you earn'", da: "Hvorfor nettoformue slår 'hvad tjener du'" },
+        body: {
+          en: "Income shows how fast money flows in. Net worth shows how much has stayed. A 60,000 kr/month earner with 500,000 kr in consumer debt and no savings has a lower net worth than a 30,000 kr/month earner who has consistently saved for 5 years. Net worth is the scoreboard — income is just one of the inputs.",
+          da: 'Indkomst viser hvor hurtigt penge strømmer ind. Nettoformue viser hvor meget er blevet. En der tjener 60.000 kr/måned med 500.000 kr i forbrugsgæld og ingen opsparing har lavere nettoformue end en der tjener 30.000 kr/måned og konsekvent har sparet i 5 år. Nettoformue er resultattavlen — indkomst er blot et af inputtene.',
+        },
+      },
+      {
+        icon: '📂',
+        title: { en: 'What counts as an asset', da: 'Hvad tæller som et aktiv' },
+        body: {
+          en: "Assets: cash and savings, investment accounts, pension (current value, not projected), property (current market value, not what you paid), any business ownership. What does NOT count: your car (it depreciates), your phone, furniture, or other consumer goods. These have value but not in a financial planning sense.",
+          da: 'Aktiver: kontanter og opsparing, investeringskonti, pension (nuværende værdi, ikke projiceret), ejendom (nuværende markedsværdi, ikke hvad du betalte), evt. virksomhedsejerskab. Hvad tæller IKKE: din bil (den afskrives), din telefon, møbler eller andre forbrugsgoder. Disse har værdi men ikke i finansiel planlægningsmæssig forstand.',
+        },
+      },
+      {
+        icon: '📉',
+        title: { en: 'Good debt vs bad debt in your balance sheet', da: 'God gæld vs dårlig gæld i dit regnskab' },
+        body: {
+          en: "Not all debt is equal. A mortgage finances an asset that tends to appreciate — the net effect on your balance sheet is often positive. Consumer loans finance things that immediately lose value. Student loans (SU-lån) are low-interest and finance income-generating capacity. Classify each liability: is the asset it bought appreciating or depreciating?",
+          da: 'Al gæld er ikke ens. Et boliglån finansierer et aktiv der tenderer til at stige i værdi — nettoeffekten på din balance er ofte positiv. Forbrugslån finansierer ting der straks mister værdi. Studielån (SU-lån) er billige og finansierer indkomstgenererende kapacitet. Klassificer hver gældspost: stiger eller falder aktivet det finansierede i værdi?',
+        },
+      },
+      {
+        icon: '📅',
+        title: { en: 'Track it quarterly — that\'s all it takes', da: 'Spor det kvartalsvist — det er alt der skal til' },
+        body: {
+          en: "You don't need a financial advisor to track net worth. One spreadsheet, updated quarterly, shows whether you're moving in the right direction. The trend matters more than the absolute number — consistent growth, even slowly, confirms the system is working. A negative net worth is not a crisis: it's a starting point with a clear direction.",
+          da: 'Du behøver ikke en finansiel rådgiver for at spore nettoformue. Et regneark opdateret kvartalsvist viser om du bevæger dig i den rigtige retning. Tendensen er vigtigere end det absolutte tal — konsekvent vækst, selv langsomt, bekræfter at systemet virker. En negativ nettoformue er ikke en krise: det er et startpunkt med en tydelig retning.',
+        },
+      },
+    ],
+    Calculator: NetWorthCalculator,
+    action: {
+      icon: '📊',
+      cta: { en: 'Check your finance overview', da: 'Tjek din finansoversigt' },
+      href: '/finance',
+    },
+    quiz: [
+      {
+        id: 'nwbq1',
+        en: 'How is net worth calculated?',
+        da: 'Hvordan beregnes nettoformue?',
+        options: [
+          { en: 'Monthly salary × 12', da: 'Månedlig løn × 12' },
+          { en: 'Total savings + pension', da: 'Samlet opsparing + pension' },
+          { en: 'Total assets minus total liabilities', da: 'Samlede aktiver minus samlet gæld' },
+          { en: 'Annual income minus annual expenses', da: 'Årsindkomst minus årsudgifter' },
+        ],
+        correct: 2,
+        explanationEn: "Net worth = everything you own (assets) minus everything you owe (liabilities). Income and expenses affect it over time, but the snapshot at any moment is assets minus liabilities.",
+        explanationDa: 'Nettoformue = alt du ejer (aktiver) minus alt du skylder (gæld). Indkomst og udgifter påvirker det over tid, men øjebliksbilledet på ethvert tidspunkt er aktiver minus gæld.',
+      },
+      {
+        id: 'nwbq2',
+        en: "Should you include your car's value as an asset when calculating net worth?",
+        da: 'Bør du inkludere din bils værdi som et aktiv ved beregning af nettoformue?',
+        options: [
+          { en: 'Yes, always at the purchase price', da: 'Ja, altid til købsprisen' },
+          { en: 'Yes, at the current market value, but note it depreciates rapidly', da: 'Ja, til aktuel markedsværdi, men bemærk at den afskrives hurtigt' },
+          { en: "No — consumer goods don't count as financial assets", da: 'Nej — forbrugsgoder tæller ikke som finansielle aktiver' },
+          { en: 'Only if it is worth over 100,000 kr', da: 'Kun hvis den er mere end 100.000 kr værd' },
+        ],
+        correct: 1,
+        explanationEn: "Cars technically have resale value, but they depreciate quickly. Including them at current market value is technically correct, though many practitioners exclude depreciating consumer goods to keep the picture focused on wealth-building assets.",
+        explanationDa: 'Biler har teknisk set salgsværdi, men de afskrives hurtigt. At inkludere dem til aktuel markedsværdi er teknisk korrekt, selvom mange praktikere udelukker afskrivende forbrugsgoder for at holde billedet fokuseret på formuesopbygningsaktiver.',
+      },
+      {
+        id: 'nwbq3',
+        en: 'You have a 3M kr home, a 2.4M kr mortgage, 200k kr in pension, and 50k kr in savings. What is your net worth?',
+        da: 'Du har en bolig til 3 mio. kr., et boliglån på 2,4 mio. kr., 200k kr i pension og 50k kr i opsparing. Hvad er din nettoformue?',
+        options: [
+          { en: '850,000 kr', da: '850.000 kr' },
+          { en: '3,250,000 kr', da: '3.250.000 kr' },
+          { en: '650,000 kr', da: '650.000 kr' },
+          { en: '−2,150,000 kr', da: '−2.150.000 kr' },
+        ],
+        correct: 0,
+        explanationEn: 'Assets: 3,000,000 + 200,000 + 50,000 = 3,250,000. Liabilities: 2,400,000. Net worth = 3,250,000 − 2,400,000 = 850,000 kr.',
+        explanationDa: 'Aktiver: 3.000.000 + 200.000 + 50.000 = 3.250.000. Gæld: 2.400.000. Nettoformue = 3.250.000 − 2.400.000 = 850.000 kr.',
+      },
+    ],
+  },
+
+  'budgeting-methods': {
+    id: 'budgeting-methods',
+    category: 'financial-foundations',
+    level: 'beginner',
+    icon: '📊',
+    mins: '~5 min',
+    question: {
+      en: 'Which budgeting method fits your life?',
+      da: 'Hvilken budgetmetode passer til dit liv?',
+    },
+    tldrFn: (p: PersonalProfile | null) => {
+      const takeHome = p?.gross_dkk ? Math.round(p.gross_dkk * 0.65) : 28000
+      const savings20 = Math.round(takeHome * 0.2)
+      return {
+        en: `There is no single right method — but you need a plan. The 50/30/20 rule assigns ${fmt(savings20)}/month (20%) as savings for you. The key insight: automate that slice so it never reaches your spending account.`,
+        da: `Der er ikke én rigtig metode — men du har brug for en plan. 50/30/20-reglen tildeler ${fmt(savings20)}/måned (20%) som opsparing for dig. Den vigtige indsigt: automatiser den del så den aldrig når din forbrugskonto.`,
+      }
+    },
+    whyCards: [
+      {
+        icon: '✉️',
+        title: { en: 'The envelope method — for spenders', da: 'Kuvertmetoden — for dem der bruger for meget' },
+        body: {
+          en: "Physically divide take-home pay into labelled envelopes: rent, food, transport, entertainment. When an envelope is empty, spending in that category stops. Sounds old-fashioned — it works because cash is viscerally painful to hand over, unlike tapping a card. Best for people who consistently overspend and need a hard stop.",
+          da: 'Del fysisk nettoløn op i mærkede kuverter: husleje, mad, transport, underholdning. Når en kuvert er tom, stopper udgifterne i den kategori. Lyder gammeldags — det virker fordi kontanter er smerteligt at give fra sig, i modsætning til at tappe et kort. Bedst til folk der konsekvent overbruger og har brug for en hård grænse.',
+        },
+      },
+      {
+        icon: '0️⃣',
+        title: { en: 'Zero-based budgeting — for analysts', da: 'Nulbaseret budget — for analytikerne' },
+        body: {
+          en: "Every kroner of income is assigned a purpose. Income minus all allocations equals zero. No unaccounted money. Requires an hour each month to plan and track. The reward: complete visibility and control. Best for people who enjoy tracking data and want to optimise precisely.",
+          da: 'Hver krone af indkomst tildeles et formål. Indkomst minus alle tildelinger er lig nul. Ingen ufordelte penge. Kræver en time om måneden til planlægning og sporing. Belønningen: fuld synlighed og kontrol. Bedst til folk der nyder at spore data og vil optimere præcist.',
+        },
+      },
+      {
+        icon: '🤖',
+        title: { en: 'Pay yourself first — for minimalists', da: 'Betal dig selv først — for minimalisterne' },
+        body: {
+          en: "On payday, automate transfers: one to savings, one to pension top-up. Live on whatever remains. No tracking required. The trade-off: you may not optimise every kroner, but you will consistently save. Ideal for people who don't want to budget actively but can control their spending on the remaining amount.",
+          da: 'På lønningsdag automatiser overførsler: én til opsparing, én til pensionspåfyldning. Lev af hvad der er tilbage. Ingen sporning nødvendig. Kompromisset: du optimerer måske ikke hver krone, men du vil konsekvent spare. Ideel til folk der ikke vil budgettere aktivt men kan kontrollere deres forbrug på det resterende beløb.',
+        },
+      },
+      {
+        icon: '💡',
+        title: { en: 'The 50/30/20 rule — for beginners', da: '50/30/20-reglen — for begyndere' },
+        body: {
+          en: "Needs (rent, food, transport, insurance): 50%. Wants (dining out, hobbies, streaming): 30%. Savings and debt repayment: 20%. No tracking required beyond knowing your three totals. It's a framework — not a rule. In Copenhagen, 50% on needs may be impossible if rent alone is 10,000 kr/month on a 25,000 kr take-home. Adjust ratios, keep the structure.",
+          da: 'Behov (husleje, mad, transport, forsikring): 50%. Ønsker (restauranter, hobbyer, streaming): 30%. Opsparing og gældsafdrag: 20%. Ingen sporning nødvendig udover at kende dine tre totaler. Det er en ramme — ikke en regel. I København kan 50% på behov være umuligt hvis huslejen alene er 10.000 kr/måned på 25.000 kr netto. Juster forholdet, behold strukturen.',
+        },
+      },
+    ],
+    Calculator: BudgetMethodCalculator,
+    action: {
+      icon: '📋',
+      cta: { en: 'Build your budget in the finance planner', da: 'Byg dit budget i finansplanleggeren' },
+      href: '/finance',
+    },
+    quiz: [
+      {
+        id: 'bmq1',
+        en: 'In the 50/30/20 rule, what does the 20% represent?',
+        da: 'Hvad repræsenterer de 20% i 50/30/20-reglen?',
+        options: [
+          { en: 'Tax payments', da: 'Skattebetalinger' },
+          { en: 'Spending on wants (restaurants, entertainment)', da: 'Forbrug på ønsker (restauranter, underholdning)' },
+          { en: 'Savings and debt repayment', da: 'Opsparing og gældsafdrag' },
+          { en: 'Investment in property only', da: 'Investering i ejendom alene' },
+        ],
+        correct: 2,
+        explanationEn: "The 20% in 50/30/20 is for savings and debt repayment — money that builds your net worth or reduces liabilities. Applied to take-home pay, not gross salary.",
+        explanationDa: 'De 20% i 50/30/20 er til opsparing og gældsafdrag — penge der opbygger din nettoformue eller reducerer gæld. Anvendt på nettoløn, ikke bruttoløn.',
+      },
+      {
+        id: 'bmq2',
+        en: "Which budgeting method is best for someone who doesn't want to track every kroner but will follow a plan?",
+        da: 'Hvilken budgetmetode er bedst for nogen der ikke vil spore hver krone men vil følge en plan?',
+        options: [
+          { en: 'Zero-based budgeting', da: 'Nulbaseret budget' },
+          { en: 'The envelope method', da: 'Kuvertmetoden' },
+          { en: 'Pay yourself first', da: 'Betal dig selv først' },
+          { en: '50/30/20 tracking', da: '50/30/20 sporing' },
+        ],
+        correct: 2,
+        explanationEn: "'Pay yourself first' automates savings on payday so you never need to decide. You spend what's left without detailed tracking. Works for people who overspend when tracking becomes tedious.",
+        explanationDa: '"Betal dig selv først" automatiserer opsparing på lønningsdag så du aldrig behøver at beslutte. Du bruger hvad der er tilbage uden detaljeret sporing. Virker til folk der overbruger når sporing bliver kedeligt.',
+      },
+      {
+        id: 'bmq3',
+        en: 'What is the most important single action regardless of which budgeting method you choose?',
+        da: 'Hvad er den vigtigste enkelthandling uanset hvilken budgetmetode du vælger?',
+        options: [
+          { en: 'Track every transaction manually', da: 'Spore hver transaktion manuelt' },
+          { en: 'Automate the savings portion so it moves on payday', da: 'Automatisere opsparingsdelen så den flyttes på lønningsdag' },
+          { en: 'Use a premium budgeting app', da: 'Bruge en premium budget-app' },
+          { en: 'Review your budget every day', da: 'Gennemgå dit budget hver dag' },
+        ],
+        correct: 1,
+        explanationEn: "Automating savings removes the daily decision. The biggest reason savings plans fail is that discretionary savings are always the last priority after spending — automation makes them the first.",
+        explanationDa: 'Automatisering af opsparing fjerner den daglige beslutning. Den største årsag til at opsparingsplaner fejler er at diskretionær opsparing altid er den sidste prioritet efter forbrug — automatisering gør dem til den første.',
+      },
+    ],
+  },
+
+  'good-vs-bad-debt': {
+    id: 'good-vs-bad-debt',
+    category: 'financial-foundations',
+    level: 'beginner',
+    icon: '⚖️',
+    mins: '~7 min',
+    question: {
+      en: 'When is borrowing smart — and when is it dangerous?',
+      da: 'Hvornår er det smart at låne — og hvornår er det farligt?',
+    },
+    tldrFn: (_p: PersonalProfile | null) => ({
+      en: "Debt is a tool. A mortgage at 4% on an appreciating asset can build wealth. A consumer loan at 18% for a holiday destroys it. The rule: borrow only when the return on the thing you're buying exceeds the cost of the loan.",
+      da: 'Gæld er et redskab. Et boliglån på 4% på et stigende aktiv kan opbygge formue. Et forbrugslån på 18% til en ferie ødelægger det. Reglen: lån kun når afkastet på det du køber overstiger lånets omkostning.',
+    }),
+    whyCards: [
+      {
+        icon: '🏠',
+        title: { en: 'When borrowing makes you wealthier', da: 'Når låntagning gør dig rigere' },
+        body: {
+          en: "Good debt finances assets that produce returns: a mortgage on a property that appreciates, a student loan that dramatically increases your earning capacity, a business loan generating more than it costs. The test: does the expected return on the purchased asset exceed the ÅOP? If yes, the debt is potentially wealth-creating.",
+          da: 'God gæld finansierer aktiver der giver afkast: et boliglån på en ejendom der stiger i værdi, et studielån der dramatisk øger din indkomstkapacitet, et erhvervslån der genererer mere end det koster. Testen: overstiger det forventede afkast på det erhvervede aktiv ÅOP\'en? Hvis ja, er gælden potentielt formuesopbyggende.',
+        },
+      },
+      {
+        icon: '🚗',
+        title: { en: 'When borrowing makes you poorer', da: 'Når låntagning gør dig fattigere' },
+        body: {
+          en: "Bad debt finances consumption or depreciating assets: consumer loans for holidays, car loans (the car loses 15–25% of its value the moment you drive it off the lot), credit card balances rolled month to month. The item you bought loses value while the debt accumulates interest. Both forces work against you simultaneously.",
+          da: 'Dårlig gæld finansierer forbrug eller afskrivende aktiver: forbrugslån til ferier, billån (bilen mister 15–25% af sin værdi i det øjeblik du kører den ud af forhandleren), kreditkortsaldi der rulles måned for måned. Den vare du køber mister værdi mens gælden akkumulerer rente. Begge kræfter virker imod dig på samme tid.',
+        },
+      },
+      {
+        icon: '🧮',
+        title: { en: "The real cost you won't see in the contract", da: 'Den reelle omkostning du ikke ser i kontrakten' },
+        body: {
+          en: "A 50,000 kr consumer loan at 15% ÅOP over 5 years costs ~18,000 kr in interest — paid for nothing. But there's a second cost: the monthly payments you make on that loan could have been invested. At 7% return, the same monthly payment invested over 5 years would grow to more than the loan itself. The true total cost is interest paid plus investment return foregone.",
+          da: 'Et forbrugslån på 50.000 kr til 15% ÅOP over 5 år koster ~18.000 kr i renter — betalt for ingenting. Men der er en anden omkostning: de månedlige afdrag du betaler på det lån kunne have været investeret. Ved 7% afkast ville den samme månedlige betaling investeret over 5 år vokse til mere end selve lånet. Den sande samlede omkostning er betalte renter plus tabt investeringsafkast.',
+        },
+      },
+      {
+        icon: '🇩🇰',
+        title: { en: "Denmark's unique mortgage advantage", da: 'Danmarks unikke realkreditfordel' },
+        body: {
+          en: "The Danish realkreditlån system offers some of Europe's most competitive mortgage rates because mortgages are funded through bonds traded on the capital market — not just bank deposits. Interest on a Danish mortgage is also tax-deductible (rentefradrag). This makes Danish mortgage debt among the cheapest available, reducing the argument against carrying a mortgage.",
+          da: 'Det danske realkreditsystem tilbyder nogle af Europas mest konkurrencedygtige realkreditrenter fordi lån finansieres via obligationer handlet på kapitalmarkedet — ikke bare bankindskud. Renter på et dansk boliglån er også fradragsberettiget (rentefradrag). Dette gør dansk realkreditgæld blandt de billigste tilgængelige, og reducerer argumentet imod at have et boliglån.',
+        },
+      },
+    ],
+    Calculator: DebtCostCalculator,
+    action: {
+      icon: '📉',
+      cta: { en: 'Review your current debts', da: 'Gennemgå din nuværende gæld' },
+      href: '/finance',
+    },
+    quiz: [
+      {
+        id: 'gbdq1',
+        en: 'What is the key test for whether debt is "good" or "bad"?',
+        da: 'Hvad er den vigtigste test for om gæld er "god" eller "dårlig"?',
+        options: [
+          { en: 'Whether the loan is from a bank or an online lender', da: 'Om lånet er fra en bank eller en onlinelåneudbyder' },
+          { en: 'The loan amount — smaller is always better', da: 'Lånebeløbet — mindre er altid bedre' },
+          { en: "Whether the asset purchased returns more than the loan's ÅOP", da: 'Om det erhvervede aktiv giver mere end lånets ÅOP' },
+          { en: 'Whether you feel comfortable with the monthly payment', da: 'Om du er komfortabel med den månedlige ydelse' },
+        ],
+        correct: 2,
+        explanationEn: "Good debt finances assets that return more than they cost. A mortgage at 4% on a property appreciating 5% creates net wealth. A consumer loan at 18% for a holiday creates net loss.",
+        explanationDa: 'God gæld finansierer aktiver der giver mere end de koster. Et boliglån på 4% på en ejendom der stiger 5% skaber nettoformue. Et forbrugslån på 18% til en ferie skaber nettotab.',
+      },
+      {
+        id: 'gbdq2',
+        en: 'Beyond interest paid, what is the "hidden" second cost of consumer debt?',
+        da: 'Udover betalte renter, hvad er den "skjulte" anden omkostning ved forbrugsgæld?',
+        options: [
+          { en: 'Impact on your credit score (RKI)', da: 'Påvirkning af din kreditvurdering (RKI)' },
+          { en: 'The investment return you could have earned on the same monthly payments', da: 'Det investeringsafkast du kunne have tjent på de samme månedlige afdrag' },
+          { en: 'The administrative fees from the bank', da: 'De administrative gebyrer fra banken' },
+          { en: 'There is no hidden cost', da: 'Der er ingen skjult omkostning' },
+        ],
+        correct: 1,
+        explanationEn: "Every kroner paid in loan repayments is a kroner not invested. At 7% historical returns, the opportunity cost over years can exceed the interest itself — making debt far more expensive than the ÅOP alone suggests.",
+        explanationDa: 'Hver krone betalt i låneafdrag er en krone ikke investeret. Ved 7% historiske afkast kan mulighedsomkostningen over år overstige renterne selv — hvilket gør gæld langt dyrere end ÅOP alene antyder.',
+      },
+      {
+        id: 'gbdq3',
+        en: 'Why is mortgage debt in Denmark often considered one of the more acceptable forms of debt?',
+        da: 'Hvorfor betragtes realkreditgæld i Danmark ofte som en af de mere acceptable former for gæld?',
+        options: [
+          { en: 'Because Danish banks never charge interest', da: 'Fordi danske banker aldrig opkræver renter' },
+          { en: 'Because it is tax-deductible and among Europe\'s lowest rates, financing an appreciating asset', da: 'Fordi det er fradragsberettiget og blandt Europas laveste renter, finansierer et stigende aktiv' },
+          { en: 'Because the government repays it if you lose your job', da: 'Fordi staten tilbagebetaler det hvis du mister dit job' },
+          { en: 'Because mortgage debt has no effect on net worth', da: 'Fordi realkreditgæld ikke påvirker nettoformue' },
+        ],
+        correct: 1,
+        explanationEn: "Danish mortgage rates are among Europe's lowest, interest is tax-deductible, and the underlying asset (property) has historically appreciated. All three factors reduce the net cost of carrying mortgage debt.",
+        explanationDa: 'Danske realkreditrenter er blandt Europas laveste, renter er fradragsberettiget, og det underliggende aktiv (ejendom) er historisk steget i værdi. Alle tre faktorer reducerer nettoomkostningen ved at have realkreditgæld.',
+      },
+    ],
+  },
+
+  'power-of-compounding': {
+    id: 'power-of-compounding',
+    category: 'financial-foundations',
+    level: 'beginner',
+    icon: '🚀',
+    mins: '~6 min',
+    question: {
+      en: 'Why starting to save 10 years earlier makes a massive difference',
+      da: 'Hvorfor det gør en kæmpe forskel at starte med at spare 10 år tidligere',
+    },
+    tldrFn: (p: PersonalProfile | null) => {
+      const age = p?.age ?? 30
+      const years = Math.max(0, 67 - age)
+      const monthly = 2000
+      const r = 0.07 / 12
+      const n = years * 12
+      const fvNow = n > 0 ? Math.round(monthly * ((Math.pow(1 + r, n) - 1) / r)) : 0
+      const nLater = Math.max(0, (years - 10) * 12)
+      const fvLater = nLater > 0 ? Math.round(monthly * ((Math.pow(1 + r, nLater) - 1) / r)) : 0
+      const cost = Math.max(0, fvNow - fvLater)
+      return {
+        en: `Starting at age ${age} with 2.000 kr/month, you'd reach ~${fmt(fvNow)} at 67. Starting at ${age + 10}, you'd reach ~${fmt(fvLater)}. The 10-year delay costs you ~${fmt(cost)} — even though you'd contribute the same amount monthly.`,
+        da: `Hvis du starter som ${age}-årig med 2.000 kr/måned, vil du nå ~${fmt(fvNow)} ved 67. Starter du som ${age + 10}-årig, når du ~${fmt(fvLater)}. De 10 års forsinkelse koster dig ~${fmt(cost)} — selvom du bidrager det samme månedligt.`,
+      }
+    },
+    whyCards: [
+      {
+        icon: '⏱️',
+        title: { en: "Time is the ingredient you can't buy back", da: "Tid er den ingrediens du ikke kan købe tilbage" },
+        body: {
+          en: "At 7% annual return, money doubles roughly every 10 years. 10,000 kr invested at age 25 becomes ~80,000 kr by 67. The same 10,000 kr invested at 35 becomes ~40,000 kr. You didn't contribute more — the 25-year-old's money simply spent more time compounding. Every year you wait cuts the final result by more than you'd expect.",
+          da: 'Ved 7% årligt afkast fordobles penge cirka hvert 10. år. 10.000 kr investeret som 25-årig bliver ~80.000 kr ved 67. De samme 10.000 kr investeret som 35-årig bliver ~40.000 kr. Du bidrog ikke mere — den 25-åriges penge brugte simpelthen mere tid på at akkumulere. Hvert år du venter reducerer slutresultatet mere end du ville forvente.',
+        },
+      },
+      {
+        icon: '🧮',
+        title: { en: 'Why contributing less earlier beats contributing more later', da: 'Hvorfor det at bidrage mindre tidligt slår at bidrage mere sent' },
+        body: {
+          en: "Consider two people: Sara contributes 1,000 kr/month from age 25 to 35, then stops. Lars contributes 1,000 kr/month from 35 to 67. Lars contributes for 32 years; Sara for only 10. At retirement, Sara still wins — because her contributions had 32 more years to grow. The first contributions are the most valuable.",
+          da: 'Overvej to mennesker: Sara bidrager 1.000 kr/måned fra 25 til 35, derefter stopper hun. Lars bidrager 1.000 kr/måned fra 35 til 67. Lars bidrager i 32 år; Sara i kun 10. Ved pensionering vinder Sara stadig — fordi hendes bidrag havde 32 mere år til at vokse. De første bidrag er de mest værdifulde.',
+        },
+      },
+      {
+        icon: '💸',
+        title: { en: 'The two enemies: fees and taxes', da: 'De to fjender: gebyrer og skat' },
+        body: {
+          en: "Compound growth can work for you — or against you. A 1% annual fee sounds trivial. Over 40 years at 7% returns, it destroys roughly 24% of your terminal wealth. That's hundreds of thousands of kroner on a typical Danish pension. Choose low-cost index funds. Check the ÅOP on every savings product. The number that matters is net return, not gross.",
+          da: 'Renters rente kan arbejde for dig — eller imod dig. Et 1% årligt gebyr lyder trivielt. Over 40 år ved 7% afkast ødelægger det ca. 24% af din slutformue. Det er hundredtusinder af kroner på en typisk dansk pension. Vælg billige indeksfonde. Tjek ÅOP på hvert opsparingsprodukt. Det tal der betyder noget er nettoafkast, ikke bruttoafkast.',
+        },
+      },
+      {
+        icon: '🇩🇰',
+        title: { en: 'The Danish pension advantage you may be wasting', da: 'Den danske pensionsfordel du måske spilder' },
+        body: {
+          en: "Most Danish employees get employer pension contributions — typically 10–12% of gross salary. Combined with their own contribution (typically 5%), that's 15–17% of gross going into a compound-growth account. If you're in topskat (marginal rate ~52%), each kr you contribute to pension saves ~52% in tax immediately and is taxed at a lower rate when drawn down. The tax advantage amplifies compounding significantly.",
+          da: 'De fleste danske ansatte får arbejdsgiverbidrag til pension — typisk 10–12% af bruttoløn. Kombineret med eget bidrag (typisk 5%) er det 15–17% af brutto der går ind på en akkumulationskonto. Hvis du betaler topskat (marginalskattesats ~52%), sparer hver krone du bidrager til pension ~52% i skat straks og beskattes til en lavere sats ved udbetaling. Skattefordelen forstærker akkumuleringen betydeligt.',
+        },
+      },
+    ],
+    Calculator: CompoundGrowthCalculator,
+    action: {
+      icon: '🎯',
+      cta: { en: 'Check your pension at PensionsInfo', da: 'Tjek din pension på PensionsInfo' },
+      href: 'https://www.pensionsinfo.dk',
+      external: true,
+    },
+    quiz: [
+      {
+        id: 'pocq1',
+        en: 'At 7% annual return, roughly how long does it take for money to double?',
+        da: 'Hvad er den omtrentlige tid det tager for penge at fordobles ved 7% årligt afkast?',
+        options: [
+          { en: '5 years', da: '5 år' },
+          { en: '10 years', da: '10 år' },
+          { en: '20 years', da: '20 år' },
+          { en: '35 years', da: '35 år' },
+        ],
+        correct: 1,
+        explanationEn: "The Rule of 72: divide 72 by the annual return to get doubling time. 72 ÷ 7 ≈ 10 years. This is why the difference between starting at 25 vs. 35 is so dramatic — the early contributions get an extra doubling.",
+        explanationDa: '72-reglen: divider 72 med det årlige afkast for at få fordobelingstiden. 72 ÷ 7 ≈ 10 år. Det er derfor forskellen mellem at starte som 25-årig vs. 35-årig er så dramatisk — de tidlige bidrag får en ekstra fordobling.',
+      },
+      {
+        id: 'pocq2',
+        en: 'How does a 1% annual fund fee affect a 40-year investment at 7% gross returns?',
+        da: 'Hvordan påvirker et 1% årligt fondsgebyr en 40-årig investering ved 7% bruttoafkast?',
+        options: [
+          { en: "It reduces returns by 1% — almost nothing over time", da: 'Det reducerer afkastet med 1% — næsten ingenting over tid' },
+          { en: 'It reduces your final balance by roughly 24%', da: 'Det reducerer din slutsaldo med ca. 24%' },
+          { en: 'It only matters on large portfolios', da: 'Det betyder kun noget på store porteføljer' },
+          { en: 'Higher fees guarantee better management', da: 'Højere gebyrer garanterer bedre forvaltning' },
+        ],
+        correct: 1,
+        explanationEn: 'Fees compound just like returns do. 1% per year over 40 years reduces terminal wealth by ~24%. On a 1M kr portfolio that is 240,000 kr — paid to a fund manager who statistically underperforms the index.',
+        explanationDa: 'Gebyrer akkumulerer ligesom afkast gør det. 1% om året over 40 år reducerer slutformuen med ~24%. På en portefølje på 1 mio. kr. er det 240.000 kr — betalt til en fondsforvalter der statistisk underpræsterer indekset.',
+      },
+      {
+        id: 'pocq3',
+        en: 'Sara saves 1,000 kr/month from age 25 to 35 (10 years) then stops. Lars saves 1,000 kr/month from age 35 to 67 (32 years). Both earn 7%. Who has more at 67?',
+        da: 'Sara sparer 1.000 kr/måned fra 25 til 35 år (10 år) og stopper. Lars sparer 1.000 kr/måned fra 35 til 67 (32 år). Begge tjener 7%. Hvem har mest ved 67?',
+        options: [
+          { en: 'Lars — he contributed for much longer', da: 'Lars — han bidrog meget længere' },
+          { en: 'They end up with the same amount', da: 'De ender med det samme beløb' },
+          { en: 'Sara — her early contributions compounded for longer', da: 'Sara — hendes tidlige bidrag akkumulerede i længere tid' },
+          { en: "It depends on market conditions", da: 'Det afhænger af markedsforholdene' },
+        ],
+        correct: 2,
+        explanationEn: "Sara's contributions from age 25–35 compound for 32–42 years before retirement. Even though Lars contributed 3.2× more money, Sara's head start creates a larger final balance — demonstrating that time in the market outweighs amount contributed.",
+        explanationDa: 'Saras bidrag fra 25–35 akkumulerer i 32–42 år inden pension. Selvom Lars bidrog 3,2 gange mere penge, skaber Saras forspring en større slutsaldo — hvilket demonstrerer at tid i markedet overstiger bidragets størrelse.',
+      },
+    ],
+  },
 
   'emergency-fund': {
     id: 'emergency-fund',
