@@ -527,13 +527,14 @@ export default function LearningPage() {
           {COURSES.map((course) => {
             const isRelevant = goalTypes.length === 0 || course.goalTypes.some((g) => goalTypes.includes(g))
             return (
-              <div
+              <Link
                 key={course.id}
-                className="rounded-2xl p-5 space-y-3"
+                href={`/learning/${course.id}`}
+                className="block rounded-2xl p-5 space-y-3 transition-all hover:opacity-90 active:scale-[0.99]"
                 style={{
                   background: '#FFF8F3',
                   border: `1.5px solid ${isRelevant ? course.color + '40' : '#EDE0D4'}`,
-                  opacity: isRelevant ? 1 : 0.6,
+                  opacity: isRelevant ? 1 : 0.65,
                 }}
               >
                 <div className="flex items-start gap-3">
@@ -577,13 +578,13 @@ export default function LearningPage() {
                     </div>
                   </div>
                   <span
-                    className="text-xs font-semibold px-3 py-1.5 rounded-lg"
-                    style={{ background: '#EDE0D4', color: '#6B5C52' }}
+                    className="text-xs font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1"
+                    style={{ background: course.color + '15', color: course.color }}
                   >
-                    {en ? 'Coming soon' : 'Kommer snart'}
+                    {en ? 'Open' : 'Åbn'} →
                   </span>
                 </div>
-              </div>
+              </Link>
             )
           })}
         </section>
