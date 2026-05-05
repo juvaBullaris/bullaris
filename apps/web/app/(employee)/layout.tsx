@@ -31,13 +31,13 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
   useEffect(() => { setMenuOpen(false) }, [pathname])
 
   const navItems = [
-    { href: '/dashboard',   label: t.nav.dashboard,   icon: '🏠' },
-    { href: '/payslip',     label: t.nav.payslip,      icon: '📄' },
-    { href: '/tax-planner', label: t.nav.taxPlanner,   icon: '🧮' },
-    { href: '/goals',       label: t.nav.goals,        icon: '🎯' },
-    { href: '/finance',     label: t.nav.finance,      icon: '💰' },
-    { href: '/chat',        label: t.nav.chat,         icon: '💬' },
-    { href: '/learning',    label: t.nav.learning,     icon: '📚' },
+    { href: '/dashboard',   label: t.nav.dashboard,   icon: '🏠',  external: false },
+    { href: '/payslip',     label: t.nav.payslip,      icon: '📄', external: false },
+    { href: '/tax-planner', label: t.nav.taxPlanner,   icon: '🧮', external: false },
+    { href: '/goals',       label: t.nav.goals,        icon: '🎯', external: false },
+    { href: '/finance',     label: t.nav.finance,      icon: '💰', external: false },
+    { href: '/chat',        label: t.nav.chat,         icon: '💬', external: false },
+    { href: '/learning',    label: t.nav.learning,     icon: '📚', external: true  },
   ]
 
   // Bottom nav shows the 5 most-used items on mobile; rest in hamburger menu
@@ -77,6 +77,8 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
               <Link
                 key={item.href}
                 href={item.href}
+                target={item.external ? '_blank' : undefined}
+                rel={item.external ? 'noopener noreferrer' : undefined}
                 className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors"
                 style={{
                   background: isActive ? '#E8634A' : 'transparent',
@@ -137,6 +139,8 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
                 <Link
                   key={item.href}
                   href={item.href}
+                  target={item.external ? '_blank' : undefined}
+                  rel={item.external ? 'noopener noreferrer' : undefined}
                   className="flex items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium"
                   style={{
                     background: isActive ? '#E8634A' : 'transparent',
@@ -183,6 +187,8 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
             <Link
               key={item.href}
               href={item.href}
+              target={item.external ? '_blank' : undefined}
+              rel={item.external ? 'noopener noreferrer' : undefined}
               className="flex-1 flex flex-col items-center justify-center py-2 gap-0.5 text-[10px] font-medium transition-colors"
               style={{ color: isActive ? '#E8634A' : '#A0917F' }}
             >

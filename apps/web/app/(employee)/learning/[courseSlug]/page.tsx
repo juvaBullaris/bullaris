@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { trpc } from '@/lib/trpc'
@@ -127,6 +127,18 @@ export default function CourseOverviewPage() {
   const course = getCourse(courseSlug)
   const progressQuery = trpc.learning.myProgress.useQuery()
   const completedIds = new Set(progressQuery.data?.map((p) => p.contentId) ?? [])
+
+  // Persist last-visited course for the learning hub dashboard
+  useEffect(() => {
+    if (!course) return
+    localStorage.setItem('bullaris-last-course', JSON.stringify({
+      slug:    course.slug,
+      title:   { en: course.titleEn, da: course.titleDa },
+      color:   course.color,
+      href:    `/learning/${course.slug}`,
+      visitedAt: Date.now(),
+    }))
+  }, [course])
 
   const availableLevels = course?.levels.map((l) => l.slug as TabLevel) ?? []
   const [activeLevel, setActiveLevel] = useState<TabLevel>(availableLevels[0] ?? 'basics')

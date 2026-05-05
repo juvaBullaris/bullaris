@@ -49,6 +49,18 @@ export const pulseRouter = router({
     }),
 
   /**
+   * Get the current employee's full pulse history (last 12 months).
+   */
+  myHistory: protectedProcedure.query(async ({ ctx }) => {
+    const responses = await db.pulseSurveyResponse.findMany({
+      where: { employeeId: ctx.employee.id },
+      orderBy: { period: 'asc' },
+      take: 12,
+    })
+    return responses.map((r) => ({ period: r.period, score: r.score }))
+  }),
+
+  /**
    * Aggregate pulse scores for the employer's organisation.
    * Only returns data if ≥5 responses exist per period (privacy threshold).
    * HR-admin only.

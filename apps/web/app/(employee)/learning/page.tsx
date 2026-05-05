@@ -33,6 +33,14 @@ interface LastTopic {
   href: string
 }
 
+interface LastCourse {
+  slug: string
+  title: { en: string; da: string }
+  color: string
+  href: string
+  visitedAt: number
+}
+
 // ── Curriculum ────────────────────────────────────────────────────────────────
 
 const CURRICULUM: Category[] = [
@@ -422,9 +430,10 @@ export default function LearningPage() {
   const { locale } = useLanguage()
   const en = locale === 'en'
 
-  const [view, setView]   = useState<View>('practical')
-  const [level, setLevel] = useState<Level>('beginner')
-  const [lastTopic, setLastTopic] = useState<LastTopic | null>(null)
+  const [view, setView]         = useState<View>('practical')
+  const [level, setLevel]       = useState<Level>('beginner')
+  const [lastTopic, setLastTopic]   = useState<LastTopic | null>(null)
+  const [lastCourse, setLastCourse] = useState<LastCourse | null>(null)
 
   useEffect(() => {
     const saved = localStorage.getItem('bullaris-learning-level') as Level | null
@@ -434,6 +443,10 @@ export default function LearningPage() {
     const lastRaw = localStorage.getItem('bullaris-last-topic')
     if (lastRaw) {
       try { setLastTopic(JSON.parse(lastRaw)) } catch {}
+    }
+    const lastCourseRaw = localStorage.getItem('bullaris-last-course')
+    if (lastCourseRaw) {
+      try { setLastCourse(JSON.parse(lastCourseRaw)) } catch {}
     }
   }, [])
 
@@ -471,6 +484,26 @@ export default function LearningPage() {
             {en ? 'Your financial education' : 'Din finansielle uddannelse'}
           </h1>
         </div>
+
+        {/* Goals chips */}
+        {hasGoals && (
+          <div className="space-y-1.5">
+            <p className="text-[10px] font-semibold uppercase tracking-widest" style={{ color: '#6B5C52' }}>
+              {en ? 'Your goals' : 'Dine mål'}
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {(goalsQuery.data ?? []).map((g) => (
+                <span
+                  key={g.id}
+                  className="text-xs px-2.5 py-1 rounded-full font-medium"
+                  style={{ background: '#2D1A0F', color: '#C8A882' }}
+                >
+                  {g.type.replace(/_/g, ' ')}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Progress stat */}
         <div className="space-y-2">
@@ -644,6 +677,41 @@ export default function LearningPage() {
             <span
               className="w-9 h-9 rounded-full flex items-center justify-center shrink-0 text-sm"
               style={{ background: '#E8634A', color: '#fff' }}
+            >
+              →
+            </span>
+          </Link>
+        </section>
+      )}
+
+      {/* ── Last course ── */}
+      {lastCourse && (
+        <section>
+          <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: '#9B8B7E' }}>
+            {en ? 'Last course visited' : 'Seneste kursus besøgt'}
+          </p>
+          <Link
+            href={lastCourse.href}
+            className="flex items-center gap-4 rounded-2xl p-5 transition-all hover:opacity-90 active:scale-[0.99]"
+            style={{ background: '#FFF8F3', border: `1.5px solid ${lastCourse.color}30` }}
+          >
+            <span
+              className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 text-lg"
+              style={{ background: lastCourse.color + '20' }}
+            >
+              📖
+            </span>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-semibold mb-1" style={{ color: '#9B8B7E' }}>
+                {en ? 'In-depth course' : 'Dybdegående kursus'}
+              </p>
+              <p className="text-sm font-semibold leading-snug truncate" style={{ color: '#1E0F00' }}>
+                {en ? lastCourse.title.en : lastCourse.title.da}
+              </p>
+            </div>
+            <span
+              className="w-9 h-9 rounded-full flex items-center justify-center shrink-0 text-sm"
+              style={{ background: lastCourse.color, color: '#fff' }}
             >
               →
             </span>
