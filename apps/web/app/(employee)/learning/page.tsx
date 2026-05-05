@@ -7,6 +7,7 @@ import { useLanguage } from '@/lib/language-context'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
+type View  = 'practical' | 'courses'
 type Level = 'beginner' | 'intermediate' | 'advanced'
 
 interface Topic {
@@ -263,6 +264,95 @@ const CURRICULUM: Category[] = [
   },
 ]
 
+// ── In-depth courses ──────────────────────────────────────────────────────────
+
+const COURSES = [
+  {
+    id: 'money-monetary-systems',
+    color: '#E8634A',
+    icon: '🪙',
+    label: 'Money & Monetary Systems',
+    labelDa: 'Penge & pengesystemer',
+    desc: 'What money really is, where it comes from, and why inflation erodes your savings every year.',
+    descDa: 'Hvad penge egentlig er, hvor de kommer fra, og hvorfor inflation æder din opsparing hvert år.',
+    modules: 6,
+    levels: ['Basics', 'Intermediate', 'Advanced'],
+    goalTypes: ['investment', 'financial_independence', 'passive_income'],
+  },
+  {
+    id: 'financial-foundations',
+    color: '#22c55e',
+    icon: '🏗️',
+    label: 'Financial Foundations',
+    labelDa: 'Finansielle grundprincipper',
+    desc: 'Budget, net worth, debt, and compounding — the habits that separate people who build wealth from those who don\'t.',
+    descDa: 'Budget, nettoformue, gæld og renters rente — vanerne der adskiller dem der opbygger formue fra dem der ikke gør.',
+    modules: 7,
+    levels: ['Basics', 'Intermediate', 'Advanced'],
+    goalTypes: ['emergency_fund', 'debt_payoff', 'financial_independence'],
+  },
+  {
+    id: 'interest-rates-credit',
+    color: '#3b82f6',
+    icon: '📈',
+    label: 'Interest Rates & Credit',
+    labelDa: 'Renter & kredit',
+    desc: 'The true cost of borrowing, how central bank rates reach your mortgage, and when debt is a tool vs. a trap.',
+    descDa: 'Den reelle pris ved at låne, hvordan centralbankrente når dit lån, og hvornår gæld er et redskab vs. en fælde.',
+    modules: 6,
+    levels: ['Basics', 'Intermediate', 'Advanced'],
+    goalTypes: ['debt_payoff', 'house_deposit', 'home_renovation'],
+  },
+  {
+    id: 'macroeconomics',
+    color: '#f97316',
+    icon: '🌍',
+    label: 'Macroeconomics',
+    labelDa: 'Makroøkonomi',
+    desc: 'How the economy around you shapes your job security, purchasing power, and investment returns.',
+    descDa: 'Hvordan økonomien omkring dig former din jobsikkerhed, købekraft og investeringsafkast.',
+    modules: 6,
+    levels: ['Basics', 'Intermediate', 'Advanced'],
+    goalTypes: ['investment', 'financial_independence', 'early_retirement'],
+  },
+  {
+    id: 'investing-markets',
+    color: '#8b5cf6',
+    icon: '📊',
+    label: 'Investing & Markets',
+    labelDa: 'Investering & markeder',
+    desc: 'From index funds to valuation frameworks — everything you need to grow your money without guessing.',
+    descDa: 'Fra indeksfonde til værdiansættelsesmodeller — alt du skal bruge for at vokse din formue uden at gætte.',
+    modules: 7,
+    levels: ['Basics', 'Intermediate', 'Advanced'],
+    goalTypes: ['investment', 'passive_income', 'financial_independence', 'early_retirement', 'generational_wealth'],
+  },
+  {
+    id: 'pension-retirement',
+    color: '#14b8a6',
+    icon: '🌅',
+    label: 'Pension & Retirement',
+    labelDa: 'Pension & pensionering',
+    desc: 'ATP, folkepension, workplace pension, and the decisions made 20 years before retirement that determine how comfortable it is.',
+    descDa: 'ATP, folkepension, firmapension og beslutningerne der tages 20 år før pension, som afgør hvor komfortabel den bliver.',
+    modules: 6,
+    levels: ['Basics', 'Intermediate', 'Advanced'],
+    goalTypes: ['pension_boost', 'early_retirement', 'financial_independence'],
+  },
+  {
+    id: 'housing-real-estate',
+    color: '#ec4899',
+    icon: '🏡',
+    label: 'Housing & Real Estate',
+    labelDa: 'Bolig & fast ejendom',
+    desc: 'The realkreditlån system, rent vs. buy, mortgage types, and what buying a home in Denmark really costs.',
+    descDa: 'Realkreditsystemet, leje vs. køb, lånetyper og hvad det egentlig koster at købe bolig i Danmark.',
+    modules: 6,
+    levels: ['Basics', 'Intermediate', 'Advanced'],
+    goalTypes: ['house_deposit', 'home_renovation', 'passive_income', 'rental_property'],
+  },
+]
+
 // ── Goal → category mapping ───────────────────────────────────────────────────
 
 const GOAL_CATEGORY_MAP: Record<string, string[]> = {
@@ -332,6 +422,7 @@ export default function LearningPage() {
   const { locale } = useLanguage()
   const en = locale === 'en'
 
+  const [view, setView]   = useState<View>('practical')
   const [level, setLevel] = useState<Level>('beginner')
   const [lastTopic, setLastTopic] = useState<LastTopic | null>(null)
 
@@ -399,6 +490,107 @@ export default function LearningPage() {
           </div>
         </div>
       </div>
+
+      {/* ── View toggle ── */}
+      <div
+        className="flex rounded-xl p-1 gap-1"
+        style={{ background: '#EDE0D4' }}
+      >
+        <button
+          onClick={() => setView('practical')}
+          className="flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all"
+          style={{
+            background: view === 'practical' ? '#FFF8F3' : 'transparent',
+            color: view === 'practical' ? '#1E0F00' : '#9B8B7E',
+          }}
+        >
+          {en ? 'Practical topics' : 'Praktiske emner'}
+        </button>
+        <button
+          onClick={() => setView('courses')}
+          className="flex-1 py-2.5 rounded-lg text-sm font-semibold transition-all"
+          style={{
+            background: view === 'courses' ? '#FFF8F3' : 'transparent',
+            color: view === 'courses' ? '#1E0F00' : '#9B8B7E',
+          }}
+        >
+          {en ? 'In-depth courses' : 'Dybdegående kurser'}
+        </button>
+      </div>
+
+      {/* ── Courses view ── */}
+      {view === 'courses' && (
+        <section className="space-y-4">
+          <p className="text-xs font-semibold uppercase tracking-widest" style={{ color: '#9B8B7E' }}>
+            {en ? '7 courses · recommended based on your goals' : '7 kurser · anbefalet ud fra dine mål'}
+          </p>
+          {COURSES.map((course) => {
+            const isRelevant = goalTypes.length === 0 || course.goalTypes.some((g) => goalTypes.includes(g))
+            return (
+              <div
+                key={course.id}
+                className="rounded-2xl p-5 space-y-3"
+                style={{
+                  background: '#FFF8F3',
+                  border: `1.5px solid ${isRelevant ? course.color + '40' : '#EDE0D4'}`,
+                  opacity: isRelevant ? 1 : 0.6,
+                }}
+              >
+                <div className="flex items-start gap-3">
+                  <span className="text-2xl shrink-0 mt-0.5">{course.icon}</span>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 flex-wrap mb-1">
+                      <h3 className="text-sm font-bold leading-snug" style={{ color: '#1E0F00' }}>
+                        {en ? course.label : course.labelDa}
+                      </h3>
+                      {isRelevant && goalTypes.length > 0 && (
+                        <span
+                          className="text-[10px] font-semibold px-2 py-0.5 rounded-full"
+                          style={{ background: course.color + '20', color: course.color }}
+                        >
+                          {en ? 'Matches your goals' : 'Matcher dine mål'}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs leading-relaxed" style={{ color: '#6B5C52' }}>
+                      {en ? course.desc : course.descDa}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between pt-1">
+                  <div className="flex items-center gap-3">
+                    <span className="text-xs font-medium" style={{ color: '#9B8B7E' }}>
+                      {course.modules} {en ? 'modules' : 'moduler'}
+                    </span>
+                    <span style={{ color: '#C8BDB5' }}>·</span>
+                    <div className="flex gap-1">
+                      {course.levels.map((l) => (
+                        <span
+                          key={l}
+                          className="text-[10px] font-medium px-1.5 py-0.5 rounded"
+                          style={{ background: '#EDE0D4', color: '#9B8B7E' }}
+                        >
+                          {l}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <span
+                    className="text-xs font-semibold px-3 py-1.5 rounded-lg"
+                    style={{ background: '#EDE0D4', color: '#6B5C52' }}
+                  >
+                    {en ? 'Coming soon' : 'Kommer snart'}
+                  </span>
+                </div>
+              </div>
+            )
+          })}
+        </section>
+      )}
+
+      {/* ── Practical view ── */}
+      {view === 'practical' && <>
 
       {/* ── Continue card ── */}
       {lastTopic ? (
@@ -613,6 +805,8 @@ export default function LearningPage() {
           })}
         </div>
       </section>
+
+      </> }
 
     </div>
   )

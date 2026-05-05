@@ -234,7 +234,7 @@ const faqSchema = {
       name: 'What does Bullaris cost?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Bullaris starts from 49 DKK per employee per month, billed annually with a minimum of 10 seats. All plans include a free 30-day pilot and dedicated onboarding. No credit card required to start.',
+        text: 'Bullaris starts from 149 DKK per employee per month, billed annually with a minimum of 10 seats. All plans include a free 30-day pilot and dedicated onboarding. No credit card required to start.',
       },
     },
   ],
@@ -248,7 +248,7 @@ const appSchema = {
   operatingSystem: 'Web',
   offers: {
     '@type': 'Offer',
-    price: '49',
+    price: '149',
     priceCurrency: 'DKK',
     description: 'Per employee per month, billed annually',
   },
