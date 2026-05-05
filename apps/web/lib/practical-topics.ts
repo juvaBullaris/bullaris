@@ -30,6 +30,32 @@ export const PRACTICAL_TOPICS: Record<string, PracticalTopic> = {
       en: 'How money actually works — and why it matters to you',
       da: 'Hvordan penge egentlig fungerer — og hvorfor det betyder noget for dig',
     },
+    videos: [
+      {
+        slug: 'hmw-v1',
+        title: { en: 'Your cash is eroding right now', da: 'Dine kontanter eroderer lige nu' },
+        hook: { en: '50,000 kr in savings. The number stays the same. The value doesn\'t.', da: '50.000 kr i opsparing. Tallet forbliver det samme. Værdien gør ikke.' },
+        durationSecs: 60,
+      },
+      {
+        slug: 'hmw-v2',
+        title: { en: 'The 2% target nobody talks about', da: 'Det 2%-mål ingen taler om' },
+        hook: { en: 'The ECB officially targets 2% inflation per year. That\'s an official target to shrink your savings.', da: 'ECB sigter officielt efter 2% inflation om året. Det er et officielt mål om at mindske din opsparing.' },
+        durationSecs: 60,
+      },
+    ],
+    lesson: {
+      headline: { en: 'Your money is losing value right now. Not the number — the purchasing power.', da: 'Dine penge mister værdi lige nu. Ikke tallet — købekraften.' },
+      paragraphs: [
+        { en: 'Every kroner you hold in cash is slowly buying less. Not because of a crisis — because inflation is a feature of modern monetary policy, not a bug.', da: 'Hver krone du holder i kontanter køber langsomt mindre. Ikke på grund af en krise — men fordi inflation er et designvalg i moderne pengepolitik, ikke en fejl.' },
+        { en: 'The European Central Bank targets 2% inflation every year. At that rate, your cash loses half its purchasing power in 35 years. This is not an accident. It is the stated goal.', da: 'Den Europæiske Centralbank sigter efter 2% inflation hvert år. Med den hastighed mister dine kontanter halvdelen af købekraften på 35 år. Det er ikke en ulykke. Det er det erklærede mål.' },
+        { en: 'The defence is simple: own assets that rise with inflation — index funds, property, pension contributions. Cash is for short-term needs. Long-term cash is a slow wealth leak.', da: 'Forsvaret er enkelt: ej aktiver der stiger med inflationen — indeksfonde, ejendom, pensionsbidrag. Kontanter er til kortsigtede behov. Langsigtede kontanter er et langsomt formuestab.' },
+      ],
+      highlight: {
+        stat: '35 år',
+        label: { en: 'to halve your cash\'s purchasing power at 2% annual inflation', da: 'til at halvere din kontant-købekraft ved 2% årlig inflation' },
+      },
+    },
     tldrFn: (p: PersonalProfile | null) => {
       const saved = p?.gross_dkk ? Math.round(p.gross_dkk * 6 / 10000) * 10000 : 100000
       const cashIn10 = Math.round(saved * Math.pow(0.97, 10))
@@ -134,6 +160,32 @@ export const PRACTICAL_TOPICS: Record<string, PracticalTopic> = {
     question: {
       en: 'Are you earning more than you spend?',
       da: 'Tjener du mere, end du bruger?',
+    },
+    videos: [
+      {
+        slug: 'ive-v1',
+        title: { en: 'Why rich people are broke', da: 'Hvorfor rige mennesker er blakket' },
+        hook: { en: 'Denmark has 80,000 kr/month earners one missed paycheck from financial crisis. Here\'s the actual reason.', da: 'Danmark har folk der tjener 80.000 kr/måned og er én manglende lønseddel fra finansiel krise. Her er den egentlige årsag.' },
+        durationSecs: 60,
+      },
+      {
+        slug: 'ive-v2',
+        title: { en: 'Find the 200 kr you forgot about', da: 'Find de 200 kr du glemte' },
+        hook: { en: 'Right now there\'s probably 200 kr/month leaving your account automatically. You signed up — and then forgot.', da: 'Lige nu forlader der sandsynligvis 200 kr/måned din konto automatisk. Du tilmeldte dig — og glemte det så.' },
+        durationSecs: 60,
+      },
+    ],
+    lesson: {
+      headline: { en: 'Your salary doesn\'t make you wealthy. The gap between in and out does.', da: 'Din løn gør dig ikke rig. Forskellen mellem ind og ud gør.' },
+      paragraphs: [
+        { en: 'High earners can be financially fragile. Moderate earners can be quietly wealthy. The single variable: the monthly gap between what comes in and what goes out.', da: 'Højtlønnede kan være finansielt skrøbelige. Moderat lønnede kan stille og roligt blive velhavende. Den ene variabel: det månedlige hul mellem hvad der kommer ind og hvad der går ud.' },
+        { en: 'The average Danish household spends 2,400 kr/year on subscriptions they\'ve forgotten about. One hour reviewing your bank statements will find most of them.', da: 'Den gennemsnitlige danske husstand bruger 2.400 kr/år på abonnementer de har glemt. Én time med at gennemgå dine kontoudtog finder de fleste af dem.' },
+        { en: 'Automate your savings on payday. Transfer before you can spend it. What\'s left is your budget. This one decision replaces a hundred smaller ones.', da: 'Automatiser din opsparing på lønningsdagen. Overfør inden du kan bruge det. Det der er tilbage er dit budget. Denne ene beslutning erstatter hundredvis af mindre.' },
+      ],
+      highlight: {
+        stat: '2.400 kr',
+        label: { en: 'average annual spend on forgotten subscriptions in Danish households', da: 'gennemsnitligt årligt forbrug på glemte abonnementer i danske husstande' },
+      },
     },
     tldrFn: (p: PersonalProfile | null) => {
       const gross = p?.gross_dkk ?? 45000
@@ -240,6 +292,32 @@ export const PRACTICAL_TOPICS: Record<string, PracticalTopic> = {
       en: 'What are you actually worth today?',
       da: 'Hvad er du egentlig værd i dag?',
     },
+    videos: [
+      {
+        slug: 'nwb-v1',
+        title: { en: 'The number that actually matters', da: 'Det tal der faktisk betyder noget' },
+        hook: { en: 'Not your salary. Not your bank balance. Net worth is the only number that tells the full financial truth.', da: 'Ikke din løn. Ikke din banksaldo. Nettoformue er det eneste tal der fortæller den fulde finansielle sandhed.' },
+        durationSecs: 60,
+      },
+      {
+        slug: 'nwb-v2',
+        title: { en: 'Calculate your net worth in 3 minutes', da: 'Beregn din nettoformue på 3 minutter' },
+        hook: { en: 'Most Danes have never done this. It takes 3 minutes. And it changes how you see your money.', da: 'De fleste danskere har aldrig gjort dette. Det tager 3 minutter. Og det ændrer hvordan du ser dine penge.' },
+        durationSecs: 60,
+      },
+    ],
+    lesson: {
+      headline: { en: 'Income tells you nothing. Net worth tells you everything.', da: 'Indkomst fortæller dig ingenting. Nettoformue fortæller dig alt.' },
+      paragraphs: [
+        { en: 'Net worth = everything you own minus everything you owe. It\'s a snapshot. Most people have never taken one.', da: 'Nettoformue = alt du ejer minus alt du skylder. Det er et øjebliksbillede. De fleste har aldrig taget ét.' },
+        { en: 'A 60,000 kr/month earner with 500,000 kr in consumer debt and zero savings has a lower net worth than a 30,000 kr/month earner who has saved consistently for five years.', da: 'En der tjener 60.000 kr/måned med 500.000 kr i forbrugsgæld og nul opsparing har lavere nettoformue end en der tjener 30.000 kr/måned og konsekvent har sparet i fem år.' },
+        { en: 'Track net worth quarterly — one spreadsheet, 30 minutes. A rising number means the system is working. A falling number means something needs to change.', da: 'Spor nettoformue kvartalsvist — ét regneark, 30 minutter. Et stigende tal betyder systemet virker. Et faldende tal betyder noget skal ændres.' },
+      ],
+      highlight: {
+        stat: '4×/år',
+        label: { en: 'is all you need to track net worth — and see your wealth building', da: 'er alt du behøver for at spore nettoformue — og se din formue vokse' },
+      },
+    },
     tldrFn: (_p: PersonalProfile | null) => ({
       en: "Net worth = what you own minus what you owe. It's the single most useful financial health number — better than income, better than bank balance. Most people have never calculated it.",
       da: 'Nettoformue = hvad du ejer minus hvad du skylder. Det er det enkelt mest nyttige finansielle sundhedstal — bedre end indkomst, bedre end banksaldo. De fleste har aldrig beregnet det.',
@@ -339,6 +417,32 @@ export const PRACTICAL_TOPICS: Record<string, PracticalTopic> = {
     question: {
       en: 'Which budgeting method fits your life?',
       da: 'Hvilken budgetmetode passer til dit liv?',
+    },
+    videos: [
+      {
+        slug: 'bm-v1',
+        title: { en: 'The budget that takes 0 minutes', da: 'Det budget der tager 0 minutter' },
+        hook: { en: 'One automatic transfer on payday. That\'s the entire system. Here\'s why it works better than tracking everything.', da: 'Én automatisk overførsel på lønningsdagen. Det er hele systemet. Her er hvorfor det virker bedre end at spore alt.' },
+        durationSecs: 60,
+      },
+      {
+        slug: 'bm-v2',
+        title: { en: 'Apply 50/30/20 to your salary right now', da: 'Anvend 50/30/20 på din løn lige nu' },
+        hook: { en: 'Take your take-home. Multiply by 0.5, 0.3, and 0.2. You have a budget. Done.', da: 'Tag din nettoløn. Gang med 0,5, 0,3 og 0,2. Du har et budget. Færdig.' },
+        durationSecs: 60,
+      },
+    ],
+    lesson: {
+      headline: { en: 'Pick a system. Any system. But pick one and automate it.', da: 'Vælg et system. Ethvert system. Men vælg ét og automatiser det.' },
+      paragraphs: [
+        { en: 'The best budgeting method is the one you\'ll actually use. Analytical people love zero-based budgets. Minimalists prefer automating and forgetting. Neither is wrong.', da: 'Den bedste budgetmetode er den du faktisk vil bruge. Analytiske mennesker elsker nulbaserede budgetter. Minimalister foretrækker at automatisere og glemme det. Ingen af delene er forkert.' },
+        { en: 'The most common failure: tracking every kroner manually, burning out after two weeks, abandoning the system entirely. The fix: remove daily decisions.', da: 'Den mest almindelige fejl: at spore hver krone manuelt, at brænde ud efter to uger, at opgive systemet helt. Løsningen: fjern daglige beslutninger.' },
+        { en: 'Automate savings on payday. What\'s left is spendable. No tracking required. One decision that runs on autopilot for years.', da: 'Automatiser opsparing på lønningsdagen. Det der er tilbage kan bruges. Ingen sporning nødvendig. Én beslutning der kører på autopilot i årevis.' },
+      ],
+      highlight: {
+        stat: '20%',
+        label: { en: 'of take-home — the savings rate that builds real wealth over a career', da: 'af nettoløn — den opsparingsrate der opbygger reel formue over en karriere' },
+      },
     },
     tldrFn: (p: PersonalProfile | null) => {
       const takeHome = p?.gross_dkk ? Math.round(p.gross_dkk * 0.65) : 28000
@@ -444,6 +548,32 @@ export const PRACTICAL_TOPICS: Record<string, PracticalTopic> = {
       en: 'When is borrowing smart — and when is it dangerous?',
       da: 'Hvornår er det smart at låne — og hvornår er det farligt?',
     },
+    videos: [
+      {
+        slug: 'gbd-v1',
+        title: { en: 'What 18% APR actually costs you', da: 'Hvad 18% ÅOP faktisk koster dig' },
+        hook: { en: '50,000 kr consumer loan at 18% over 5 years. You\'ll repay 68,000 kr. Here\'s the maths most people skip.', da: '50.000 kr forbrugslån til 18% over 5 år. Du tilbagebetaler 68.000 kr. Her er den matematik de fleste springer over.' },
+        durationSecs: 60,
+      },
+      {
+        slug: 'gbd-v2',
+        title: { en: 'When your mortgage is your best investment', da: 'Hvornår dit boliglån er din bedste investering' },
+        hook: { en: 'Borrowing at 4% to buy an asset growing at 5%+ per year isn\'t debt. It\'s leverage. Done right, it builds wealth.', da: 'At låne til 4% for at købe et aktiv der vokser med 5%+ om året er ikke gæld. Det er gearing. Gjort rigtigt opbygger det formue.' },
+        durationSecs: 60,
+      },
+    ],
+    lesson: {
+      headline: { en: 'Debt is a tool. Most people use it wrong.', da: 'Gæld er et redskab. De fleste bruger det forkert.' },
+      paragraphs: [
+        { en: 'Good debt buys assets that return more than the loan costs. A mortgage at 4% on a property growing at 5%+ per year builds net worth. A consumer loan at 18% for a holiday destroys it — in two directions.', da: 'God gæld køber aktiver der giver mere end lånet koster. Et boliglån på 4% på en ejendom der vokser med 5%+ om året opbygger nettoformue. Et forbrugslån på 18% til en ferie ødelægger det — i to retninger.' },
+        { en: 'The first direction is the interest you pay. The second is the investment return you don\'t earn. Both compound against you simultaneously.', da: 'Den første retning er de renter du betaler. Den anden er det investeringsafkast du ikke tjener. Begge akkumulerer imod dig på samme tid.' },
+        { en: 'The test: does the thing you\'re buying return more than the ÅOP? If yes, potentially smart. If no, think twice. If it\'s a holiday, the answer is always no.', da: 'Testen: giver det du køber mere end ÅOP\'en? Hvis ja, potentielt smart. Hvis nej, tænk dig om. Hvis det er en ferie, er svaret altid nej.' },
+      ],
+      highlight: {
+        stat: '18%',
+        label: { en: 'average ÅOP on consumer loans in Denmark — 4× the current mortgage rate', da: 'gennemsnitlig ÅOP på forbrugslån i Danmark — 4× den nuværende realkreditrente' },
+      },
+    },
     tldrFn: (_p: PersonalProfile | null) => ({
       en: "Debt is a tool. A mortgage at 4% on an appreciating asset can build wealth. A consumer loan at 18% for a holiday destroys it. The rule: borrow only when the return on the thing you're buying exceeds the cost of the loan.",
       da: 'Gæld er et redskab. Et boliglån på 4% på et stigende aktiv kan opbygge formue. Et forbrugslån på 18% til en ferie ødelægger det. Reglen: lån kun når afkastet på det du køber overstiger lånets omkostning.',
@@ -543,6 +673,32 @@ export const PRACTICAL_TOPICS: Record<string, PracticalTopic> = {
     question: {
       en: 'Why starting to save 10 years earlier makes a massive difference',
       da: 'Hvorfor det gør en kæmpe forskel at starte med at spare 10 år tidligere',
+    },
+    videos: [
+      {
+        slug: 'poc-v1',
+        title: { en: 'The 10 years that cost 700,000 kr', da: 'De 10 år der koster 700.000 kr' },
+        hook: { en: 'Sara started at 25. Lars at 35. Same monthly contribution. Lars retires 700,000 kr poorer. Here\'s exactly why.', da: 'Sara startede som 25-årig. Lars som 35-årig. Samme månedlige bidrag. Lars går på pension 700.000 kr fattigere. Her er præcis hvorfor.' },
+        durationSecs: 60,
+      },
+      {
+        slug: 'poc-v2',
+        title: { en: 'How fees steal your retirement', da: 'Hvordan gebyrer stjæler din pension' },
+        hook: { en: '1% annual fund fee. Sounds like nothing. Over 40 years: it destroys 24% of your wealth. The maths are brutal.', da: '1% årligt fondsgebyr. Lyder som ingenting. Over 40 år: det ødelægger 24% af din formue. Matematikken er brutal.' },
+        durationSecs: 60,
+      },
+    ],
+    lesson: {
+      headline: { en: 'Time does more work than money. And you can\'t buy it back.', da: 'Tid gør mere arbejde end penge. Og du kan ikke købe den tilbage.' },
+      paragraphs: [
+        { en: 'At 7% annual return, money doubles roughly every 10 years. Each decade you wait removes one doubling from your final result. The first contributions are the most valuable ones you\'ll ever make.', da: 'Ved 7% årligt afkast fordobles penge ca. hvert 10. år. Hvert årti du venter fjerner én fordobling fra dit slutresultat. De første bidrag er de mest værdifulde du nogensinde vil foretage.' },
+        { en: '1,000 kr invested at 25 becomes ~8,000 kr at 67. The same 1,000 kr at 35 becomes ~4,000 kr. Nothing changed except the start date. That\'s compounding.', da: '1.000 kr investeret som 25-årig bliver ~8.000 kr ved 67. De samme 1.000 kr som 35-årig bliver ~4.000 kr. Intet ændrede sig undtagen startdatoen. Det er renters rente.' },
+        { en: 'Fees compound too — against you. A 1% annual fee over 40 years erases 24% of your terminal wealth. Always check the ÅOP on any savings or pension product. The difference between 0.2% and 1.5% is enormous.', da: 'Gebyrer akkumulerer også — imod dig. Et 1% årligt gebyr over 40 år sletter 24% af din slutformue. Tjek altid ÅOP på ethvert opsparing- eller pensionsprodukt. Forskellen mellem 0,2% og 1,5% er enorm.' },
+      ],
+      highlight: {
+        stat: '700.000 kr',
+        label: { en: 'approximate cost of starting pension contributions 10 years late', da: 'omtrentlig omkostning ved at starte pensionsbidrag 10 år for sent' },
+      },
     },
     tldrFn: (p: PersonalProfile | null) => {
       const age = p?.age ?? 30
@@ -656,6 +812,32 @@ export const PRACTICAL_TOPICS: Record<string, PracticalTopic> = {
       en: 'How much should you keep for emergencies — and where?',
       da: 'Hvor meget skal du have til nødsituationer — og hvor?',
     },
+    videos: [
+      {
+        slug: 'ef-v1',
+        title: { en: 'Why you\'ll lose 20% on your next emergency', da: 'Hvorfor du mister 20% på din næste nødsituation' },
+        hook: { en: 'No emergency fund means every crisis becomes a loan. At 20% APR.', da: 'Ingen nødopsparing betyder at hver krise bliver et lån. Til 20% ÅOP.' },
+        durationSecs: 60,
+      },
+      {
+        slug: 'ef-v2',
+        title: { en: 'Where to keep your emergency fund in Denmark', da: 'Hvor du skal opbevare din nødopsparing i Danmark' },
+        hook: { en: 'Not your NemKonto. Not your investment account. Here\'s where it actually belongs.', da: 'Ikke din NemKonto. Ikke din investeringskonto. Her hører den faktisk hjemme.' },
+        durationSecs: 60,
+      },
+    ],
+    lesson: {
+      headline: { en: 'The emergency fund\'s job is to prevent a bad situation from becoming a financial disaster.', da: 'Nødopsparingens opgave er at forhindre en dårlig situation i at blive en finansiel katastrofe.' },
+      paragraphs: [
+        { en: 'Without a buffer, every unexpected cost — a broken washing machine, a medical bill, a job loss — forces you to borrow. And consumer debt at 15–20% APR compounds fast.', da: 'Uden en buffer tvinger enhver uventet udgift — en ødelagt vaskemaskine, en lægefaktura, et jobskifte — dig til at låne. Og forbrugsgæld til 15–20% ÅOP vokser hurtigt.' },
+        { en: 'Three months of expenses is the minimum. Six months if your income is variable or your fixed costs are high. This is not a luxury — it\'s the foundation everything else sits on.', da: 'Tre måneders udgifter er minimum. Seks måneder hvis din indkomst er variabel eller dine faste udgifter er høje. Det er ikke en luksus — det er fundamentet alt andet hviler på.' },
+        { en: 'Keep it in a separate account you can access within 48 hours but won\'t accidentally spend. A dedicated savings account at a secondary bank works perfectly.', da: 'Opbevar den på en separat konto du kan tilgå inden for 48 timer men ikke vil bruge ved et uheld. En dedikeret opsparingskonto i en sekundær bank fungerer perfekt.' },
+      ],
+      highlight: {
+        stat: '3–6 mdr.',
+        label: { en: 'of monthly expenses — the range that covers nearly every emergency', da: 'af månedlige udgifter — rækkevidden der dækker næsten alle nødsituationer' },
+      },
+    },
     tldrFn: (p: PersonalProfile | null) => {
       const expenses = p?.gross_dkk ? Math.round(p.gross_dkk * 0.65) : 28000
       const lo = fmt(expenses * 3)
@@ -766,6 +948,32 @@ export const PRACTICAL_TOPICS: Record<string, PracticalTopic> = {
       en: 'Consumer loan, car loan, mortgage — what is the difference?',
       da: 'Forbrugslån, billån, boliglån — hvad er forskellen?',
     },
+    videos: [
+      {
+        slug: 'tol-v1',
+        title: { en: 'Why the same amount costs differently depending on what you buy', da: 'Hvorfor samme beløb koster forskelligt afhængigt af hvad du køber' },
+        hook: { en: '10,000 kr borrowed for a holiday vs. a car vs. a home — three wildly different costs.', da: '10.000 kr lånt til en ferie, en bil eller en bolig — tre vidt forskellige omkostninger.' },
+        durationSecs: 60,
+      },
+      {
+        slug: 'tol-v2',
+        title: { en: 'The ÅOP number that reveals what a loan actually costs', da: 'ÅOP-tallet der afslører hvad et lån egentlig koster' },
+        hook: { en: '7% interest. But the ÅOP is 12%. The headline rate is not the real price.', da: '7% rente. Men ÅOP er 12%. Den annoncerede rente er ikke den rigtige pris.' },
+        durationSecs: 60,
+      },
+    ],
+    lesson: {
+      headline: { en: 'Every loan has a price. The question is whether the asset you\'re buying is worth it.', da: 'Ethvert lån har en pris. Spørgsmålet er om aktivet du køber er det værd.' },
+      paragraphs: [
+        { en: 'The difference between a mortgage at 4% and a consumer loan at 18% is collateral. The mortgage is secured by the home — if you stop paying, the bank gets the house. Less risk for the bank means less cost for you.', da: 'Forskellen mellem et boliglån til 4% og et forbrugslån til 18% er sikkerhed. Boliglånet er sikret af boligen — hvis du stopper med at betale, får banken huset. Mindre risiko for banken betyder lavere omkostning for dig.' },
+        { en: 'A consumer loan has no collateral. The bank takes a bigger risk, so it charges you more. The question to ask before any loan: does what I\'m buying appreciate or depreciate?', da: 'Et forbrugslån har ingen sikkerhed. Banken tager en større risiko, så den opkræver mere. Spørgsmålet du skal stille inden ethvert lån: stiger eller falder det jeg køber i værdi?' },
+        { en: 'Always compare ÅOP — not the headline interest rate. ÅOP includes all fees, setup costs, and compounding. It is the only honest comparison between loans.', da: 'Sammenlign altid ÅOP — ikke den annoncerede rente. ÅOP inkluderer alle gebyrer, oprettelsesomkostninger og renters rente. Det er den eneste ærlige sammenligning mellem lån.' },
+      ],
+      highlight: {
+        stat: '18% ÅOP',
+        label: { en: '— the typical cost of an unsecured Danish consumer loan', da: '— den typiske omkostning på et usikret dansk forbrugslån' },
+      },
+    },
     tldrFn: (_p: PersonalProfile | null) => ({
       en: 'Consumer loans cost 8–25% APR. Car loans 4–8%. Mortgages 3–5%. The difference is collateral — secured loans are cheaper because the bank can take back the asset if you stop paying.',
       da: 'Forbrugslån koster 8–25% ÅOP. Billån 4–8%. Boliglån 3–5%. Forskellen er sikkerhed — sikrede lån er billigere fordi banken kan tage aktivet tilbage hvis du stopper med at betale.',
@@ -870,6 +1078,32 @@ export const PRACTICAL_TOPICS: Record<string, PracticalTopic> = {
     question: {
       en: 'Why is your grocery bill higher than it was two years ago?',
       da: 'Hvorfor er din dagligvareregning højere end for to år siden?',
+    },
+    videos: [
+      {
+        slug: 'wii-v1',
+        title: { en: 'Why your grocery bill is higher than two years ago', da: 'Hvorfor din dagligvareregning er højere end for to år siden' },
+        hook: { en: 'The prices didn\'t just rise randomly. There\'s a mechanism. And knowing it changes what you do next.', da: 'Priserne steg ikke bare tilfældigt. Der er en mekanisme. Og at kende den ændrer hvad du gør næste gang.' },
+        durationSecs: 60,
+      },
+      {
+        slug: 'wii-v2',
+        title: { en: 'Denmark\'s 2022 inflation spike — and what it cost you', da: 'Danmarks inflationsstigning i 2022 — og hvad den kostede dig' },
+        hook: { en: 'Danish inflation hit 10.1% in 2022. Wages grew 3.8%. Most Danes took a real pay cut without noticing.', da: 'Dansk inflation ramte 10,1% i 2022. Lønninger voksede 3,8%. De fleste danskere fik en reel lønnedgang uden at opdage det.' },
+        durationSecs: 60,
+      },
+    ],
+    lesson: {
+      headline: { en: 'Inflation is not chaos. It\'s a predictable process — with winners and losers.', da: 'Inflation er ikke kaos. Det er en forudsigelig proces — med vindere og tabere.' },
+      paragraphs: [
+        { en: 'Inflation happens when more money chases the same amount of goods. Three causes: more spending (demand-pull), higher input costs like energy (cost-push), or central banks creating more money (monetary).', da: 'Inflation sker når mere penge jager den samme mængde varer. Tre årsager: mere forbrug (efterspørgselstræk), højere inputomkostninger som energi (omkostningsskub) eller centralbanker der skaber mere penge (monetær).' },
+        { en: '2022 combined all three: post-COVID stimulus money still circulating, energy shock from Ukraine, and supply chains still broken. The result was 10.1% inflation — the highest Danish rate in 40 years.', da: '2022 kombinerede alle tre: post-COVID stimulusmidler der stadig cirkulerede, energichok fra Ukraine og forsyningskæder stadig brudte. Resultatet var 10,1% inflation — den højeste danske rate i 40 år.' },
+        { en: 'Winners: homeowners (property values rose), borrowers (debt shrank in real terms). Losers: cash savers, wage earners whose pay rises lagged. Knowing which side you\'re on is half the battle.', da: 'Vindere: boligejere (ejendomsværdier steg), låntagere (gæld skrumpede i reale termer). Tabere: kontantopsparere, lønmodtagere hvis lønstigninger halted bagefter. At vide hvilken side du er på er halvdelen af kampen.' },
+      ],
+      highlight: {
+        stat: '10,1%',
+        label: { en: 'Danish inflation peak in October 2022 — the highest in 40 years', da: 'Dansk inflationstoppen i oktober 2022 — den højeste i 40 år' },
+      },
     },
     tldrFn: (_p: PersonalProfile | null) => ({
       en: "Inflation means each kroner buys less each year. Denmark averaged 6–8% inflation in 2022–2023. At 3% ongoing inflation, 100.000 kr today will buy only 74.000 kr worth of goods in 10 years.",
@@ -976,6 +1210,32 @@ export const PRACTICAL_TOPICS: Record<string, PracticalTopic> = {
       en: 'The simplest, cheapest way most people should invest',
       da: 'Den simpleste og billigste måde de fleste bør investere på',
     },
+    videos: [
+      {
+        slug: 'wif-v1',
+        title: { en: 'What you actually own when you buy an index fund', da: 'Hvad du faktisk ejer når du køber en indeksfond' },
+        hook: { en: 'One fund. 1,500 companies. 23 countries. One 0.2% annual fee. That\'s it.', da: 'Én fond. 1.500 virksomheder. 23 lande. Ét 0,2% årligt gebyr. Det er det.' },
+        durationSecs: 60,
+      },
+      {
+        slug: 'wif-v2',
+        title: { en: 'Why professionals with PhDs can\'t beat this', da: 'Hvorfor professionelle med ph.d.\'er ikke kan slå dette' },
+        hook: { en: '90% of actively managed funds underperform the index over 10 years — after fees. Not because the managers are bad. Because the market is smarter.', da: '90% af aktivt forvaltede fonde underpræsterer indekset over 10 år — efter gebyrer. Ikke fordi forvalterne er dårlige. Fordi markedet er smartere.' },
+        durationSecs: 60,
+      },
+    ],
+    lesson: {
+      headline: { en: 'The simplest investment strategy has the best long-term track record.', da: 'Den simpleste investeringsstrategi har den bedste langsigtede historik.' },
+      paragraphs: [
+        { en: 'An index fund buys every company in a market, weighted by size. When one company fails, you barely notice. When the whole economy grows over decades, you capture that growth automatically.', da: 'En indeksfond køber alle virksomheder i et marked, vægtet efter størrelse. Når én virksomhed fejler, mærker du det næsten ikke. Når hele økonomien vokser over årtier, fanger du automatisk den vækst.' },
+        { en: 'The fee is the single most controllable variable in long-term investing. A 0.2% annual fee vs. 1.5% sounds trivial. Over 30 years on a 1M kr portfolio, the difference is 320,000 kr — paid to a fund manager who statistically underperforms the index anyway.', da: 'Gebyret er den eneste mest kontrollerbare variabel i langsigtet investering. Et 0,2% årligt gebyr vs. 1,5% lyder trivielt. Over 30 år på en portefølje på 1 mio. kr. er forskellen 320.000 kr — betalt til en fondsforvalter der statistisk underpræsterer indekset alligevel.' },
+        { en: 'In Denmark, start with an aktiesparekonto (up to 135,900 kr, 17% flat tax on gains). Inside it, buy a Sparindex or equivalent global fund. That\'s the whole strategy.', da: 'I Danmark, start med en aktiesparekonto (op til 135.900 kr, 17% flat skat på gevinster). Køb en Sparindex eller tilsvarende global fond. Det er hele strategien.' },
+      ],
+      highlight: {
+        stat: '~7%',
+        label: { en: 'average annual historical return on a global index — before fees', da: 'gennemsnitligt historisk årligt afkast på et globalt indeks — før gebyrer' },
+      },
+    },
     tldrFn: (_p: PersonalProfile | null) => ({
       en: 'A global index fund (e.g. iShares MSCI World) automatically buys a slice of 1,500+ companies for ~0.2% annual fee. Historically returns ~7–9% per year. Start with any amount — 500 DKK/month compounds to millions over decades.',
       da: 'En global indeksfond (f.eks. iShares MSCI World) køber automatisk en andel af 1.500+ virksomheder for ~0,2% i årligt gebyr. Giver historisk ~7–9% om året. Start med ethvert beløb — 500 kr/måned vokser til millioner over årtier.',
@@ -1080,6 +1340,32 @@ export const PRACTICAL_TOPICS: Record<string, PracticalTopic> = {
     question: {
       en: 'When do you qualify for folkepension — and how much is it?',
       da: 'Hvornår er du berettiget til folkepension — og hvor meget er det?',
+    },
+    videos: [
+      {
+        slug: 'fp-v1',
+        title: { en: 'How much folkepension you\'ll actually receive', da: 'Hvor meget folkepension du faktisk modtager' },
+        hook: { en: 'Most Danes assume folkepension is enough. The maximum is 16,200 kr/month. The average Danish household spends more than double that.', da: 'De fleste danskere antager at folkepension er nok. Maksimum er 16.200 kr/måned. Den gennemsnitlige danske husstand bruger mere end det dobbelte.' },
+        durationSecs: 60,
+      },
+      {
+        slug: 'fp-v2',
+        title: { en: 'The 40-year residency rule that catches Danes off guard', da: '40-årsreglen der overrasker danskere' },
+        hook: { en: 'Moved to Denmark at 30? You won\'t get full folkepension. Here\'s the calculation.', da: 'Flyttede til Danmark som 30-årig? Du får ikke fuld folkepension. Her er beregningen.' },
+        durationSecs: 60,
+      },
+    ],
+    lesson: {
+      headline: { en: 'Folkepension is a foundation. Not a plan.', da: 'Folkepension er et fundament. Ikke en plan.' },
+      paragraphs: [
+        { en: 'The Danish state pension pays a maximum of ~16,200 kr/month — only if you\'ve lived in Denmark for 40 years and have no other pension income reducing your supplement.', da: 'Den danske statspension udbetaler maksimalt ~16.200 kr/måned — kun hvis du har boet i Danmark i 40 år og ikke har anden pensionsindkomst der reducerer dit tillæg.' },
+        { en: 'The average Danish household spends 35,000–40,000 kr/month. The gap between folkepension and real spending is large. That gap must be filled by workplace pension, ATP, and personal savings.', da: 'Den gennemsnitlige danske husstand bruger 35.000–40.000 kr/måned. Kløften mellem folkepension og reelt forbrug er stor. Den kløft skal udfyldes af firmapension, ATP og personlig opsparing.' },
+        { en: 'Check what you\'re on track for at PensionsInfo.dk — it aggregates all your pension sources in one place.', da: 'Tjek hvad du er på vej til på PensionsInfo.dk — det samler alle dine pensionskilder på ét sted.' },
+      ],
+      highlight: {
+        stat: '67 år',
+        label: { en: 'the current Danish folkepension age — and it\'s rising with life expectancy', da: 'den nuværende danske folkepensionsalder — og den stiger med forventet levealder' },
+      },
     },
     tldrFn: (p: PersonalProfile | null) => {
       const age = p?.age ?? 35
@@ -1191,6 +1477,32 @@ export const PRACTICAL_TOPICS: Record<string, PracticalTopic> = {
       en: 'How much do you actually need saved before buying a home?',
       da: 'Hvor meget skal du egentlig have sparet op, inden du køber bolig?',
     },
+    videos: [
+      {
+        slug: 'dpb-v1',
+        title: { en: 'The real cost of buying a home in Denmark', da: 'Den reelle omkostning ved at købe bolig i Danmark' },
+        hook: { en: 'It\'s not just the down payment. Add another 3–5% in transaction costs nobody mentions until you\'re at the notary.', da: 'Det er ikke bare udbetalingen. Læg yderligere 3–5% til i transaktionsomkostninger ingen nævner før du er hos notaren.' },
+        durationSecs: 60,
+      },
+      {
+        slug: 'dpb-v2',
+        title: { en: 'Why 20% down beats 5% down every time', da: 'Hvorfor 20% udbetaling slår 5% udbetaling hver gang' },
+        hook: { en: '5% is the legal minimum. 20% is the financial smart move. The difference in interest rate is 0.3–0.8% — for 30 years.', da: '5% er det lovmæssige minimum. 20% er det finansielt smarte træk. Forskellen i rente er 0,3–0,8% — i 30 år.' },
+        durationSecs: 60,
+      },
+    ],
+    lesson: {
+      headline: { en: 'The down payment is the visible cost. The transaction costs are the surprise.', da: 'Udbetalingen er den synlige omkostning. Transaktionsomkostningerne er overraskelsen.' },
+      paragraphs: [
+        { en: 'Danish law requires at least 5% of the purchase price as your own funds. But 5% is the floor, not the target. With 5% down, your interest rate will be higher and your monthly payment bigger for the next 30 years.', da: 'Dansk lov kræver mindst 5% af købesummen som egne midler. Men 5% er gulvet, ikke målet. Med 5% udbetaling vil din rente være højere og din månedlige ydelse større i de næste 30 år.' },
+        { en: 'On top of the down payment, budget 3–5% of the purchase price for transaction costs: tinglysningsafgift, bank fees, legal costs, and valuation. On a 3M kr home, that\'s up to 150,000 kr.', da: 'Udover udbetalingen skal du budgettere 3–5% af købesummen til transaktionsomkostninger: tinglysningsafgift, bankgebyrer, juridiske omkostninger og vurdering. På en bolig til 3 mio. kr. er det op til 150.000 kr.' },
+        { en: 'The practical target: save 20% down plus 5% for transaction costs. On an average Copenhagen apartment: 600,000–750,000 kr total before you can close the deal.', da: 'Det praktiske mål: spar 20% udbetaling plus 5% til transaktionsomkostninger. På en gennemsnitlig Københavnerlejlighed: 600.000–750.000 kr i alt før du kan afslutte handlen.' },
+      ],
+      highlight: {
+        stat: '25%',
+        label: { en: 'of purchase price to target — 20% down + 5% transaction costs', da: 'af købesummen at sigte efter — 20% udbetaling + 5% transaktionsomkostninger' },
+      },
+    },
     tldrFn: (p: PersonalProfile | null) => {
       const savingCapacity = p?.gross_dkk ? Math.round(p.gross_dkk * 0.15) : 5000
       const target = 625000 // 25% of 2.5M DKK
@@ -1300,6 +1612,32 @@ export const PRACTICAL_TOPICS: Record<string, PracticalTopic> = {
     question: {
       en: 'Do you need life insurance — and how much?',
       da: 'Har du brug for livsforsikring — og hvor meget?',
+    },
+    videos: [
+      {
+        slug: 'lib-v1',
+        title: { en: 'Do you actually need life insurance?', da: 'Har du egentlig brug for livsforsikring?' },
+        hook: { en: 'If no one depends on your income, you probably don\'t need it. If someone does, you probably already have it.', da: 'Hvis ingen er afhængig af din indkomst, behøver du det sandsynligvis ikke. Hvis nogen er det, har du det sandsynligvis allerede.' },
+        durationSecs: 60,
+      },
+      {
+        slug: 'lib-v2',
+        title: { en: 'Why you probably already have life insurance and don\'t know', da: 'Hvorfor du sandsynligvis allerede har livsforsikring og ikke ved det' },
+        hook: { en: 'Most Danish workplace pension schemes include 2–3× annual salary in life cover. Have you checked yours?', da: 'De fleste danske arbejdspensionsordninger inkluderer 2–3× årsløn i livsdækning. Har du tjekket din?' },
+        durationSecs: 60,
+      },
+    ],
+    lesson: {
+      headline: { en: 'Life insurance is not about you. It\'s about the people who depend on your income.', da: 'Livsforsikring handler ikke om dig. Det handler om de mennesker der er afhængige af din indkomst.' },
+      paragraphs: [
+        { en: 'The question is simple: if you died tomorrow, would someone else\'s financial life fall apart? Mortgage that needs two incomes to pay, young children, a partner who earns significantly less — these are the conditions that create a real need.', da: 'Spørgsmålet er enkelt: hvis du døde i morgen, ville nogens andens finansielle liv falde fra hinanden? Et boliglån der kræver to indkomster, små børn, en partner der tjener væsentligt mindre — det er betingelserne der skaber et reelt behov.' },
+        { en: 'Before buying anything: check PensionsInfo.dk. Most Danes through collective agreements have 2–3× annual salary already covered through their workplace pension. Buying more on top of full coverage is waste.', da: 'Før du køber noget: tjek PensionsInfo.dk. De fleste danskere via overenskomster er allerede dækket for 2–3× årsløn gennem deres firmapension. At købe mere ovenpå fuld dækning er spild.' },
+        { en: 'If you do need more, risikoforsikring (term life) is nearly always the right product — cheaper, simpler, and does the one job it needs to do.', da: 'Hvis du har brug for mere, er risikoforsikring (tidsbegrænset) næsten altid det rigtige produkt — billigere, enklere og udfører den ene opgave det skal.' },
+      ],
+      highlight: {
+        stat: '2–3×',
+        label: { en: 'annual salary — the life cover most Danes already have via their employer', da: 'årsløn — den livsdækning de fleste danskere allerede har via deres arbejdsgiver' },
+      },
     },
     tldrFn: (p: PersonalProfile | null) => {
       const salary = p?.gross_dkk ? Math.round(p.gross_dkk * 12 / 100000) * 100000 : 480000
