@@ -635,6 +635,17 @@ export function PracticalTopicLayout({ topic, profile }: Props) {
 
   const tldr = topic.tldrFn(profile)
 
+  // Persist last-visited topic so the learning hub can show "Continue"
+  useEffect(() => {
+    localStorage.setItem('bullaris-last-topic', JSON.stringify({
+      id: topic.id,
+      icon: topic.icon,
+      question: topic.question,
+      level: topic.level,
+      href: `/learning/practical/${topic.id}`,
+    }))
+  }, [topic.id]) // eslint-disable-line react-hooks/exhaustive-deps
+
   function handleQuizComplete(score: number) {
     setQuizScore(score)
     markComplete.mutate({ content_id: `practical-${topic.id}` })

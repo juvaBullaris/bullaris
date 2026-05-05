@@ -48,6 +48,15 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
     router.push('/login')
   }
 
+  // Learning platform gets its own full-screen shell — no sidebar
+  if (pathname.startsWith('/learning')) {
+    return (
+      <div className="min-h-screen" style={{ background: '#FDF6EE' }}>
+        {children}
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen flex" style={{ background: '#FDF6EE' }}>
 
