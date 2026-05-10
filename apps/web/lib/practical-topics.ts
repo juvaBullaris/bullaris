@@ -36,6 +36,7 @@ export const PRACTICAL_TOPICS: Record<string, PracticalTopic> = {
         title: { en: 'Your cash is eroding right now', da: 'Dine kontanter eroderer lige nu' },
         hook: { en: '50,000 kr in savings. The number stays the same. The value doesn\'t.', da: '50.000 kr i opsparing. Tallet forbliver det samme. Værdien gør ikke.' },
         durationSecs: 60,
+        muxPlaybackId: '7Nr7BgGIoTeBLQ6vNnA3iMIZs22rx5ElqQqBpWx6UXY',
       },
       {
         slug: 'hmw-v2',
