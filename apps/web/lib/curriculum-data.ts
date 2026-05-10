@@ -1,7 +1,7 @@
 import type { Course, CourseModule, VideoLesson, PodcastLesson, QuizLesson } from './curriculum-types'
 
-function v(index: number, titleEn: string, titleDa: string): VideoLesson {
-  return { index, titleEn, titleDa, muxPlaybackId: null, durationSeconds: null }
+function v(index: number, titleEn: string, titleDa: string, muxPlaybackId: string | null = null, durationSeconds: number | null = null): VideoLesson {
+  return { index, titleEn, titleDa, muxPlaybackId, durationSeconds }
 }
 function pod(titleEn: string, titleDa: string): PodcastLesson {
   return { titleEn, titleDa, muxAudioPlaybackId: null, durationSeconds: null }
@@ -41,10 +41,10 @@ export const CURRICULUM: Course[] = [
           mod('what-is-money', 'What Is Money, Really?', 'Hvad er penge, egentlig?',
             'Strip away assumptions and ask the foundational question from scratch: why do humans use money at all?',
             'Fjern forudantagelser og stil det grundlæggende spørgsmål fra bunden: hvorfor bruger mennesker penge overhovedet?',
-            [v(0,'The Double Coincidence Problem','Det dobbelte sammenfaldsproblem'),
-             v(1,'Direct vs Indirect Exchange','Direkte vs indirekte byttehandel'),
-             v(2,'The Three Functions of Money','Penges tre funktioner'),
-             v(3,'What Money Is — and What It Is Not','Hvad penge er — og hvad de ikke er')]),
+            [v(0,'The Barter Problem','Byttehandelproblemet','kwdA4kWmqBoXNyZSCSXv01xWextaLaOnttoBm5KO008v8'),
+             v(1,'The Three Functions of Money','Penges tre funktioner','ul02KgPJ022sFlL02GxaalfcL00Phoi302z00aqPa01zTPAH300'),
+             v(2,'What Money Is Not','Hvad penge ikke er','F018nF029ru5A2ctSEEBaQn02QT5ykqi00TJDVgKveHJkns'),
+             v(3,'Why You Hold Money But Don\'t Want It','Hvorfor du holder penge, men ikke vil have dem','1b2XBV00jPE1f02XQLkHQEhiSpAttJfq8qh8RQE8PS5Bw')]),
 
           mod('origin-of-money', 'The Origin of Money', 'Penges oprindelse',
             'How money emerges spontaneously from market exchange — no government decree required.',
