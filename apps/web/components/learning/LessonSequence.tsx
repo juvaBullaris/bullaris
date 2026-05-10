@@ -9,7 +9,7 @@ import { PodcastLesson } from './PodcastLesson'
 import { QuizLesson } from './QuizLesson'
 import { buildContentId, isModuleEmpty } from '@/lib/curriculum-types'
 import type { CourseModule } from '@/lib/curriculum-types'
-import { getVideoId, getPodcastId, getQuizQuestions } from '@/lib/curriculum-content'
+import { getQuizQuestions } from '@/lib/curriculum-content'
 
 type LessonRef =
   | { type: 'video'; index: number }
@@ -121,7 +121,7 @@ export function LessonSequence({
       return (
         <VideoLesson
           key={key}
-          lesson={{ ...v, muxPlaybackId: getVideoId(key) }}
+          lesson={v}
           isCompleted={completedIds.has(key)}
           onComplete={() => handleLessonComplete(active)}
         />
@@ -132,7 +132,7 @@ export function LessonSequence({
       return (
         <PodcastLesson
           key={key}
-          lesson={{ ...module.podcast, muxAudioPlaybackId: getPodcastId(key) }}
+          lesson={module.podcast}
           isCompleted={completedIds.has(key)}
           onComplete={() => handleLessonComplete(active)}
         />
