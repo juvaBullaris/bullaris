@@ -43,6 +43,7 @@ export const PRACTICAL_TOPICS: Record<string, PracticalTopic> = {
         title: { en: 'The 2% target nobody talks about', da: 'Det 2%-mål ingen taler om' },
         hook: { en: 'The ECB officially targets 2% inflation per year. That\'s an official target to shrink your savings.', da: 'ECB sigter officielt efter 2% inflation om året. Det er et officielt mål om at mindske din opsparing.' },
         durationSecs: 60,
+        muxPlaybackId: 'iDT41USIDV9caDqoK02fGdoNhtwgfQZdjwUVa2jFuQFE',
       },
     ],
     lesson: {
