@@ -3,8 +3,8 @@ import type { Course, CourseModule, VideoLesson, PodcastLesson, QuizLesson } fro
 function v(index: number, titleEn: string, titleDa: string, muxPlaybackId: string | null = null, durationSeconds: number | null = null): VideoLesson {
   return { index, titleEn, titleDa, muxPlaybackId, durationSeconds }
 }
-function pod(titleEn: string, titleDa: string): PodcastLesson {
-  return { titleEn, titleDa, muxAudioPlaybackId: null, durationSeconds: null }
+function pod(titleEn: string, titleDa: string, muxAudioPlaybackId: string | null = null): PodcastLesson {
+  return { titleEn, titleDa, muxAudioPlaybackId, durationSeconds: null }
 }
 const emptyQuiz: QuizLesson = { questions: [] }
 
@@ -13,12 +13,13 @@ function mod(
   titleEn: string, titleDa: string,
   descEn: string, descDa: string,
   videos: VideoLesson[],
+  podcastId: string | null = null,
 ): CourseModule {
   return {
     slug, titleEn, titleDa,
     descriptionEn: descEn, descriptionDa: descDa,
     videos,
-    podcast: pod(`${titleEn} — Deep Dive`, `${titleDa} — Dybdedyk`),
+    podcast: pod(`${titleEn} — Deep Dive`, `${titleDa} — Dybdedyk`, podcastId),
     quiz: emptyQuiz,
   }
 }
@@ -41,10 +42,11 @@ export const CURRICULUM: Course[] = [
           mod('what-is-money', 'What Is Money, Really?', 'Hvad er penge, egentlig?',
             'Strip away assumptions and ask the foundational question from scratch: why do humans use money at all?',
             'Fjern forudantagelser og stil det grundlæggende spørgsmål fra bunden: hvorfor bruger mennesker penge overhovedet?',
-            [v(0,'The Barter Problem','Byttehandelproblemet','kwdA4kWmqBoXNyZSCSXv01xWextaLaOnttoBm5KO008v8'),
-             v(1,'The Three Functions of Money','Penges tre funktioner','ul02KgPJ022sFlL02GxaalfcL00Phoi302z00aqPa01zTPAH300'),
-             v(2,'What Money Is Not','Hvad penge ikke er','F018nF029ru5A2ctSEEBaQn02QT5ykqi00TJDVgKveHJkns'),
-             v(3,'Why You Hold Money But Don\'t Want It','Hvorfor du holder penge, men ikke vil have dem','1b2XBV00jPE1f02XQLkHQEhiSpAttJfq8qh8RQE8PS5Bw')]),
+            [v(0,'The Barter Problem','Byttehandelproblemet','F018nF029ru5A2ctSEEBaQn02QT5ykqi00TJDVgKveHJkns'),
+             v(1,'The Three Functions of Money','Penges tre funktioner','1b2XBV00jPE1f02XQLkHQEhiSpAttJfq8qh8RQE8PS5Bw'),
+             v(2,'What Money Is Not','Hvad penge ikke er','4RUUWb9JvJR02AVW4FboaObyTFJR5DhdaTXDI7E6MUqc'),
+             v(3,'Why You Hold Money But Don\'t Want It','Hvorfor du holder penge, men ikke vil have dem','ul02KgPJ022sFlL02GxaalfcL00Phoi302z00aqPa01zTPAH300')],
+            'DLwAJ02qtC4xs012hbKEtDhuRRmjYDVAobJ3OAmL3vGMo'),
 
           mod('origin-of-money', 'The Origin of Money', 'Penges oprindelse',
             'How money emerges spontaneously from market exchange — no government decree required.',
