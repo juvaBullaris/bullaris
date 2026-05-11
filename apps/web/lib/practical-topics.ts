@@ -151,6 +151,34 @@ export const PRACTICAL_TOPICS: Record<string, PracticalTopic> = {
         explanationDa: 'Reale aktiver — virksomheder, ejendom — tenderer til at stige i pris i takt med inflation fordi de har underliggende værdi uafhængig af enhver valuta. Ingen garanti, men historisk set den mest pålidelige inflationsbeskyttelse.',
       },
     ],
+    blogReads: [
+      {
+        url: 'https://www.grumpy-economist.com/p/inflation-and-relative-prices',
+        title: {
+          en: 'Inflation and Relative Prices',
+          da: 'Inflation og relative priser',
+        },
+        source: 'The Grumpy Economist',
+        estimatedMins: 8,
+        description: {
+          en: 'Why aggregate inflation numbers hide what\'s actually happening to the prices that matter to you.',
+          da: 'Hvorfor samlede inflationstal skjuler hvad der faktisk sker med de priser der betyder noget for dig.',
+        },
+      },
+      {
+        url: 'https://mises.org/library/book/war-and-money-machine-concealing-costs-war-beneath-veil-inflation',
+        title: {
+          en: 'War and the Money Machine',
+          da: 'Krig og pengemaskinen',
+        },
+        source: 'Mises Institute',
+        estimatedMins: 12,
+        description: {
+          en: 'How governments use inflation to finance spending without voters noticing — and who pays the cost.',
+          da: 'Hvordan regeringer bruger inflation til at finansiere udgifter uden at vælgerne bemærker det — og hvem der betaler prisen.',
+        },
+      },
+    ],
   },
 
   'income-vs-expenses': {
