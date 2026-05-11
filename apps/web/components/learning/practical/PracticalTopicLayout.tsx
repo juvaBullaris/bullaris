@@ -5,8 +5,7 @@ import Link from 'next/link'
 import MuxPlayer from '@mux/mux-player-react'
 import { useLanguage } from '@/lib/language-context'
 import { trpc } from '@/lib/trpc'
-import type { PracticalTopic, PersonalProfile, TopicVideo, BlogRead } from '@/lib/practical-topic-types'
-import { BlogReaderDrawer } from './BlogReaderDrawer'
+import type { PracticalTopic, PersonalProfile, TopicVideo } from '@/lib/practical-topic-types'
 
 interface Props {
   topic: PracticalTopic
@@ -628,7 +627,6 @@ export function PracticalTopicLayout({ topic, profile }: Props) {
   const en = locale === 'en'
   const [quizScore, setQuizScore] = useState<number | null>(null)
   const [quizKey, setQuizKey] = useState(0)
-  const [openBlog, setOpenBlog] = useState<BlogRead | null>(null)
 
   const utils = trpc.useUtils()
   const markComplete = trpc.learning.markComplete.useMutation({
@@ -758,10 +756,12 @@ export function PracticalTopicLayout({ topic, profile }: Props) {
           </p>
           <div className="space-y-2">
             {topic.blogReads.map((blog, i) => (
-              <button
+              <a
                 key={i}
-                onClick={() => setOpenBlog(blog)}
-                className="w-full text-left rounded-2xl p-4 flex items-start gap-3 transition-opacity hover:opacity-90 active:scale-[0.99]"
+                href={blog.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block rounded-2xl p-4 flex items-start gap-3 transition-opacity hover:opacity-90 active:scale-[0.99]"
                 style={{ background: '#FFF8F3', border: '1.5px solid #EDE0D4' }}
               >
                 <div className="flex-1 min-w-0">
@@ -785,20 +785,11 @@ export function PracticalTopicLayout({ topic, profile }: Props) {
                     </p>
                   )}
                 </div>
-                <span className="shrink-0 mt-1 text-sm" style={{ color: '#9B8B7E' }}>→</span>
-              </button>
+                <span className="shrink-0 mt-1 text-sm" style={{ color: '#9B8B7E' }}>↗</span>
+              </a>
             ))}
           </div>
         </section>
-      )}
-
-      {/* ── Blog reader drawer ── */}
-      {openBlog && (
-        <BlogReaderDrawer
-          blog={openBlog}
-          en={en}
-          onClose={() => setOpenBlog(null)}
-        />
       )}
     </div>
   )
