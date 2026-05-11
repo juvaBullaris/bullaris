@@ -850,7 +850,7 @@ export default function LearningPage() {
                     return (
                       <div
                         key={topic.id}
-                        className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm select-none"
+                        className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm select-none cursor-default pointer-events-none"
                         style={{
                           background: '#FDFAF7',
                           border: '1px solid #EDE0D4',

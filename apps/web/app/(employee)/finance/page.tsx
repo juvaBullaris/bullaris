@@ -112,6 +112,10 @@ export default function FinancePage() {
   const [nwAssets,      setNwAssets]      = useState('')
   const [nwLiabilities, setNwLiabilities] = useState('')
 
+  // Delete confirmation states
+  const [confirmDeleteBudgetId, setConfirmDeleteBudgetId] = useState<string | null>(null)
+  const [confirmDeleteDebtId,   setConfirmDeleteDebtId]   = useState<string | null>(null)
+
   // ── Financial Health Score ─────────────────────────────────────────────────
   const goals = goalsQuery.data ?? []
   const debts = debtQuery.data ?? []
@@ -385,13 +389,33 @@ export default function FinancePage() {
                     {fmt(Number(cat.limit_dkk))} / {cat.period === 'monthly' ? t.common.month : t.common.annual}
                   </p>
                 </div>
-                <button
-                  onClick={() => deleteBudget.mutate({ id: cat.id })}
-                  className="text-xs px-2 py-1 rounded"
-                  style={{ color: '#DC2626' }}
-                >
-                  {t.common.delete}
-                </button>
+                {confirmDeleteBudgetId === cat.id ? (
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => setConfirmDeleteBudgetId(null)}
+                      className="text-xs px-2 py-1 rounded border"
+                      style={{ color: '#6B5C52', borderColor: '#EDE0D4' }}
+                    >
+                      {locale === 'da' ? 'Annuller' : 'Cancel'}
+                    </button>
+                    <button
+                      onClick={() => { deleteBudget.mutate({ id: cat.id }); setConfirmDeleteBudgetId(null) }}
+                      disabled={deleteBudget.isPending}
+                      className="text-xs px-2 py-1 rounded text-white disabled:opacity-50"
+                      style={{ background: '#DC2626' }}
+                    >
+                      {locale === 'da' ? 'Slet' : 'Delete'}
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setConfirmDeleteBudgetId(cat.id)}
+                    className="text-xs px-2 py-1 rounded"
+                    style={{ color: '#DC2626' }}
+                  >
+                    {t.common.delete}
+                  </button>
+                )}
               </div>
             ))}
 
@@ -434,7 +458,7 @@ export default function FinancePage() {
                     createBudget.mutate({ label: newBudgetLabel, limit_dkk: Number(newBudgetLimit), period: newBudgetPeriod })
                     setNewBudgetLabel(''); setNewBudgetLimit('')
                   }}
-                  className="rounded-lg px-4 py-2 text-sm font-semibold text-white disabled:opacity-50 transition"
+                  className="rounded-lg px-4 py-2 text-sm font-semibold text-white disabled:opacity-50 disabled:cursor-not-allowed transition"
                   style={{ background: '#E8634A' }}
                 >
                   {t.common.save}
@@ -496,9 +520,33 @@ export default function FinancePage() {
                         ? (locale === 'da' ? 'Snebold' : 'Snowball')
                         : (locale === 'da' ? 'Lavine'  : 'Avalanche')}
                     </span>
-                    <button onClick={() => deleteDebt.mutate({ id: debt.id })} className="text-xs px-2 py-1 rounded" style={{ color: '#DC2626' }}>
-                      {t.common.delete}
-                    </button>
+                    {confirmDeleteDebtId === debt.id ? (
+                      <div className="flex items-center gap-1">
+                        <button
+                          onClick={() => setConfirmDeleteDebtId(null)}
+                          className="text-xs px-2 py-1 rounded border"
+                          style={{ color: '#6B5C52', borderColor: '#EDE0D4' }}
+                        >
+                          {locale === 'da' ? 'Annuller' : 'Cancel'}
+                        </button>
+                        <button
+                          onClick={() => { deleteDebt.mutate({ id: debt.id }); setConfirmDeleteDebtId(null) }}
+                          disabled={deleteDebt.isPending}
+                          className="text-xs px-2 py-1 rounded text-white disabled:opacity-50"
+                          style={{ background: '#DC2626' }}
+                        >
+                          {locale === 'da' ? 'Slet' : 'Delete'}
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => setConfirmDeleteDebtId(debt.id)}
+                        className="text-xs px-2 py-1 rounded"
+                        style={{ color: '#DC2626' }}
+                      >
+                        {t.common.delete}
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}
