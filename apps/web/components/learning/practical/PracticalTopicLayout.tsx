@@ -5,7 +5,8 @@ import Link from 'next/link'
 import MuxPlayer from '@mux/mux-player-react'
 import { useLanguage } from '@/lib/language-context'
 import { trpc } from '@/lib/trpc'
-import type { PracticalTopic, PersonalProfile, TopicVideo } from '@/lib/practical-topic-types'
+import type { PracticalTopic, PersonalProfile, TopicVideo, BlogRead } from '@/lib/practical-topic-types'
+import { BlogReaderDrawer } from './BlogReaderDrawer'
 
 interface Props {
   topic: PracticalTopic
@@ -627,6 +628,7 @@ export function PracticalTopicLayout({ topic, profile }: Props) {
   const en = locale === 'en'
   const [quizScore, setQuizScore] = useState<number | null>(null)
   const [quizKey, setQuizKey] = useState(0)
+  const [openBlog, setOpenBlog] = useState<BlogRead | null>(null)
 
   const utils = trpc.useUtils()
   const markComplete = trpc.learning.markComplete.useMutation({
@@ -747,6 +749,57 @@ export function PracticalTopicLayout({ topic, profile }: Props) {
           />
         )}
       </section>
+
+      {/* ── Further reading ── */}
+      {topic.blogReads && topic.blogReads.length > 0 && (
+        <section>
+          <p className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: '#9B8B7E' }}>
+            {en ? 'Further reading' : 'Videre læsning'}
+          </p>
+          <div className="space-y-2">
+            {topic.blogReads.map((blog, i) => (
+              <button
+                key={i}
+                onClick={() => setOpenBlog(blog)}
+                className="w-full text-left rounded-2xl p-4 flex items-start gap-3 transition-opacity hover:opacity-90 active:scale-[0.99]"
+                style={{ background: '#FFF8F3', border: '1.5px solid #EDE0D4' }}
+              >
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <span
+                      className="text-xs font-semibold px-2 py-0.5 rounded-full"
+                      style={{ background: '#E8634A18', color: '#E8634A' }}
+                    >
+                      {blog.source}
+                    </span>
+                    <span className="text-xs" style={{ color: '#9B8B7E' }}>
+                      {blog.estimatedMins} min
+                    </span>
+                  </div>
+                  <p className="text-sm font-semibold leading-snug" style={{ color: '#1E0F00' }}>
+                    {en ? blog.title.en : blog.title.da}
+                  </p>
+                  {blog.description && (
+                    <p className="text-xs mt-1 leading-snug line-clamp-2" style={{ color: '#6B5C52' }}>
+                      {en ? blog.description.en : blog.description.da}
+                    </p>
+                  )}
+                </div>
+                <span className="shrink-0 mt-1 text-sm" style={{ color: '#9B8B7E' }}>→</span>
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ── Blog reader drawer ── */}
+      {openBlog && (
+        <BlogReaderDrawer
+          blog={openBlog}
+          en={en}
+          onClose={() => setOpenBlog(null)}
+        />
+      )}
     </div>
   )
 }

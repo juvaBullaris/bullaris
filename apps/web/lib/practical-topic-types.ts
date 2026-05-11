@@ -40,6 +40,14 @@ export interface TopicLesson {
   }
 }
 
+export interface BlogRead {
+  url: string
+  title: { en: string; da: string }
+  source: string
+  estimatedMins: number
+  description?: { en: string; da: string }
+}
+
 export interface PracticalTopic {
   id: string
   category: string
@@ -61,4 +69,5 @@ export interface PracticalTopic {
     external?: boolean
   }
   quiz: QuizQuestion[]
+  blogReads?: BlogRead[]
 }
