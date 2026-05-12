@@ -631,6 +631,11 @@ export function PracticalTopicLayout({ topic, profile }: Props) {
   const utils = trpc.useUtils()
   const markComplete = trpc.learning.markComplete.useMutation({
     onSuccess: () => utils.learning.myProgress.invalidate(),
+    onError: () => {
+      // Revert optimistic completion so the quiz can be retried
+      setQuizScore(null)
+      setQuizKey((k) => k + 1)
+    },
   })
 
   const tldr = topic.tldrFn(profile)

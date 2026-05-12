@@ -390,11 +390,10 @@ const LEVELS: { id: Level; en: string; da: string }[] = [
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-function allLiveTopics() {
-  return CURRICULUM.flatMap((cat) =>
-    Object.values(cat.topics).flat().filter((t) => t.href)
-  )
-}
+// Computed once at module load — CURRICULUM is static
+const LIVE_TOPICS = CURRICULUM.flatMap((cat) =>
+  Object.values(cat.topics).flat().filter((t) => t.href)
+)
 
 function getRecommendedTopics(goalTypes: string[], completedIds: Set<string>, limit = 4): (Topic & { color: string; categoryLabel: string; categoryLabelDa: string })[] {
   const relevantCategoryIds = new Set(goalTypes.flatMap((g) => GOAL_CATEGORY_MAP[g] ?? []))
@@ -459,9 +458,8 @@ export default function LearningPage() {
   const progressQuery = trpc.learning.myProgress.useQuery()
 
   const completedIds  = new Set((progressQuery.data ?? []).map((p) => p.contentId))
-  const liveTopics    = allLiveTopics()
-  const completedCount = liveTopics.filter((t) => completedIds.has(t.id)).length
-  const totalLive     = liveTopics.length
+  const completedCount = LIVE_TOPICS.filter((t) => completedIds.has(t.id)).length
+  const totalLive     = LIVE_TOPICS.length
   const pctDone       = totalLive > 0 ? Math.round((completedCount / totalLive) * 100) : 0
 
   const goalTypes = (goalsQuery.data ?? []).map((g) => g.type)

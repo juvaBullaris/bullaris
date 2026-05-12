@@ -179,6 +179,7 @@ export function QuizLesson({ quiz, isCompleted, previousScore, onComplete }: Qui
 
   // Question phase
   const q = quiz.questions[idx]
+  if (!q) return null
   const qText = locale === 'da' ? q.da : q.en
   const options = q.options.map((o) => (locale === 'da' ? o.da : o.en))
 

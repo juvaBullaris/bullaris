@@ -9,7 +9,6 @@ import { PodcastLesson } from './PodcastLesson'
 import { QuizLesson } from './QuizLesson'
 import { buildContentId, isModuleEmpty } from '@/lib/curriculum-types'
 import type { CourseModule } from '@/lib/curriculum-types'
-import { getQuizQuestions } from '@/lib/curriculum-content'
 
 type LessonRef =
   | { type: 'video'; index: number }
@@ -53,11 +52,18 @@ export function LessonSequence({
 
   const markComplete = trpc.learning.markComplete.useMutation({
     onSuccess: () => utils.learning.myProgress.invalidate(),
+    onError: (_err, variables) => {
+      setLocalCompleted((prev) => {
+        const next = new Set(prev)
+        next.delete(variables.content_id)
+        return next
+      })
+    },
   })
 
   // Build the ordered list of all lessons in this module
   const allLessons = useMemo<LessonRef[]>(() => {
-    const refs: LessonRef[] = module.videos.map((v) => ({ type: 'video' as const, index: v.index }))
+    const refs: LessonRef[] = module.videos.map((_, idx) => ({ type: 'video' as const, index: idx }))
     refs.push({ type: 'podcast' })
     refs.push({ type: 'quiz' })
     return refs
@@ -148,7 +154,7 @@ export function LessonSequence({
     return (
       <QuizLesson
         key={key}
-        quiz={{ questions: getQuizQuestions(courseSlug, levelSlug, module.slug) }}
+        quiz={module.quiz}
         isCompleted={isDone(key)}
         onComplete={(score) => handleLessonComplete(active)}
       />
