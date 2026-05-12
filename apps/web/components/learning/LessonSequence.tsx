@@ -71,11 +71,15 @@ export function LessonSequence({
     return firstIncomplete ?? allLessons[0]
   })
 
+  // Optimistic completions — show tick immediately without waiting for server
+  const [localCompleted, setLocalCompleted] = useState<Set<string>>(new Set())
+  const isDone = (key: string) => completedIds.has(key) || localCompleted.has(key)
+
   const [moduleJustCompleted, setModuleJustCompleted] = useState(false)
 
-  // Check module completion after each mark
+  // Check module completion after each mark (uses optimistic local state)
   const completedCount = allLessons.filter((ref) =>
-    completedIds.has(lessonKey(courseSlug, levelSlug, module.slug, ref)),
+    isDone(lessonKey(courseSlug, levelSlug, module.slug, ref)),
   ).length
 
   useEffect(() => {
@@ -87,6 +91,7 @@ export function LessonSequence({
 
   function handleLessonComplete(ref: LessonRef) {
     const contentId = lessonKey(courseSlug, levelSlug, module.slug, ref)
+    setLocalCompleted((prev) => new Set([...prev, contentId]))
     markComplete.mutate({ content_id: contentId })
 
     // Auto-advance to next lesson
@@ -122,7 +127,7 @@ export function LessonSequence({
         <VideoLesson
           key={key}
           lesson={v}
-          isCompleted={completedIds.has(key)}
+          isCompleted={isDone(key)}
           onComplete={() => handleLessonComplete(active)}
         />
       )
@@ -133,7 +138,7 @@ export function LessonSequence({
         <PodcastLesson
           key={key}
           lesson={module.podcast}
-          isCompleted={completedIds.has(key)}
+          isCompleted={isDone(key)}
           onComplete={() => handleLessonComplete(active)}
         />
       )
@@ -144,7 +149,7 @@ export function LessonSequence({
       <QuizLesson
         key={key}
         quiz={{ questions: getQuizQuestions(courseSlug, levelSlug, module.slug) }}
-        isCompleted={completedIds.has(key)}
+        isCompleted={isDone(key)}
         onComplete={(score) => handleLessonComplete(active)}
       />
     )
@@ -170,7 +175,7 @@ export function LessonSequence({
         <div className="lg:hidden flex gap-2 overflow-x-auto pb-2">
           {allLessons.map((ref, i) => {
             const key = lessonKey(courseSlug, levelSlug, module.slug, ref)
-            const done = completedIds.has(key)
+            const done = isDone(key)
             const isAct = isActiveRef(ref)
             return (
               <button
@@ -196,7 +201,7 @@ export function LessonSequence({
         <div className="hidden lg:flex flex-col gap-1">
           {allLessons.map((ref, i) => {
             const key = lessonKey(courseSlug, levelSlug, module.slug, ref)
-            const done = completedIds.has(key)
+            const done = isDone(key)
             const isAct = isActiveRef(ref)
             const label = lessonLabel(ref, locale, module)
             const typeLabel =

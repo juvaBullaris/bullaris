@@ -159,7 +159,7 @@ export default function GoalsPage() {
   const en = locale === 'en'
 
   const [activeTab, setActiveTab]         = useState<ActiveTab>('all')
-  const [showCascade, setShowCascade]     = useState(true)
+  const [showCascade, setShowCascade]     = useState(false)
   const [expandedFlow, setExpandedFlow]   = useState<string | null>(null)
   const [showForm, setShowForm]           = useState(false)
   const [goalType, setGoalType]           = useState('emergency_fund')
@@ -345,78 +345,131 @@ export default function GoalsPage() {
         })}
       </div>
 
-      {/* ── Create form ─────────────────────────────────────────────────────── */}
+      {/* ── Create goal modal ───────────────────────────────────────────────── */}
       {showForm && (
-        <div className="rounded-xl border bg-card p-6 mb-8 space-y-4">
-          <h2 className="font-semibold">{t.goals.createGoal}</h2>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">{t.goals.goalType}</label>
-            <select
-              value={goalType}
-              onChange={(e) => setGoalType(e.target.value)}
-              className="w-full rounded-md border px-3 py-2 text-sm"
+        <div className="fixed inset-0 z-50 flex flex-col" style={{ background: '#FFF8F3' }}>
+          {/* Modal header */}
+          <div
+            className="flex items-center justify-between px-5 py-4 shrink-0"
+            style={{ borderBottom: '1px solid #EDE0D4' }}
+          >
+            <p className="font-serif text-lg font-bold" style={{ color: '#1E0F00' }}>
+              {t.goals.createGoal}
+            </p>
+            <button
+              onClick={() => setShowForm(false)}
+              className="w-9 h-9 rounded-full flex items-center justify-center text-sm transition-opacity hover:opacity-70"
+              style={{ background: '#F5F0EB', color: '#1E0F00' }}
+              aria-label="Close"
             >
-              {HORIZONS.map((h) => (
-                <optgroup key={h} label={`${horizonInfo[h].label} · ${horizonInfo[h].range}`}>
-                  {typesByHorizon(h).map((m) => (
-                    <option key={m.value} value={m.value}>
-                      {m.icon} {getLabel(m.value)}
-                    </option>
-                  ))}
-                </optgroup>
-              ))}
-              <optgroup label={en ? 'Other' : 'Andet'}>
-                <option value="other">⭐ {getLabel('other')}</option>
-              </optgroup>
-            </select>
+              ✕
+            </button>
+          </div>
 
-            {selectedMeta && selectedMeta.value !== 'other' && (
-              <div
-                className="mt-2 rounded-lg px-3 py-2 text-xs"
-                style={{
-                  background: HORIZON_STYLE[selectedMeta.horizon].bg,
-                  border: `1px solid ${HORIZON_STYLE[selectedMeta.horizon].border}`,
-                  color: HORIZON_STYLE[selectedMeta.horizon].color,
-                }}
-              >
-                <span className="font-semibold">
-                  {horizonInfo[selectedMeta.horizon].label} · {horizonInfo[selectedMeta.horizon].range}
+          {/* Modal body */}
+          <div className="flex-1 overflow-y-auto px-5 py-6 space-y-6">
+            {/* Goal type — visual pill grid */}
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: '#9B8B7E' }}>
+                {t.goals.goalType}
+              </p>
+              {HORIZONS.map((h) => {
+                const s = HORIZON_STYLE[h]
+                return (
+                  <div key={h} className="mb-4">
+                    <p className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: s.color }}>
+                      {horizonInfo[h].label} · {horizonInfo[h].range}
+                    </p>
+                    <div className="grid grid-cols-2 gap-2">
+                      {typesByHorizon(h).filter(m => m.value !== 'other').map((m) => {
+                        const isSelected = goalType === m.value
+                        return (
+                          <button
+                            key={m.value}
+                            onClick={() => setGoalType(m.value)}
+                            className="flex items-center gap-2.5 rounded-xl px-3 py-3 text-sm text-left transition-all"
+                            style={{
+                              background: isSelected ? s.bg : '#FDFAF7',
+                              border: `1.5px solid ${isSelected ? s.border : '#EDE0D4'}`,
+                              color: isSelected ? s.color : '#3D2B1F',
+                              fontWeight: isSelected ? 600 : 400,
+                            }}
+                          >
+                            <span className="text-base shrink-0">{m.icon}</span>
+                            <span className="leading-tight text-xs">{getLabel(m.value)}</span>
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )
+              })}
+              {/* Other */}
+              {(() => {
+                const m = GOAL_META.find(m => m.value === 'other')!
+                const isSelected = goalType === 'other'
+                const s = HORIZON_STYLE['short']
+                return (
+                  <button
+                    onClick={() => setGoalType('other')}
+                    className="flex items-center gap-2.5 rounded-xl px-3 py-3 text-sm text-left transition-all w-full"
+                    style={{
+                      background: isSelected ? s.bg : '#FDFAF7',
+                      border: `1.5px solid ${isSelected ? s.border : '#EDE0D4'}`,
+                      color: isSelected ? s.color : '#3D2B1F',
+                      fontWeight: isSelected ? 600 : 400,
+                    }}
+                  >
+                    <span className="text-base shrink-0">{m.icon}</span>
+                    <span className="text-xs">{getLabel('other')}</span>
+                  </button>
+                )
+              })()}
+            </div>
+
+            {/* Target amount */}
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: '#9B8B7E' }}>
+                {t.goals.targetAmount}
+              </p>
+              <div className="relative">
+                <input
+                  type="number"
+                  value={targetDkk}
+                  onChange={(e) => setTargetDkk(e.target.value)}
+                  placeholder={t.goals.targetPlaceholder}
+                  className="w-full rounded-xl border px-4 py-3 text-base outline-none focus:ring-2 focus:ring-orange-200"
+                  style={{ borderColor: '#EDE0D4', background: '#fff' }}
+                />
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-sm font-medium" style={{ color: '#9B8B7E' }}>
+                  DKK
                 </span>
-                {' — '}
-                {horizonInfo[selectedMeta.horizon].desc}
               </div>
+            </div>
+
+            {/* Deadline */}
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: '#9B8B7E' }}>
+                {t.goals.deadline} <span style={{ color: '#C8BDB5' }}>({en ? 'optional' : 'valgfrit'})</span>
+              </p>
+              <input
+                type="date"
+                value={deadline}
+                onChange={(e) => setDeadline(e.target.value)}
+                className="w-full rounded-xl border px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-orange-200"
+                style={{ borderColor: '#EDE0D4', background: '#fff' }}
+              />
+            </div>
+
+            {createGoal.error && (
+              <p className="text-xs font-medium" style={{ color: '#E8634A' }}>
+                {createGoal.error.message}
+              </p>
             )}
           </div>
 
-          <div>
-            <label className="block text-sm font-medium mb-1">{t.goals.targetAmount}</label>
-            <input
-              type="number"
-              value={targetDkk}
-              onChange={(e) => setTargetDkk(e.target.value)}
-              placeholder={t.goals.targetPlaceholder}
-              className="w-full rounded-md border px-3 py-2 text-sm"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">{t.goals.deadline}</label>
-            <input
-              type="date"
-              value={deadline}
-              onChange={(e) => setDeadline(e.target.value)}
-              className="w-full rounded-md border px-3 py-2 text-sm"
-            />
-          </div>
-
-          {createGoal.error && (
-            <p className="text-xs font-medium" style={{ color: '#E8634A' }}>
-              {createGoal.error.message}
-            </p>
-          )}
-
-          <div className="flex gap-3 pt-2">
+          {/* Modal footer */}
+          <div className="shrink-0 px-5 py-4" style={{ borderTop: '1px solid #EDE0D4' }}>
             <button
               onClick={() =>
                 createGoal.mutate({
@@ -426,15 +479,10 @@ export default function GoalsPage() {
                 })
               }
               disabled={!targetDkk || createGoal.isPending}
-              className="rounded-md bg-bullaris-blue px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-60 transition-colors"
+              className="w-full rounded-2xl py-4 text-sm font-bold text-white disabled:opacity-50 disabled:cursor-not-allowed transition"
+              style={{ background: '#E8634A' }}
             >
               {createGoal.isPending ? '...' : t.goals.save}
-            </button>
-            <button
-              onClick={() => setShowForm(false)}
-              className="rounded-md border px-4 py-2 text-sm font-medium hover:bg-accent transition-colors"
-            >
-              {t.goals.cancel}
             </button>
           </div>
         </div>
@@ -518,54 +566,63 @@ export default function GoalsPage() {
                           </div>
                         )}
 
-                        <div className="rounded-xl border bg-card p-5">
-                          <div className="flex items-start justify-between mb-3">
-                            <div className="flex items-center gap-2.5">
-                              <span
-                                className="w-9 h-9 rounded-full flex items-center justify-center text-lg shrink-0"
-                                style={{ background: style.bg, border: `1.5px solid ${style.border}` }}
-                              >
-                                {meta?.icon ?? '⭐'}
-                              </span>
-                              <div>
-                                <h3 className="font-semibold text-sm leading-tight">{label}</h3>
-                                {goal.deadline && (
-                                  <p className="text-xs text-muted-foreground">
-                                    {en ? 'Deadline' : 'Deadline'}:{' '}
-                                    {new Date(goal.deadline).toLocaleDateString(en ? 'en-GB' : 'da-DK')}
-                                  </p>
-                                )}
-                              </div>
+                        <div
+                          className="rounded-2xl p-5"
+                          style={{
+                            background: pct === 100 ? '#F0FBF5' : '#fff',
+                            border: `1.5px solid ${pct === 100 ? '#C8E6D2' : style.border}`,
+                          }}
+                        >
+                          {/* Top row */}
+                          <div className="flex items-center gap-3 mb-4">
+                            <span
+                              className="w-10 h-10 rounded-full flex items-center justify-center text-xl shrink-0"
+                              style={{ background: pct === 100 ? '#D1FAE5' : style.bg, border: `1.5px solid ${pct === 100 ? '#86EFAC' : style.border}` }}
+                            >
+                              {pct === 100 ? '✓' : meta?.icon ?? '⭐'}
+                            </span>
+                            <div className="flex-1 min-w-0">
+                              <p className="font-semibold text-sm leading-tight" style={{ color: '#1E0F00' }}>{label}</p>
+                              {goal.deadline && (
+                                <p className="text-xs mt-0.5" style={{ color: '#9B8B7E' }}>
+                                  {new Date(goal.deadline).toLocaleDateString(en ? 'en-GB' : 'da-DK')}
+                                </p>
+                              )}
                             </div>
                             <span
                               className="text-sm font-bold shrink-0"
                               style={{ color: pct === 100 ? '#16A34A' : style.color }}
                             >
-                              {pct === 100 ? '✓ 100%' : `${pct}%`}
+                              {pct}%
                             </span>
                           </div>
 
-                          <div className="h-1.5 bg-muted rounded-full mb-3">
+                          {/* Progress bar */}
+                          <div className="h-2 rounded-full mb-3 overflow-hidden" style={{ background: '#EDE0D4' }}>
                             <div
-                              className="h-1.5 rounded-full transition-all"
+                              className="h-full rounded-full transition-all duration-500"
                               style={{ width: `${pct}%`, background: pct === 100 ? '#16A34A' : style.bar }}
                             />
                           </div>
 
-                          <div className="flex justify-between text-xs text-muted-foreground mb-3">
-                            <span>{fmt(Number(goal.progress_dkk))} {t.goals.saved}</span>
+                          {/* Amounts */}
+                          <div className="flex justify-between text-xs mb-4" style={{ color: '#9B8B7E' }}>
+                            <span style={{ color: pct === 100 ? '#16A34A' : '#3D2B1F', fontWeight: 500 }}>
+                              {fmt(Number(goal.progress_dkk))}
+                            </span>
                             <span>{t.goals.target} {fmt(Number(goal.target_dkk))}</span>
                           </div>
 
-                          {/* Update progress input */}
+                          {/* Update progress */}
                           {pct < 100 && (
-                            <div className="flex gap-2 mt-2">
+                            <div className="flex gap-2">
                               <input
                                 type="number"
-                                placeholder={en ? 'Update saved amount (DKK)' : 'Opdater sparet beløb (DKK)'}
+                                placeholder={en ? 'Current saved amount (DKK)' : 'Nuværende sparet beløb (DKK)'}
                                 value={editingProgress[goal.id] ?? ''}
                                 onChange={(e) => setEditingProgress((prev) => ({ ...prev, [goal.id]: e.target.value }))}
-                                className="flex-1 rounded-lg border border-input px-3 py-1.5 text-xs outline-none focus:ring-1 focus:ring-bullaris-blue/30"
+                                className="flex-1 rounded-xl border px-3 py-2 text-xs outline-none focus:ring-2 focus:ring-orange-200"
+                                style={{ borderColor: '#EDE0D4' }}
                               />
                               <button
                                 disabled={!editingProgress[goal.id] || updateProgress.isPending}
@@ -573,10 +630,10 @@ export default function GoalsPage() {
                                   updateProgress.mutate({ goal_id: goal.id, progress_dkk: Number(editingProgress[goal.id]) })
                                   setEditingProgress((prev) => ({ ...prev, [goal.id]: '' }))
                                 }}
-                                className="rounded-lg px-3 py-1.5 text-xs font-semibold text-white disabled:opacity-50"
+                                className="rounded-xl px-4 py-2 text-xs font-semibold text-white disabled:opacity-50 transition"
                                 style={{ background: style.color }}
                               >
-                                {en ? 'Save' : 'Gem'}
+                                {en ? 'Update' : 'Opdater'}
                               </button>
                             </div>
                           )}

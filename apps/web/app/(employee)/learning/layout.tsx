@@ -16,11 +16,10 @@ export default function LearningLayout({ children }: { children: React.ReactNode
         style={{ background: '#FFF8F3', borderBottom: '1px solid #EDE0D4' }}
       >
         <Link
-          href="/dashboard"
+          href="/learning"
           className="flex items-center gap-2 text-sm font-semibold transition-opacity hover:opacity-70"
           style={{ color: '#1E0F00' }}
         >
-          <span style={{ color: '#9B8B7E' }}>←</span>
           <span className="font-serif">Bullaris</span>
         </Link>
 
