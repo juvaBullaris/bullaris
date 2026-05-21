@@ -54,7 +54,8 @@ export const CURRICULUM: Course[] = [
             [v(0,'Salability: The Key Property','Omsættelighed: den afgørende egenskab','3iUOnkroUmWiODho4joOFaAtejywcFyl4he1AeoR52I'),
              v(1,'Spatial, Temporal, and Quantitative Dimensions','Rumlige, tidsmæssige og kvantitative dimensioner','N8S00nV00A2k00DKkNAPYV7z9s3qkvWtC7UHXfq02MSwSY4'),
              v(2,'Why Gold and Silver Won','Hvorfor guld og sølv vandt','VP16JX85gGUgdL2Hks02wP5Tfo2s01QjPeN014l8ViAs7o'),
-             v(3,'The Spontaneous Order of Monetary Selection','Pengeudvælgelsens spontane orden','ux1Q02DNlWEZvKTdqg9WaFA1003Dh3LEfu0100mE67Ctq01Q')]),
+             v(3,'The Spontaneous Order of Monetary Selection','Pengeudvælgelsens spontane orden','ux1Q02DNlWEZvKTdqg9WaFA1003Dh3LEfu0100mE67Ctq01Q')],
+            'p7o4QsirO00OyvapYE02mycpWfWsDEK00pALBc00AyS7zDc'),
 
           mod('commodity-to-fiat', 'From Commodity Money to Fiat Money', 'Fra varebaserede penge til fiatpenge',
             'Trace the historical path from gold coins to the banknotes and digital entries we use today.',
