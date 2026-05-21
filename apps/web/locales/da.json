@@ -219,10 +219,41 @@
     "privacyNotice": "Du ser kun anonymiserede aggregater. Individuelle medarbejderdata er aldrig synlige her.",
     "privacyGuarantee": "Bullaris viser aldrig individuelle medarbejderdata i HR portalen. Alle aggregater kræver minimum 5 medarbejdere.",
     "insufficientData": "Utilstrækkelige data",
+    "loading": "Indlæser...",
     "stats": {
       "activeEmployees": "Aktive medarbejdere",
       "onboardingRate": "Onboarding-rate",
-      "totalGoals": "Mål oprettet (total)"
+      "totalGoals": "Mål oprettet (total)",
+      "invited": "Inviterede",
+      "onboarded": "Onboardede",
+      "seatsPurchased": "Pladser købt",
+      "seatsUsed": "Pladser i brug",
+      "seatsAvailable": "Ledige pladser",
+      "learningEngagement": "Læringsengagement"
+    },
+    "recommendations": {
+      "title": "Anbefalinger",
+      "subtitle": "Baseret på din organisations data",
+      "noData": "Ingen data at basere anbefalinger på endnu.",
+      "onboardingLow": {
+        "title": "Onboarding-rate under 80%",
+        "body": "Mere end 20% af dine inviterede medarbejdere har endnu ikke gennemført onboarding. En målrettet påmindelseskampagne kan hjælpe.",
+        "cta": "Gå til kampagner →"
+      },
+      "learningLow": {
+        "title": "Læringsengagement under 50%",
+        "body": "Mere end halvdelen af dine onboardede medarbejdere har endnu ikke gennemført et læringsmodul. En kampagne kan øge engagementet.",
+        "cta": "Gå til kampagner →"
+      },
+      "noGoals": {
+        "title": "Ingen finansielle mål registreret",
+        "body": "Ingen medarbejdere har oprettet finansielle mål endnu. Overvej en kampagne, der opfordrer til målsætning.",
+        "cta": "Gå til kampagner →"
+      },
+      "allGood": {
+        "title": "Alt ser godt ud",
+        "body": "Onboarding, læring og mål er alle på et tilfredsstillende niveau. Fortsæt det gode arbejde."
+      }
     }
   },
   "employees": {

@@ -219,10 +219,41 @@
     "privacyNotice": "You only see anonymised aggregates. Individual employee data is never visible here.",
     "privacyGuarantee": "Bullaris never shows individual employee data in the HR portal. All aggregates require a minimum of 5 employees.",
     "insufficientData": "Insufficient data",
+    "loading": "Loading...",
     "stats": {
       "activeEmployees": "Active employees",
       "onboardingRate": "Onboarding rate",
-      "totalGoals": "Goals created (total)"
+      "totalGoals": "Goals created (total)",
+      "invited": "Invited",
+      "onboarded": "Onboarded",
+      "seatsPurchased": "Seats purchased",
+      "seatsUsed": "Seats in use",
+      "seatsAvailable": "Seats available",
+      "learningEngagement": "Learning engagement"
+    },
+    "recommendations": {
+      "title": "Recommendations",
+      "subtitle": "Based on your organisation's data",
+      "noData": "No data to base recommendations on yet.",
+      "onboardingLow": {
+        "title": "Onboarding rate below 80%",
+        "body": "More than 20% of your invited employees have not yet completed onboarding. A targeted reminder campaign can help.",
+        "cta": "Go to campaigns →"
+      },
+      "learningLow": {
+        "title": "Learning engagement below 50%",
+        "body": "More than half of your onboarded employees have not yet completed a learning module. A campaign can increase engagement.",
+        "cta": "Go to campaigns →"
+      },
+      "noGoals": {
+        "title": "No financial goals recorded",
+        "body": "No employees have created financial goals yet. Consider a campaign encouraging goal-setting.",
+        "cta": "Go to campaigns →"
+      },
+      "allGood": {
+        "title": "Everything looks good",
+        "body": "Onboarding, learning and goals are all at a satisfactory level. Keep up the good work."
+      }
     }
   },
   "employees": {

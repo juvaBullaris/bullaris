@@ -85,6 +85,61 @@ export const employerRouter = router({
     }),
 
   /**
+   * Aggregated HR portal stats.
+   * All figures are group-level. Any metric with fewer than 5 employees returns null.
+   */
+  getPortalStats: hrAdminProcedure.query(async ({ ctx }) => {
+    const MIN_GROUP = 5
+
+    // All employees for this employer
+    const employees = await db.employee.findMany({
+      where: { employerId: ctx.employerId },
+      select: { id: true, onboardedAt: true },
+    })
+
+    const totalInvited  = employees.length
+    const onboardedIds  = employees.filter((e) => !!e.onboardedAt).map((e) => e.id)
+    const onboardedCount = onboardedIds.length
+    const onboardingRate = totalInvited > 0 ? Math.round((onboardedCount / totalInvited) * 100) : null
+
+    // Seat info
+    const employer = await db.employer.findUnique({
+      where: { id: ctx.employerId },
+      select: { seatsPurchased: true },
+    })
+    const seatsPurchased = employer?.seatsPurchased ?? null
+
+    // Learning engagement — % of onboarded employees with ≥1 completion
+    // Only shown when ≥5 onboarded employees
+    let learningEngagementRate: number | null = null
+    if (onboardedCount >= MIN_GROUP) {
+      const engaged = await db.learningProgress.groupBy({
+        by: ['employeeId'],
+        where: { employeeId: { in: onboardedIds } },
+      })
+      learningEngagementRate = Math.round((engaged.length / onboardedCount) * 100)
+    }
+
+    // Goals created — total count across all onboarded employees
+    // Only shown when ≥5 onboarded employees
+    let goalsCount: number | null = null
+    if (onboardedCount >= MIN_GROUP) {
+      goalsCount = await db.goal.count({
+        where: { employee: { employerId: ctx.employerId } },
+      })
+    }
+
+    return {
+      totalInvited,
+      onboardedCount,
+      onboardingRate,
+      seatsPurchased,
+      learningEngagementRate,
+      goalsCount,
+    }
+  }),
+
+  /**
    * Get employer account details (seats, plan).
    */
   getAccount: hrAdminProcedure.query(async ({ ctx }) => {
