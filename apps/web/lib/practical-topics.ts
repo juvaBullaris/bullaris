@@ -197,12 +197,14 @@ export const PRACTICAL_TOPICS: Record<string, PracticalTopic> = {
         title: { en: 'Why rich people are broke', da: 'Hvorfor rige mennesker er blakket' },
         hook: { en: 'Denmark has 80,000 kr/month earners one missed paycheck from financial crisis. Here\'s the actual reason.', da: 'Danmark har folk der tjener 80.000 kr/måned og er én manglende lønseddel fra finansiel krise. Her er den egentlige årsag.' },
         durationSecs: 60,
+        muxPlaybackId: 'GZ00ocKkm3ZDdiE4ZPFGKwCqkIYjaepxltXs821qYkQo',
       },
       {
         slug: 'ive-v2',
         title: { en: 'Find the 200 kr you forgot about', da: 'Find de 200 kr du glemte' },
         hook: { en: 'Right now there\'s probably 200 kr/month leaving your account automatically. You signed up — and then forgot.', da: 'Lige nu forlader der sandsynligvis 200 kr/måned din konto automatisk. Du tilmeldte dig — og glemte det så.' },
         durationSecs: 60,
+        muxPlaybackId: '00B01vF8ZaLyJrACx1t21zi5fuHGuI4BNId6uuwkunImE',
       },
     ],
     lesson: {
