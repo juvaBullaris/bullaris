@@ -10,12 +10,18 @@ export const dynamic = 'force-dynamic'
  * https://developers.zoom.us/docs/api/rest/webhook-reference/
  */
 export async function POST(req: Request) {
+  const secret = process.env.ZOOM_WEBHOOK_SECRET_TOKEN
+  if (!secret) {
+    console.error('ZOOM_WEBHOOK_SECRET_TOKEN not configured')
+    return new NextResponse('Webhook secret not configured', { status: 500 })
+  }
+
   const body = await req.json()
 
   // Zoom URL validation challenge (required during webhook setup)
   if (body.event === 'endpoint.url_validation') {
     const hashForValidate = crypto
-      .createHmac('sha256', process.env.ZOOM_WEBHOOK_SECRET_TOKEN ?? '')
+      .createHmac('sha256', secret)
       .update(body.payload.plainToken)
       .digest('hex')
 
@@ -36,7 +42,7 @@ export async function POST(req: Request) {
   const expectedSig =
     'v0=' +
     crypto
-      .createHmac('sha256', process.env.ZOOM_WEBHOOK_SECRET_TOKEN ?? '')
+      .createHmac('sha256', secret)
       .update(message)
       .digest('hex')
 

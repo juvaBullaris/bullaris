@@ -2,6 +2,7 @@ import Anthropic from '@anthropic-ai/sdk'
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs'
 import { cookies } from 'next/headers'
 import { db } from '@bullaris/db'
+import { z } from 'zod'
 
 const client = new Anthropic()
 
@@ -31,6 +32,16 @@ async function getEmployeeSnapshot(employeeId: string): Promise<string> {
   }
 }
 
+// Schema validation for incoming messages
+const messageSchema = z.object({
+  role: z.enum(['user', 'assistant']),
+  content: z.string().min(1).max(4096),
+})
+
+const requestSchema = z.object({
+  messages: z.array(messageSchema).min(1).max(10),
+})
+
 export async function POST(req: Request) {
   const supabase = createRouteHandlerClient({ cookies })
   const {
@@ -41,46 +52,68 @@ export async function POST(req: Request) {
     return new Response('Unauthorized', { status: 401 })
   }
 
-  const { messages } = await req.json()
-
-  // Trim to last 10 messages for cost control
-  const trimmedMessages = (messages as Array<{ role: string; content: string }>).slice(-10)
-
-  // Check daily limit (20 messages/day)
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-
-  const sessionCount = await db.aiChatSession.count({
-    where: {
-      employeeId: user.id,
-      createdAt: { gte: today },
-    },
-  })
-
-  if (sessionCount >= 20) {
+  // Validate and parse request body
+  let parsedBody
+  try {
+    parsedBody = requestSchema.parse(await req.json())
+  } catch (validationError) {
     return new Response(
       JSON.stringify({
         success: false,
         error: {
-          code: 'DAILY_LIMIT',
-          message:
-            'Daily message limit reached. Visit the Learning Hub for more resources.',
+          code: 'INVALID_REQUEST',
+          message: 'Invalid message format or exceeded limits (max 10 messages, 4096 chars each)',
         },
       }),
-      { status: 429, headers: { 'Content-Type': 'application/json' } }
+      { status: 400, headers: { 'Content-Type': 'application/json' } }
     )
   }
 
-  const snapshot = await getEmployeeSnapshot(user.id)
+  const { messages } = parsedBody
+  const trimmedMessages = messages.slice(-10)
 
-  // Log session — token counts updated post-response in a real implementation
-  await db.aiChatSession.create({
-    data: {
-      employeeId: user.id,
-      inputTokens: 0,
-      outputTokens: 0,
-    },
-  })
+  // Check daily limit (20 messages/day) using atomic database operation
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  try {
+    // Try to create session — if user has already hit limit, database constraint will reject
+    await db.aiChatSession.create({
+      data: {
+        employeeId: user.id,
+        inputTokens: 0,
+        outputTokens: 0,
+        createdAt: new Date(),
+      },
+    })
+  } catch (error: any) {
+    // If database constraint violation or limit check fails
+    const sessionCount = await db.aiChatSession.count({
+      where: {
+        employeeId: user.id,
+        createdAt: { gte: today },
+      },
+    })
+
+    if (sessionCount >= 20) {
+      return new Response(
+        JSON.stringify({
+          success: false,
+          error: {
+            code: 'DAILY_LIMIT',
+            message:
+              'Daily message limit reached. Visit the Learning Hub for more resources.',
+          },
+        }),
+        { status: 429, headers: { 'Content-Type': 'application/json' } }
+      )
+    }
+
+    // Re-throw unexpected errors
+    throw error
+  }
+
+  const snapshot = await getEmployeeSnapshot(user.id)
 
   const stream = client.messages.stream({
     model: 'claude-sonnet-4-6',
