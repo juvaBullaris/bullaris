@@ -40,6 +40,17 @@ export interface TopicLesson {
   }
 }
 
+export interface TopicDownload {
+  label: { en: string; da: string }
+  description: { en: string; da: string }
+  filename: string
+}
+
+export interface TopicFinanceLink {
+  label: { en: string; da: string }
+  tab: 'overview' | 'budgetplan' | 'budgettracker' | 'debt' | 'networth'
+}
+
 export interface BlogRead {
   url: string
   title: { en: string; da: string }
@@ -70,4 +81,6 @@ export interface PracticalTopic {
   }
   quiz: QuizQuestion[]
   blogReads?: BlogRead[]
+  download?: TopicDownload
+  financeLink?: TopicFinanceLink
 }

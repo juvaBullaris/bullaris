@@ -5,7 +5,7 @@ import Link from 'next/link'
 import MuxPlayer from '@mux/mux-player-react'
 import { useLanguage } from '@/lib/language-context'
 import { trpc } from '@/lib/trpc'
-import type { PracticalTopic, PersonalProfile, TopicVideo } from '@/lib/practical-topic-types'
+import type { PracticalTopic, PersonalProfile, TopicVideo, TopicDownload, TopicFinanceLink } from '@/lib/practical-topic-types'
 
 interface Props {
   topic: PracticalTopic
@@ -620,6 +620,67 @@ function DoneCard({ topic, score, en, onRetake }: { topic: PracticalTopic; score
   )
 }
 
+// ─── Tools: download + Finance page link ─────────────────────────────────────
+
+function ToolsSection({
+  download,
+  financeLink,
+  en,
+}: {
+  download?: TopicDownload
+  financeLink?: TopicFinanceLink
+  en: boolean
+}) {
+  if (!download && !financeLink) return null
+
+  return (
+    <section>
+      <p className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: '#9B8B7E' }}>
+        {en ? 'Tools' : 'Værktøjer'}
+      </p>
+      <div className="flex flex-col gap-3">
+        {download && (
+          <a
+            href={`/downloads/${download.filename}`}
+            download={download.filename}
+            className="rounded-2xl p-5 flex items-start gap-4 transition-all hover:opacity-90 active:scale-[0.99]"
+            style={{ background: '#1E0F00', border: '1px solid #2D1B0E' }}
+          >
+            <span
+              className="w-11 h-11 rounded-full flex items-center justify-center text-xl shrink-0 mt-0.5"
+              style={{ background: '#E8634A20' }}
+            >
+              📥
+            </span>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-bold mb-1" style={{ color: '#FFF8F3' }}>
+                {en ? download.label.en : download.label.da}
+              </p>
+              <p className="text-xs leading-relaxed" style={{ color: '#6B5C52' }}>
+                {en ? download.description.en : download.description.da}
+              </p>
+            </div>
+            <span className="text-xs shrink-0 mt-1" style={{ color: '#E8634A' }}>↓</span>
+          </a>
+        )}
+
+        {financeLink && (
+          <Link
+            href={`/finance?tab=${financeLink.tab}`}
+            className="rounded-2xl px-5 py-4 flex items-center justify-between transition-all hover:opacity-90 active:scale-[0.99]"
+            style={{ background: '#FFF8F3', border: '1.5px solid #EDE0D4' }}
+          >
+            <span className="text-sm font-semibold" style={{ color: '#1E0F00' }}>
+              {en ? financeLink.label.en : financeLink.label.da}
+            </span>
+            <span style={{ color: '#E8634A' }}>→</span>
+          </Link>
+        )}
+      </div>
+    </section>
+  )
+}
+
 // ─── Main layout ──────────────────────────────────────────────────────────────
 
 export function PracticalTopicLayout({ topic, profile }: Props) {
@@ -752,6 +813,11 @@ export function PracticalTopicLayout({ topic, profile }: Props) {
           />
         )}
       </section>
+
+      {/* ── Tools: download + Finance link ── */}
+      {(topic.download || topic.financeLink) && (
+        <ToolsSection download={topic.download} financeLink={topic.financeLink} en={en} />
+      )}
 
       {/* ── Further reading ── */}
       {topic.blogReads && topic.blogReads.length > 0 && (

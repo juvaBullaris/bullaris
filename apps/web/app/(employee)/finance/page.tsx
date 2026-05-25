@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import { trpc } from '@/lib/trpc'
 import { useLanguage } from '@/lib/language-context'
 import { NetWorthChart } from '@/components/net-worth-chart'
@@ -67,7 +68,18 @@ export default function FinancePage() {
   const { t, locale } = useLanguage()
   const fmt = (n: number) => n.toLocaleString(locale === 'da' ? 'da-DK' : 'en-GB', { maximumFractionDigits: 0 }) + ' kr.'
 
-  const [tab, setTab] = useState<Tab>('overview')
+  const searchParams = useSearchParams()
+  const [tab, setTab] = useState<Tab>(() => {
+    const t = searchParams.get('tab') as Tab | null
+    const valid: Tab[] = ['overview', 'budgetplan', 'budgettracker', 'debt', 'networth']
+    return t && valid.includes(t) ? t : 'overview'
+  })
+
+  useEffect(() => {
+    const t = searchParams.get('tab') as Tab | null
+    const valid: Tab[] = ['overview', 'budgetplan', 'budgettracker', 'debt', 'networth']
+    if (t && valid.includes(t)) setTab(t)
+  }, [searchParams])
   const [framework, setFramework] = useState<Framework>('503020')
 
   // Queries

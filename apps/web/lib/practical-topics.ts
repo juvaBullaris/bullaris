@@ -391,8 +391,17 @@ export const PRACTICAL_TOPICS: Record<string, PracticalTopic> = {
     Calculator: NetWorthCalculator,
     action: {
       icon: '📊',
-      cta: { en: 'Check your finance overview', da: 'Tjek din finansoversigt' },
-      href: '/finance',
+      cta: { en: 'Track your net worth in Finance', da: 'Spor din nettoformue i Økonomi' },
+      href: '/finance?tab=networth',
+    },
+    download: {
+      label: { en: 'Download Net Worth Tracker', da: 'Download nettoformue-tracker' },
+      description: { en: 'Excel spreadsheet — assets, liabilities, quarterly history. Pre-built formulas, ready to fill in.', da: 'Excel-regneark — aktiver, passiver, kvartalshistorik. Færdige formler, klar til at udfylde.' },
+      filename: 'net-worth-tracker.xlsx',
+    },
+    financeLink: {
+      label: { en: 'Track it in the platform instead →', da: 'Spor det i platformen i stedet →' },
+      tab: 'networth',
     },
     quiz: [
       {
@@ -522,7 +531,16 @@ export const PRACTICAL_TOPICS: Record<string, PracticalTopic> = {
     action: {
       icon: '📋',
       cta: { en: 'Build your budget in the finance planner', da: 'Byg dit budget i finansplanleggeren' },
-      href: '/finance',
+      href: '/finance?tab=budgetplan',
+    },
+    download: {
+      label: { en: 'Download Budget Planner', da: 'Download budgetplanner' },
+      description: { en: 'Excel with all three methods — 50/30/20, zero-based, and pay yourself first. Monthly tracker included.', da: 'Excel med alle tre metoder — 50/30/20, nulbaseret og betal dig selv først. Månedssporing inkluderet.' },
+      filename: 'budget-planner.xlsx',
+    },
+    financeLink: {
+      label: { en: 'Use the in-app budget planner instead →', da: 'Brug den digitale budgetplanner i stedet →' },
+      tab: 'budgetplan',
     },
     quiz: [
       {
