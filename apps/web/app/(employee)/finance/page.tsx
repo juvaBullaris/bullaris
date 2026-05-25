@@ -1,85 +1,26 @@
-'use client'
-
-import { useState, useEffect } from 'react'
-import { useSearchParams } from 'next/navigation'
-import { trpc } from '@/lib/trpc'
-import { useLanguage } from '@/lib/language-context'
-import { NetWorthChart } from '@/components/net-worth-chart'
-
-type Tab = 'overview' | 'budgetplan' | 'budgettracker' | 'debt' | 'networth'
-
-// ─── Budget plan data ──────────────────────────────────────────────────────────
-
-type Framework = '503020' | '60solution'
-
-interface BudgetRow {
-  key: string
-  pct5030: number   // % of net pay (50/30/20)
-  pct60: number     // % of net pay (60% solution)
-  bucket5030: 'needs' | 'wants' | 'savings'
-  bucket60: 'committed' | 'retirement' | 'longterm' | 'shortterm' | 'fun'
-  source?: string
-}
-
-const BUDGET_ROWS: BudgetRow[] = [
-  // 50/30/20 — Needs (50%)
-  { key: 'housing',     pct5030: 30, pct60: 30, bucket5030: 'needs',   bucket60: 'committed', source: 'Linneman & Wachter (1989)' },
-  { key: 'food',        pct5030: 10, pct60: 12, bucket5030: 'needs',   bucket60: 'committed', source: 'Danmarks Statistik (2023)' },
-  { key: 'transport',   pct5030: 10, pct60: 10, bucket5030: 'needs',   bucket60: 'committed', source: 'DST transport survey' },
-  { key: 'utilities',   pct5030: 5,  pct60: 8,  bucket5030: 'needs',   bucket60: 'committed', source: 'DST (2023)' },
-  // 50/30/20 — Wants (30%)
-  { key: 'entertainment', pct5030: 10, pct60: 0, bucket5030: 'wants', bucket60: 'fun', source: 'Warren & Tyagi (2005)' },
-  { key: 'clothing',    pct5030: 10, pct60: 0,  bucket5030: 'wants',   bucket60: 'fun', source: '' },
-  { key: 'misc',        pct5030: 10, pct60: 0,  bucket5030: 'wants',   bucket60: 'fun', source: '' },
-  // 50/30/20 — Savings (20%)
-  { key: 'pension',     pct5030: 12, pct60: 10, bucket5030: 'savings', bucket60: 'retirement', source: 'Bengen (1994); Vanguard (2020)' },
-  { key: 'emergency',   pct5030: 5,  pct60: 10, bucket5030: 'savings', bucket60: 'longterm',   source: 'Lusardi & Mitchell (2011)' },
-  { key: 'investments', pct5030: 3,  pct60: 10, bucket5030: 'savings', bucket60: 'shortterm',  source: 'Trinity Study, Cooley et al. (1998)' },
-]
-
-const BUCKET_LABELS_5030: Record<string, { en: string; da: string }> = {
-  needs:   { en: 'Needs (50%)',    da: 'Behov (50%)' },
-  wants:   { en: 'Wants (30%)',    da: 'Ønsker (30%)' },
-  savings: { en: 'Savings (20%)', da: 'Opsparing (20%)' },
-}
-
-const BUCKET_LABELS_60: Record<string, { en: string; da: string }> = {
-  committed:  { en: 'Fixed costs (60%)',        da: 'Faste udgifter (60%)' },
-  retirement: { en: 'Pension (10%)',             da: 'Pension (10%)' },
-  longterm:   { en: 'Long-term savings (10%)',   da: 'Langsigtede opsparing (10%)' },
-  shortterm:  { en: 'Short-term savings (10%)',  da: 'Kortsigtede opsparing (10%)' },
-  fun:        { en: 'Freedom (10%)',             da: 'Frihed (10%)' },
-}
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-
-type RatingLabels = { excellent: string; good: string; fair: string; needsWork: string }
-function healthRating(score: number, labels: RatingLabels) {
-  if (score >= 80) return { label: labels.excellent, color: '#16A34A' }
-  if (score >= 60) return { label: labels.good,      color: '#2563EB' }
-  if (score >= 40) return { label: labels.fair,      color: '#E8634A' }
-  return            { label: labels.needsWork,   color: '#DC2626' }
-}
-
-// ─── Main component ────────────────────────────────────────────────────────────
+import { Suspense } from 'react'
+import { FinanceClient } from '@/components/finance/finance-client'
 
 export default function FinancePage() {
-  const { t, locale } = useLanguage()
-  const fmt = (n: number) => n.toLocaleString(locale === 'da' ? 'da-DK' : 'en-GB', { maximumFractionDigits: 0 }) + ' kr.'
+  return (
+    <Suspense fallback={<FinancePageSkeleton />}>
+      <FinanceClient />
+    </Suspense>
+  )
+}
 
-  const searchParams = useSearchParams()
-  const [tab, setTab] = useState<Tab>(() => {
-    const t = searchParams.get('tab') as Tab | null
-    const valid: Tab[] = ['overview', 'budgetplan', 'budgettracker', 'debt', 'networth']
-    return t && valid.includes(t) ? t : 'overview'
-  })
-
-  useEffect(() => {
-    const t = searchParams.get('tab') as Tab | null
-    const valid: Tab[] = ['overview', 'budgetplan', 'budgettracker', 'debt', 'networth']
-    if (t && valid.includes(t)) setTab(t)
-  }, [searchParams])
+function FinancePageSkeleton() {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white p-6 animate-pulse">
+      <div className="max-w-6xl mx-auto">
+        <div className="h-10 bg-gray-200 rounded w-64 mb-4" />
+        <div className="h-6 bg-gray-100 rounded w-96 mb-8" />
+        <div className="h-12 bg-gray-100 rounded mb-8" />
+        <div className="bg-white rounded-lg shadow-sm p-8 h-96 bg-gray-50" />
+      </div>
+    </div>
+  )
+}
   const [framework, setFramework] = useState<Framework>('503020')
 
   // Queries
