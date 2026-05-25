@@ -52,3 +52,9 @@ yarn-error.log*
 .sentryclirc
 
 .vercel
+
+# Sensitive documents — NEVER commit (internal/confidential)
+# Keep in Bullaris/ root or encrypted cloud storage only
+CTO_ONBOARDING.md
+ISO_27001_REVIEW.md
+ONBOARDING.md
