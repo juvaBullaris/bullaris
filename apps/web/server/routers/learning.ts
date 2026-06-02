@@ -35,7 +35,7 @@ export const learningRouter = router({
    * Format: {courseSlug}-{levelSlug}-{moduleSlug}-{type}-{index}
    */
   markComplete: protectedProcedure
-    .input(z.object({ content_id: z.string().min(1) }))
+    .input(z.object({ content_id: z.string().min(1).max(200) }))
     .mutation(async ({ ctx, input }) => {
       const progress = await db.learningProgress.upsert({
         where: {

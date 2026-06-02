@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { randomUUID } from 'crypto'
 import { router, hrAdminProcedure } from '../trpc'
 import { db } from '@bullaris/db'
 import { TRPCError } from '@trpc/server'
@@ -70,7 +71,7 @@ export const employerRouter = router({
       const employee = await db.employee.create({
         data: {
           employerId: ctx.employerId,
-          supabaseUserId: '', // Populated when employee accepts invite
+          supabaseUserId: `pending-${randomUUID()}`, // Replaced with real ID when invite is accepted
           role: 'employee',
           invitedAt: new Date(),
         },

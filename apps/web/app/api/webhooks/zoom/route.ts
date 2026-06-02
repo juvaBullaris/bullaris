@@ -52,16 +52,27 @@ export async function POST(req: Request) {
 
   // Handle participant joined event
   if (body.event === 'webinar.participant_joined') {
-    const { registrant_id, email } = body.payload?.object?.participant ?? {}
+    const { email } = body.payload?.object?.participant ?? {}
     const webinarId = body.payload?.object?.id as string | undefined
 
     if (email && webinarId) {
-      // Find employee by email via Supabase user lookup is not available here —
-      // match on webinarSanityId stored in the registration (Zoom webinar ID = Sanity ID convention)
-      await db.webinarRegistration.updateMany({
-        where: { webinarSanityId: webinarId },
-        data: { attended: true },
-      }).catch(() => {})
+      // Resolve email → auth.users → employees (Prisma connects with service role, auth schema accessible)
+      const authUsers = await db.$queryRaw<Array<{ id: string }>>`
+        SELECT id FROM auth.users WHERE email = ${email} LIMIT 1
+      `.catch(() => [] as Array<{ id: string }>)
+
+      if (authUsers.length > 0) {
+        const employee = await db.employee.findUnique({
+          where: { supabaseUserId: authUsers[0].id },
+          select: { id: true },
+        })
+        if (employee) {
+          await db.webinarRegistration.updateMany({
+            where: { employeeId: employee.id, webinarSanityId: webinarId },
+            data: { attended: true },
+          }).catch(() => {})
+        }
+      }
     }
   }
 

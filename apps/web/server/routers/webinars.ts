@@ -40,15 +40,18 @@ export const webinarsRouter = router({
   register: protectedProcedure
     .input(
       z.object({
-        webinarSanityId: z.string().min(1),
-        webinarTitle: z.string().min(1),
-        webinarDate: z.string(), // ISO date
+        webinarSanityId: z.string().min(1).max(200),
+        webinarTitle: z.string().min(1).max(200),
+        webinarDate: z.string(),
         zoomJoinUrl: z.string().url(),
-        userEmail: z.string().email(),
-        userFirstName: z.string().optional(),
+        userFirstName: z.string().max(100).optional(),
       })
     )
     .mutation(async ({ ctx, input }) => {
+      // Email always comes from the authenticated session — never from client input
+      const toEmail = ctx.user.email
+      if (!toEmail) throw new TRPCError({ code: 'BAD_REQUEST', message: 'No email on account' })
+
       // Idempotent — ignore if already registered
       const existing = await db.webinarRegistration.findUnique({
         where: {
@@ -70,7 +73,10 @@ export const webinarsRouter = router({
         },
       })
 
-      // Send confirmation email
+      // Send confirmation email — title and name are sanitized before HTML injection
+      const safeTitle = input.webinarTitle.replace(/[<>"'&]/g, '')
+      const safeName  = input.userFirstName ? input.userFirstName.replace(/[<>"'&]/g, '') : ''
+
       const formattedDate = new Date(input.webinarDate).toLocaleDateString('da-DK', {
         weekday: 'long',
         year: 'numeric',
@@ -82,16 +88,16 @@ export const webinarsRouter = router({
 
       await getResend().emails.send({
         from: 'Bullaris <hello@bullaris.dk>',
-        to: input.userEmail,
-        subject: `Du er tilmeldt: ${input.webinarTitle}`,
+        to: toEmail,
+        subject: `Du er tilmeldt: ${safeTitle}`,
         html: `
           <div style="font-family: DM Sans, system-ui, sans-serif; max-width: 560px; margin: 0 auto; color: #1E0F00;">
             <div style="background: #1A56DB; padding: 24px 32px;">
               <span style="color: white; font-size: 20px; font-weight: 700;">Bullaris</span>
             </div>
             <div style="padding: 32px;">
-              <p style="margin: 0 0 8px;">Hej${input.userFirstName ? ` ${input.userFirstName}` : ''},</p>
-              <p style="margin: 0 0 24px;">Du er nu tilmeldt webinaret <strong>${input.webinarTitle}</strong>.</p>
+              <p style="margin: 0 0 8px;">Hej${safeName ? ` ${safeName}` : ''},</p>
+              <p style="margin: 0 0 24px;">Du er nu tilmeldt webinaret <strong>${safeTitle}</strong>.</p>
               <div style="background: #F5F0E8; border-radius: 12px; padding: 20px 24px; margin-bottom: 24px;">
                 <p style="margin: 0 0 8px; font-size: 14px; color: #6B6059;">Dato og tid</p>
                 <p style="margin: 0 0 16px; font-weight: 600;">${formattedDate}</p>
@@ -106,32 +112,10 @@ export const webinarsRouter = router({
           </div>
         `,
       }).catch(() => {
-        // Email failure should not block registration
+        // Email failure does not block registration
       })
 
       return { success: true, data: registration, alreadyRegistered: false }
-    }),
-
-  /**
-   * Zoom webhook handler — mark employee as attended.
-   * Called by /api/webhooks/zoom, not directly by clients.
-   */
-  markAttended: protectedProcedure
-    .input(
-      z.object({
-        employeeId: z.string().uuid(),
-        webinarSanityId: z.string(),
-      })
-    )
-    .mutation(async ({ input }) => {
-      await db.webinarRegistration.updateMany({
-        where: {
-          employeeId: input.employeeId,
-          webinarSanityId: input.webinarSanityId,
-        },
-        data: { attended: true },
-      })
-      return { success: true }
     }),
 
   /**

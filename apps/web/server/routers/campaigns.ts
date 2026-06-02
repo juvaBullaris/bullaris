@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { router, hrAdminProcedure } from '../trpc'
 import { db } from '@bullaris/db'
+import { TRPCError } from '@trpc/server'
 
 export const campaignsRouter = router({
   /**
@@ -27,7 +28,7 @@ export const campaignsRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       if (input.scheduledAt <= new Date()) {
-        throw new Error('scheduledAt must be in the future')
+        throw new TRPCError({ code: 'BAD_REQUEST', message: 'scheduledAt must be in the future' })
       }
       return db.customNudgeCampaign.create({
         data: {
@@ -48,8 +49,8 @@ export const campaignsRouter = router({
       const campaign = await db.customNudgeCampaign.findFirst({
         where: { id: input.id, employerId: ctx.employerId },
       })
-      if (!campaign) throw new Error('Campaign not found')
-      if (campaign.sentAt !== null) throw new Error('Campaign already sent — cannot cancel')
+      if (!campaign) throw new TRPCError({ code: 'NOT_FOUND', message: 'Campaign not found' })
+      if (campaign.sentAt !== null) throw new TRPCError({ code: 'PRECONDITION_FAILED', message: 'Campaign already sent — cannot cancel' })
       await db.customNudgeCampaign.delete({ where: { id: input.id } })
       return { success: true }
     }),
