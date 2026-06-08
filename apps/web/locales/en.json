@@ -477,7 +477,8 @@
     "nav": {
       "howItWorks": "How it works",
       "pricing": "Pricing",
-      "bookDemo": "Book a conversation"
+      "bookDemo": "Book a conversation",
+      "login": "Log in"
     },
     "hero": {
       "badge": "Employee Financial Wellbeing",
@@ -485,9 +486,9 @@
       "cta": "Take the free Financial Stress Audit →",
       "secondaryCta": "Book a conversation",
       "cardTitle": "Emergency fund: funded",
-      "cardSubtitle": "Anna just reached her goal 🎉",
+      "cardSubtitle": "67% reached a financial goal this quarter",
       "card2Title": "Salary decoded",
-      "card2Subtitle": "Thomas finally understood his payslip"
+      "card2Subtitle": "8 in 10 now understand their payslip"
     },
     "trust": {
       "dpa": "Data processing agreement included",

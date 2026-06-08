@@ -10,8 +10,8 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 10 77% 60%;
+    --primary-foreground: 0 0% 100%;
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
@@ -69,7 +69,7 @@
 .prose-article h2,
 .prose-article h3 {
   color: #1E0F00;
-  font-family: Georgia, serif;
+  font-family: var(--font-lora), Georgia, serif;
   font-weight: 700;
   margin-top: 1.75em;
   margin-bottom: 0.5em;

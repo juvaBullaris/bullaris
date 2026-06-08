@@ -377,6 +377,13 @@ export default function LandingPage() {
           >
             <LangPill />
             <a
+              href="/dashboard"
+              className="hidden rounded-xl border px-4 py-2.5 text-sm font-semibold transition-all hover:bg-amber-50 md:block"
+              style={{ borderColor: '#D4B898', color: '#6B4C2A' }}
+            >
+              {m.nav.login}
+            </a>
+            <a
               href="mailto:hello@bullaris.dk"
               className="hidden rounded-xl px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all hover:scale-105 hover:shadow-lg md:block"
               style={{ background: 'linear-gradient(135deg, #E8634A, #D4503A)' }}

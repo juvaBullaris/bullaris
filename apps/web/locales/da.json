@@ -477,7 +477,8 @@
     "nav": {
       "howItWorks": "Sådan virker det",
       "pricing": "Priser",
-      "bookDemo": "Book en samtale"
+      "bookDemo": "Book en samtale",
+      "login": "Log ind"
     },
     "hero": {
       "badge": "Finansiel wellness til medarbejdere",
@@ -485,9 +486,9 @@
       "cta": "Tag den gratis Finansielle Stress-audit →",
       "secondaryCta": "Book en samtale",
       "cardTitle": "Nødreserve: opfyldt",
-      "cardSubtitle": "Anna nåede sit mål 🎉",
+      "cardSubtitle": "67% nåede et finansielt mål dette kvartal",
       "card2Title": "Løn forstået",
-      "card2Subtitle": "Thomas forstod endelig sin lønseddel"
+      "card2Subtitle": "8 ud af 10 forstår nu deres lønseddel"
     },
     "trust": {
       "dpa": "Databehandleraftale inkluderet",
