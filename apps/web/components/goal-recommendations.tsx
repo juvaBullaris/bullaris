@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { trpc } from '@/lib/trpc'
 import { useLanguage } from '@/lib/language-context'
 
@@ -313,21 +312,11 @@ export function GoalRecommendations({ goalTypes }: { goalTypes: string[] }) {
   const r = t.goals.recommendations
 
   const [activeTab, setActiveTab] = useState<'learning' | 'partners' | 'webinars'>('learning')
-  const [userEmail, setUserEmail]   = useState<string | null>(null)
-
   const progressQuery      = trpc.learning.myProgress.useQuery()
   const registrationsQuery = trpc.webinars.myRegistrations.useQuery()
   const registerMutation   = trpc.webinars.register.useMutation({
     onSuccess: () => registrationsQuery.refetch(),
   })
-
-  // Get Supabase user email client-side for webinar registration emails
-  useEffect(() => {
-    const supabase = createClientComponentClient()
-    supabase.auth.getUser().then(({ data }) => {
-      if (data.user?.email) setUserEmail(data.user.email)
-    })
-  }, [])
 
   if (goalTypes.length === 0) {
     return (
@@ -549,16 +538,14 @@ export function GoalRecommendations({ goalTypes }: { goalTypes: string[] }) {
                     ) : (
                       <button
                         onClick={() =>
-                          userEmail &&
                           registerMutation.mutate({
                             webinarSanityId: webinar.id,
                             webinarTitle:    en ? webinar.en.title : webinar.da.title,
                             webinarDate:     webinar.date,
                             zoomJoinUrl:     'https://zoom.bullaris.dk/webinar',
-                            userEmail,
                           })
                         }
-                        disabled={isPending || !userEmail}
+                        disabled={isPending}
                         className="text-xs font-semibold transition-opacity disabled:opacity-50"
                         style={{ color: '#E8634A' }}
                       >
