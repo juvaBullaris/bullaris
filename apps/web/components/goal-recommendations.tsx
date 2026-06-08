@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { trpc } from '@/lib/trpc'
 import { useLanguage } from '@/lib/language-context'
+import { WEBINARS } from '@/lib/webinar-data'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -26,17 +27,6 @@ interface Partner {
   url: string
   en: { tagline: string }
   da: { tagline: string }
-}
-
-interface Webinar {
-  id: string
-  icon: string
-  date: string
-  duration: string
-  speaker: string
-  goalTypes: string[]
-  en: { title: string }
-  da: { title: string }
 }
 
 // ─── Learning modules ─────────────────────────────────────────────────────────
@@ -215,96 +205,6 @@ const PARTNERS: Partner[] = [
     da: { tagline: 'Cloud-regnskab bygget til danske freelancere og mindre virksomheder' },
   },
 ]
-
-// ─── Webinars ─────────────────────────────────────────────────────────────────
-//
-// Static schedule — in production this would be fetched from Sanity.
-// goalTypes lists which goal types make each webinar relevant.
-
-const WEBINARS: Webinar[] = [
-  {
-    id: 'webinar-tax-2026',
-    icon: '📊',
-    date: '2026-04-15T17:00:00',
-    duration: '45 min',
-    speaker: 'Bullaris Tax Team',
-    goalTypes: ['debt_payoff', 'investment', 'financial_independence', 'passive_income', 'pension_boost', 'side_income'],
-    en: { title: '2026 Tax Changes — What Every Employee Needs to Know' },
-    da: { title: '2026 Skatteændringer — hvad enhver medarbejder skal vide' },
-  },
-  {
-    id: 'webinar-fire-dk',
-    icon: '🌅',
-    date: '2026-04-22T17:00:00',
-    duration: '60 min',
-    speaker: 'Financial Independence Network DK',
-    goalTypes: ['financial_independence', 'early_retirement', 'passive_income', 'investment'],
-    en: { title: 'FIRE in Denmark: The Practical Roadmap' },
-    da: { title: 'FIRE i Danmark: Det praktiske vejkort' },
-  },
-  {
-    id: 'webinar-house-2026',
-    icon: '🏠',
-    date: '2026-05-06T17:00:00',
-    duration: '45 min',
-    speaker: 'Nykredit Advisors',
-    goalTypes: ['house_deposit', 'home_renovation', 'generational_wealth'],
-    en: { title: 'Buying Your First Home in Denmark in 2026' },
-    da: { title: 'Køb dit første hjem i Danmark i 2026' },
-  },
-  {
-    id: 'webinar-aktiesparekonto',
-    icon: '📈',
-    date: '2026-05-13T18:00:00',
-    duration: '45 min',
-    speaker: 'Nordnet',
-    goalTypes: ['investment', 'financial_independence', 'passive_income', 'early_retirement', 'children_savings'],
-    en: { title: 'Aktiesparekonto 2026: Maximize Your Tax-Free Returns' },
-    da: { title: 'Aktiesparekonto 2026: Maksimer dit skattefrie afkast' },
-  },
-  {
-    id: 'webinar-pension-boost',
-    icon: '🏦',
-    date: '2026-05-20T17:00:00',
-    duration: '45 min',
-    speaker: 'PensionDanmark',
-    goalTypes: ['pension_boost', 'early_retirement', 'generational_wealth', 'financial_independence'],
-    en: { title: 'Boost Your Pension: Extra Contributions That Compound' },
-    da: { title: 'Boost din pension: Ekstra bidrag der giver renters rente' },
-  },
-  {
-    id: 'webinar-debt-free',
-    icon: '🔗',
-    date: '2026-06-03T17:00:00',
-    duration: '30 min',
-    speaker: 'Bullaris',
-    goalTypes: ['debt_payoff'],
-    en: { title: 'Debt-Free Fast: Avalanche vs. Snowball in Danish Context' },
-    da: { title: 'Gældfri hurtigt: Lavine vs. snebold i dansk kontekst' },
-  },
-  {
-    id: 'webinar-side-income',
-    icon: '💼',
-    date: '2026-06-10T17:00:00',
-    duration: '45 min',
-    speaker: 'e-conomic + Bullaris',
-    goalTypes: ['side_income', 'financial_independence', 'passive_income', 'early_retirement'],
-    en: { title: 'Building a Side Income in Denmark: Tax, Registration & Growth' },
-    da: { title: 'Biindtægt i Danmark: Skat, registrering og vækst' },
-  },
-  {
-    id: 'webinar-children-savings',
-    icon: '👶',
-    date: '2026-06-17T17:00:00',
-    duration: '30 min',
-    speaker: 'Bullaris',
-    goalTypes: ['children_savings', 'generational_wealth'],
-    en: { title: "Children's Savings in Denmark: Børneopsparing & Beyond" },
-    da: { title: 'Børneopsparing i Danmark: Børneopsparing og mere' },
-  },
-]
-
-// ─────────────────────────────────────────────────────────────────────────────
 
 export function GoalRecommendations({ goalTypes }: { goalTypes: string[] }) {
   const { t, locale } = useLanguage()

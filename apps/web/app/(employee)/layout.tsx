@@ -36,6 +36,7 @@ export default function EmployeeLayout({ children }: { children: React.ReactNode
     { href: '/tax-planner', label: t.nav.taxPlanner,   icon: '🧮', external: false },
     { href: '/goals',       label: t.nav.goals,        icon: '🎯', external: false },
     { href: '/finance',     label: t.nav.finance,      icon: '💰', external: false },
+    { href: '/webinars',    label: t.nav.webinars,     icon: '🎙️', external: false },
     { href: '/chat',        label: t.nav.chat,         icon: '💬', external: false },
     { href: '/learning',    label: t.nav.learning,     icon: '📚', external: true  },
   ]

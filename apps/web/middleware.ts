@@ -2,7 +2,7 @@ import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-const EMPLOYEE_ROUTES = ['/dashboard', '/payslip', '/tax-planner', '/goals', '/chat', '/learning', '/onboarding']
+const EMPLOYEE_ROUTES = ['/dashboard', '/payslip', '/tax-planner', '/goals', '/chat', '/learning', '/onboarding', '/webinars']
 const EMPLOYER_ROUTES = ['/portal', '/analytics', '/employees']
 
 export async function middleware(req: NextRequest) {
@@ -51,6 +51,7 @@ export const config = {
     '/chat/:path*',
     '/learning/:path*',
     '/onboarding/:path*',
+    '/webinars/:path*',
     '/portal/:path*',
     '/analytics/:path*',
     '/employees/:path*',
